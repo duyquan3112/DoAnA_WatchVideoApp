@@ -1,24 +1,5 @@
 import 'package:flutter/material.dart';
 
-void main() {
-  runApp(const MyApp());
-}
-
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Home Page',
-      theme: ThemeData(
-        primarySwatch: Colors.grey,
-      ),
-      home: const MyProfilePage(title: 'Home Page'),
-    );
-  }
-}
-
 class MyProfilePage extends StatefulWidget {
   const MyProfilePage({super.key, required this.title});
   final String title;
