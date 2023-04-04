@@ -58,7 +58,7 @@ class _watchingPageState extends State<watchingPage> {
     super.initState();
     flickManager = FlickManager(
       videoPlayerController: VideoPlayerController.network(
-          "https://flutter.github.io/assets-for-api-docs/assets/videos/butterfly.mp4"),
+          "https://firebasestorage.googleapis.com/v0/b/android-b258a.appspot.com/o/files%2F3c1d3c7f2b694a9ba7c8895072e29254.MOV?alt=media&token=28c769f3-4f1a-4603-ac02-9b7709c82355"),
       autoInitialize: true,
       autoPlay: true,
     );
@@ -85,7 +85,9 @@ class _watchingPageState extends State<watchingPage> {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
       body: Container(
+        constraints: BoxConstraints.expand(),
         width: MediaQuery.of(context).size.width,
+        decoration: BoxDecoration(),
         //height: MediaQuery.of(context).size.height,
         height: double.infinity,
         child: Column(
@@ -102,14 +104,18 @@ class _watchingPageState extends State<watchingPage> {
                     flickManager.flickControlManager?.autoResume();
                   }
                 },
-                child: FlickVideoPlayer(
-                  flickManager: flickManager,
-                  flickVideoWithControls: FlickVideoWithControls(
-                    closedCaptionTextStyle: TextStyle(fontSize: 8),
-                    controls: FlickPortraitControls(),
-                  ),
-                  flickVideoWithControlsFullscreen: FlickVideoWithControls(
-                    controls: FlickLandscapeControls(),
+                child: SizedBox(
+                  height: size.height * 1 / 3.5,
+                  child: FlickVideoPlayer(
+                    flickManager: flickManager,
+                    flickVideoWithControls: FlickVideoWithControls(
+                      videoFit: BoxFit.fitHeight,
+                      closedCaptionTextStyle: TextStyle(fontSize: 8),
+                      controls: FlickPortraitControls(),
+                    ),
+                    flickVideoWithControlsFullscreen: FlickVideoWithControls(
+                      controls: FlickLandscapeControls(),
+                    ),
                   ),
                 ),
               ),
@@ -141,7 +147,7 @@ class _watchingPageState extends State<watchingPage> {
                         fontWeight: FontWeight.bold),
                   ),
                   Container(
-                    width: size.width * 1 / 2,
+                    width: size.width * 1 / 3,
                     child: LikeButton(
                       onTap: onLikeButtonTapped,
                       size: 40,
@@ -212,17 +218,17 @@ class _watchingPageState extends State<watchingPage> {
                             filedata.insert(0, value);
                           });
                           commentController.clear();
-                          FocusScope.of(context).unfocus();
+                          FocusManager.instance.primaryFocus?.unfocus();
                         } else {
                           print("Not validated");
                         }
                       },
                       formKey: formKey,
                       commentController: commentController,
-                      backgroundColor: Colors.pink,
-                      textColor: Colors.white,
-                      sendWidget:
-                          Icon(Icons.send_sharp, size: 30, color: Colors.white),
+                      backgroundColor: Color.fromARGB(255, 255, 255, 255),
+                      textColor: AppColors.blackGrey,
+                      sendWidget: Icon(Icons.send_sharp,
+                          size: 30, color: Color.fromARGB(255, 177, 177, 177)),
                     ),
                   ),
                 ],
