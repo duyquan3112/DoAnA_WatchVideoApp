@@ -1,3 +1,5 @@
+import 'package:do_an/pages/homePage.dart';
+
 import 'package:do_an/pages/upLoadVideo.dart';
 import 'package:do_an/pages/watchingPage.dart';
 import 'package:flutter/material.dart';
@@ -15,7 +17,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: []);
     return MaterialApp(
-      home: const watchingPage(),
+      home: const MyHomeApp(),
     );
   }
 }
