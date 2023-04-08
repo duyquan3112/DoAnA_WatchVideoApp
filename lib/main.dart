@@ -2,11 +2,15 @@ import 'package:do_an/pages/homePage.dart';
 
 import 'package:do_an/pages/upLoadVideo.dart';
 import 'package:do_an/pages/watchingPage.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-void main() {
-  runApp(const MyApp());
+Future main() async{
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
+
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
@@ -18,6 +22,7 @@ class MyApp extends StatelessWidget {
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: []);
     return MaterialApp(
       home: const MyHomeApp(),
+
     );
   }
 }
