@@ -1,14 +1,46 @@
 import 'package:flutter/material.dart';
+import 'package:slide_popup_dialog_null_safety/slide_popup_dialog.dart'
+    as slideDialog;
 
-class MyProfilePage extends StatefulWidget {
-  const MyProfilePage({super.key, required this.title});
+class MyHomeApp extends StatelessWidget {
+  const MyHomeApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Home Page',
+      theme: ThemeData(
+        primarySwatch: Colors.grey,
+      ),
+      home: const MyHomePage(title: 'Home Page'),
+    );
+  }
+}
+
+class MyHomePage extends StatefulWidget {
+  const MyHomePage({super.key, required this.title});
+
   final String title;
 
   @override
-  State<MyProfilePage> createState() => _MyProfilePageState();
+  State<MyHomePage> createState() => _MyHomePageState();
 }
 
-class _MyProfilePageState extends State<MyProfilePage> {
+class _MyHomePageState extends State<MyHomePage> {
+  int _selectedIndex = 0;
+
+  final List<Widget> _widgetOptions = [
+    listVideo(),
+    Text(''),
+    likedVideo(),
+  ];
+
+  void _onItemTapped(int index) {
+    setState(() {
+      _selectedIndex = index;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -30,72 +62,93 @@ class _MyProfilePageState extends State<MyProfilePage> {
           ),
         ],
       ),
-      body: Padding(
-        padding: const EdgeInsets.fromLTRB(5, 20, 0, 0),
-        child: Expanded(
-          flex: 1,
-          child: ListView(
-            padding: const EdgeInsets.fromLTRB(0, 20, 0, 0),
-            children: [
-              Row(
-                mainAxisSize: MainAxisSize.max,
-                children: [
-                  // Row(
-                  //   children: [
-                  //     Expanded(
-                  //       child: Container(
-                  //         child: Image.network(
-                  //             'https://media.istockphoto.com/id/1145618475/vi/anh/villefranche-tr%C3%AAn-bi%E1%BB%83n-v%C3%A0o-bu%E1%BB%95i-t%E1%BB%91i.jpg?s=1024x1024&w=is&k=20&c=XoPFOytGtsMJwiH_dZu6Hf19Y9NUGN6mos4aiONb8bc=',
-                  //             fit: BoxFit.fill),
-                  //       ),
-                  //     ),
-                  //   ],
-                  // ),
-                  Row(
-                    children: [
-                      CircleAvatar(
-                        child: Text('avatar'),
-                      ),
-                      Column(
-                        children: [Text("Ten video"), Text("Description")],
-                      ),
-                      Icon(Icons.donut_large)
-                    ],
-                  )
-                ],
+      body: _widgetOptions.elementAt(_selectedIndex),
+
+      bottomNavigationBar: BottomNavigationBar(
+        items: <BottomNavigationBarItem>[
+          BottomNavigationBarItem(icon: const Icon(Icons.home), label: ''),
+          BottomNavigationBarItem(
+              icon: IconButton(
+                icon: const Icon(
+                  Icons.add_circle_outline,
+                  color: Colors.indigo,
+                ),
+                onPressed: () {
+                  _showDialog();
+                },
               ),
-              Row(
-                mainAxisSize: MainAxisSize.max,
-                children: [
-                  Row(
-                    children: [],
-                  ),
-                  Row(
-                    children: [
-                      CircleAvatar(
-                        child: Text('avatar'),
-                      ),
-                      Column(
-                        children: [Text("Ten video"), Text("Description")],
-                      ),
-                      Icon(Icons.donut_large)
-                    ],
-                  )
-                ],
-              ),
-            ],
-          ),
-        ),
+              label: ''),
+          BottomNavigationBarItem(
+              icon: Icon(Icons.library_add_outlined), label: ''),
+        ],
+        currentIndex: _selectedIndex,
+        selectedItemColor: Colors.amber[800],
+        onTap: _onItemTapped,
       ),
-      bottomNavigationBar:
-          BottomNavigationBar(items: const <BottomNavigationBarItem>[
-        BottomNavigationBarItem(icon: Icon(Icons.home), label: ''),
-        BottomNavigationBarItem(
-            icon: Icon(Icons.add_circle_outline), label: ''),
-        BottomNavigationBarItem(
-            icon: Icon(Icons.library_add_outlined), label: ''),
-      ]),
       // This trailing comma makes auto-formatting nicer for build methods.
     );
+  }
+
+  void _showDialog() {
+    slideDialog.showSlideDialog(
+      context: context,
+      child: Text("Hello World"),
+      // barrierColor: Colors.white.withOpacity(0.7),
+      // pillColor: Colors.red,
+      // backgroundColor: Colors.yellow,
+    );
+  }
+}
+
+class listVideo extends StatelessWidget {
+  const listVideo({super.key});
+  @override
+  Widget build(BuildContext context) {
+    return ListView(
+      padding: EdgeInsets.all(10),
+      children: <Widget>[
+        Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
+          TextButton(
+            onPressed: () {},
+            child: Text('Am nhac'),
+            style: ButtonStyle(
+              backgroundColor: MaterialStatePropertyAll<Color>(Colors.black),
+            ),
+          ),
+          TextButton(
+            onPressed: () {},
+            child: Text('Tro choi'),
+            style: ButtonStyle(
+              backgroundColor: MaterialStatePropertyAll<Color>(Colors.black),
+            ),
+          ),
+          TextButton(
+            onPressed: () {},
+            child: Text('Phim anh'),
+            style: ButtonStyle(
+              backgroundColor: MaterialStatePropertyAll<Color>(Colors.black),
+            ),
+          ),
+        ]),
+        Card(
+          child: ListTile(
+            isThreeLine: true,
+            leading: CircleAvatar(),
+            title: Text('Ten cua Video'),
+            subtitle: Text('Ho va ten nguoi dung'),
+            trailing: Icon(Icons.more_vert),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class likedVideo extends StatelessWidget {
+  const likedVideo({super.key});
+  @override
+  Widget build(BuildContext context) {
+    // TODO: implement build
+    return Center(child: Text("This is liked video"));
   }
 }

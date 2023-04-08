@@ -1,3 +1,5 @@
+import 'package:do_an/pages/homePage.dart';
+
 import 'package:do_an/pages/upLoadVideo.dart';
 import 'package:do_an/pages/watchingPage.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -19,7 +21,8 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: []);
     return MaterialApp(
-      home: const upLoadVideo(),
+      home: const MyHomeApp(),
+
     );
   }
 }
