@@ -153,7 +153,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "6.1.4"
-
   file_picker:
     dependency: "direct main"
     description:
@@ -162,7 +161,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "5.2.6"
-
   firebase_auth:
     dependency: "direct main"
     description:
@@ -211,7 +209,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.3.0"
-
   firebase_storage:
     dependency: "direct main"
     description:
@@ -236,7 +233,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.4.0"
-
   flick_video_player:
     dependency: "direct main"
     description:
@@ -405,7 +401,7 @@ packages:
     source: hosted
     version: "1.8.2"
   path_provider:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: path_provider
       sha256: c7edf82217d4b2952b2129a61d3ad60f1075b9299e629e149a8d2e39c2e6aad4
@@ -673,6 +669,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.0.15"
+  video_thumbnail:
+    dependency: "direct main"
+    description:
+      name: video_thumbnail
+      sha256: "3455c189d3f0bb4e3fc2236475aa84fe598b9b2d0e08f43b9761f5bc44210016"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.5.3"
   visibility_detector:
     dependency: "direct main"
     description:

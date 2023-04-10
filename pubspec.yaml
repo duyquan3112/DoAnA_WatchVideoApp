@@ -50,6 +50,8 @@ dependencies:
   firebase_storage: ^11.1.0
   firebase_auth: ^4.4.0
   path: ^1.8.2
+  video_thumbnail: ^0.5.3
+  path_provider: ^2.0.14
 
 dev_dependencies:
   flutter_test:
@@ -80,8 +82,11 @@ flutter:
     - assets/fonts/
     - assets/fonts/Inter/
     - assets/images/
+    - assets/images/user/
+    - assets/images/thumbnail/
     - assets/icons/system/2x/
     - assets/icons/system/3x/
+    - assets/video/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
