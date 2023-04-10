@@ -1,3 +1,5 @@
+import 'package:do_an/values/app_assets.dart';
+import 'package:do_an/widgets/videoCard.dart';
 import 'package:flutter/material.dart';
 import 'package:slide_popup_dialog_null_safety/slide_popup_dialog.dart'
     as slideDialog;
@@ -104,6 +106,8 @@ class listVideo extends StatelessWidget {
   const listVideo({super.key});
   @override
   Widget build(BuildContext context) {
+    String uRlVideo = AppAssets.videoDefault;
+
     return ListView(
       padding: EdgeInsets.all(10),
       children: <Widget>[
@@ -130,15 +134,16 @@ class listVideo extends StatelessWidget {
             ),
           ),
         ]),
-        Card(
-          child: ListTile(
-            isThreeLine: true,
-            leading: CircleAvatar(),
-            title: Text('Ten cua Video'),
-            subtitle: Text('Ho va ten nguoi dung'),
-            trailing: Icon(Icons.more_vert),
-          ),
-        ),
+        // Card(
+        //   child: ListTile(
+        //     isThreeLine: true,
+        //     leading: CircleAvatar(),
+        //     title: Text('Ten cua Video'),
+        //     subtitle: Text('Ho va ten nguoi dung'),
+        //     trailing: Icon(Icons.more_vert),
+        //   ),
+        // ),
+        videoCard(uRLVideo: uRlVideo),
       ],
     );
   }
