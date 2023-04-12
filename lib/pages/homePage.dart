@@ -1,8 +1,13 @@
+import 'dart:io';
+
 import 'package:do_an/values/app_assets.dart';
 import 'package:do_an/widgets/videoCard.dart';
 import 'package:flutter/material.dart';
+import 'package:path/path.dart';
 import 'package:slide_popup_dialog_null_safety/slide_popup_dialog.dart'
     as slideDialog;
+
+import '../widgets/selectFiles.dart';
 
 class MyHomeApp extends StatelessWidget {
   const MyHomeApp({super.key});
@@ -30,7 +35,7 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   int _selectedIndex = 0;
-
+  File? file;
   final List<Widget> _widgetOptions = [
     listVideo(),
     Text(''),
@@ -92,9 +97,10 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   void _showDialog() {
+    final fileName = file != null ? basename(file!.path) : 'No File Selected';
     slideDialog.showSlideDialog(
-      context: context,
-      child: Text("Hello World"),
+      context: this.context,
+      child: selectAndUploadFiles(),
       // barrierColor: Colors.white.withOpacity(0.7),
       // pillColor: Colors.red,
       // backgroundColor: Colors.yellow,
