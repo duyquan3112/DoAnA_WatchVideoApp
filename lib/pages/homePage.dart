@@ -17,6 +17,7 @@ class MyHomeApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       title: 'Home Page',
       theme: ThemeData(
         primarySwatch: Colors.grey,
