@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:do_an/pages/signInPage.dart';
 import 'package:do_an/values/app_assets.dart';
 import 'package:do_an/widgets/videoCard.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -67,7 +68,12 @@ class _MyHomePageState extends State<MyHomePage> {
               backgroundColor: Colors.red,
               foregroundColor: Colors.white,
             ),
-            onPressed: () {},
+            onPressed: () { // Điều hướng qua Login 
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => signInPage()),
+              );
+            },
             child: const Text('Login'),
           ),
         ],
