@@ -1,4 +1,8 @@
 import 'package:do_an/pages/homePage.dart';
+import 'package:do_an/pages/signUpPage.dart';
+import 'package:do_an/widgets/auth_button.dart';
+import 'package:do_an/widgets/textfield.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
@@ -17,22 +21,40 @@ class _signInPageState extends State<signInPage> {
   final passwordController = TextEditingController();
 
   void signUserIn() async {
-    showDialog(
-      context: context, 
-      builder: (context) {
-        return const Center(
-          child: CircularProgressIndicator(),
-        );
-      },
-    );
+    try {
+      await FirebaseAuth.instance.signInWithEmailAndPassword(
+      email: emailController.text, 
+      password: passwordController.text,
+      );
+    
+    ///Pop off loading circle
+    Navigator.pop(context);
+    } on FirebaseAuthException catch (e) {
+      ///Pop off loading circle
+      Navigator.pop(context);
+      if (e.code == 'user-not-found'){
+        // wrongEmailPopup();
+        print(e);
+      } else if (e.code == 'wrong-password') {
+        // wrongPasswordPopup();
+        print(e);
+      }
+    }
   }
 
   void navigateToHomePage() {
-  Navigator.pushReplacement(
-    context,
-    MaterialPageRoute(builder: (context) => MyHomeApp()),
-  );
-}
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(builder: (context) => MyHomeApp()),
+    );
+  }
+
+  void navigateToSignUp() {
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(builder: (context) => signUpPage()),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -73,20 +95,20 @@ class _signInPageState extends State<signInPage> {
               const SizedBox(height: 5),
 
               // Emailname textfield
-              // MyTextField(
-              //   controller: emailController,
-              //   hintText: 'Email',
-              //   obscureText: false,               
-              // ),
+              MyTextField(
+                controller: emailController,
+                hintText: 'Email',
+                obscureText: false,               
+              ),
 
               const SizedBox(height: 10),
-              // password textfield
-              
-              // MyTextField(
-              //   controller: passwordController,
-              //   hintText: 'Password',
-              //   obscureText: true,               
-              // ),
+
+              // password textfield           
+              MyTextField(
+                controller: passwordController,
+                hintText: 'Password',
+                obscureText: true,               
+              ),
 
               const SizedBox(height: 10),
 
@@ -107,10 +129,10 @@ class _signInPageState extends State<signInPage> {
               const SizedBox(height: 20),
 
               // sign in button
-              // authButton(
-              //   options: "Sign In",
-              //   onTap: signUserIn,
-              // ),
+              authButton(
+                options: "Sign In",
+                onTap: signUserIn,
+              ),
 
               const SizedBox(height: 15),
 
@@ -171,7 +193,7 @@ class _signInPageState extends State<signInPage> {
                     width: 5,
                   ),
                   GestureDetector(
-                    // onTap: widget.onTap,
+                    onTap: navigateToSignUp,
                     child: const Text(
                       'Register now',
                       style: TextStyle(
