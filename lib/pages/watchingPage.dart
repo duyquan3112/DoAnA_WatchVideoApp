@@ -58,7 +58,7 @@ class _watchingPageState extends State<watchingPage> {
     //fileData = [];
     super.initState();
     flickManager = FlickManager(
-      videoPlayerController: VideoPlayerController.asset(widget.uRlVideo),
+      videoPlayerController: VideoPlayerController.network(widget.uRlVideo),
       autoInitialize: true,
       autoPlay: true,
     );

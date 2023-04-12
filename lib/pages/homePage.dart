@@ -1,7 +1,9 @@
 import 'dart:io';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:do_an/values/app_assets.dart';
 import 'package:do_an/widgets/videoCard.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:path/path.dart';
 import 'package:slide_popup_dialog_null_safety/slide_popup_dialog.dart'
@@ -116,25 +118,25 @@ class listVideo extends StatelessWidget {
 
     return ListView(
       padding: EdgeInsets.all(10),
-      children: <Widget>[
+      children: [
         Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
           TextButton(
             onPressed: () {},
-            child: Text('Am nhac'),
+            child: Text('Music'),
             style: ButtonStyle(
               backgroundColor: MaterialStatePropertyAll<Color>(Colors.black),
             ),
           ),
           TextButton(
             onPressed: () {},
-            child: Text('Tro choi'),
+            child: Text('Game'),
             style: ButtonStyle(
               backgroundColor: MaterialStatePropertyAll<Color>(Colors.black),
             ),
           ),
           TextButton(
             onPressed: () {},
-            child: Text('Phim anh'),
+            child: Text('Movies'),
             style: ButtonStyle(
               backgroundColor: MaterialStatePropertyAll<Color>(Colors.black),
             ),
@@ -149,7 +151,36 @@ class listVideo extends StatelessWidget {
         //     trailing: Icon(Icons.more_vert),
         //   ),
         // ),
-        videoCard(uRLVideo: uRlVideo),
+        // videoCard(uRLVideo: uRlVideo),
+
+        Container(
+          child: StreamBuilder(
+              stream: FirebaseFirestore.instance
+                  .collection('video_list')
+                  .snapshots(),
+              builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+                if (snapshot.hasData) {
+                  return ListView.builder(
+                      shrinkWrap: true,
+                      itemCount: snapshot.data!.docs.length,
+                      itemBuilder: (context, index) => videoCard(
+                          uRLVideo: snapshot.data!.docs[index]['videoUrl'],
+                          title: snapshot.data!.docs[index]['title'],
+                          des: snapshot.data!.docs[index]['description'])
+                      // Card(
+                      //     child: ListTile(
+                      //   isThreeLine: true,
+                      //   leading: CircleAvatar(),
+                      //   title: Text(snapshot.data!.docs[index]['title']),
+                      //   subtitle: Text(snapshot.data!.docs[index]['description']),
+                      //   trailing: Icon(Icons.more_vert),
+                      // )),
+                      );
+                } else {
+                  return Center(child: const Text('No data'));
+                }
+              }),
+        )
       ],
     );
   }
