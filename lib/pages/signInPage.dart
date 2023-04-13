@@ -45,7 +45,8 @@ class _signInPageState extends State<signInPage> {
       }
     }
   }
-
+  
+  //Navigate Function
   void navigateToHomePage() {
     Navigator.pushReplacement(
       context,
