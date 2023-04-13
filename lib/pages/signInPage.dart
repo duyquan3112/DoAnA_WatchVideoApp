@@ -28,7 +28,11 @@ class _signInPageState extends State<signInPage> {
       );
     
     ///Pop off loading circle
-    Navigator.pop(context);
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(
+        builder: (context) => MyHomeApp()),
+      );
     } on FirebaseAuthException catch (e) {
       ///Pop off loading circle
       Navigator.pop(context);
@@ -129,10 +133,34 @@ class _signInPageState extends State<signInPage> {
               const SizedBox(height: 20),
 
               // sign in button
-              authButton(
-                options: "Sign In",
+              // authButton(
+              //   options: "Sign In",
+              //   onTap: signUserIn,
+              // ),
+              GestureDetector(
                 onTap: signUserIn,
+                child: Container(
+                  padding: const EdgeInsets.all(15),
+                  margin: const EdgeInsets.symmetric(horizontal: 25),
+                  decoration: BoxDecoration(
+                    color: Colors.black,
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+        
+                  child: Center(
+                    child: Text(
+                      'Sign In',
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16,
+                      ),
+                    ),
+                  ),
+                ),
               ),
+
+
 
               const SizedBox(height: 15),
 
