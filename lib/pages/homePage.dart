@@ -138,6 +138,34 @@ class listVideo extends StatefulWidget {
   }
   var user = FirebaseAuth.instance.currentUser;
 class _listVideoState extends State<listVideo> {
+
+  String? _username;
+  @override
+  void initState() {
+    super.initState();
+    _getUser();
+  }
+
+  Future<void> _getUser() async {
+    User? user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      setState(() {
+        _username = user.displayName;
+      });
+    } else {
+      setState(() {
+        _username = null;
+      });
+    }
+  }
+
+  void _handleLogout() async {
+    await FirebaseAuth.instance.signOut();
+    setState(() {
+      _username = null;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     String uRlVideo = AppAssets.videoDefault;
@@ -168,12 +196,7 @@ class _listVideoState extends State<listVideo> {
             ),
           ),
           TextButton(
-            onPressed: () async {
-              await FirebaseAuth.instance.signOut();
-              setState(() {
-                user = null;
-              });
-            },
+            onPressed: _handleLogout,
             child: Text('Logout'),
             style: ButtonStyle(
               backgroundColor: MaterialStatePropertyAll<Color>(Colors.black),
@@ -182,10 +205,10 @@ class _listVideoState extends State<listVideo> {
         ]),
         Center(
           
-          child:Text(
-              '${user?.displayName}',
-              style: TextStyle(fontSize: 16.0),
-            ),
+          child:
+              _username != null
+            ? Text('Welcome, $_username')
+            : const Text('Guest'),
         ),
         // Card(
         //   child: ListTile(
