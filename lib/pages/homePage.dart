@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:do_an/pages/signInPage.dart';
 import 'package:do_an/values/app_assets.dart';
 import 'package:do_an/widgets/videoCard.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:path/path.dart';
@@ -12,9 +13,14 @@ import 'package:slide_popup_dialog_null_safety/slide_popup_dialog.dart'
 
 import '../widgets/selectFiles.dart';
 
-class MyHomeApp extends StatelessWidget {
+class MyHomeApp extends StatefulWidget {
   const MyHomeApp({super.key});
 
+  @override
+  State<MyHomeApp> createState() => _MyHomeAppState();
+}
+
+class _MyHomeAppState extends State<MyHomeApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -117,8 +123,21 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 }
 
-class listVideo extends StatelessWidget {
+
+
+class listVideo extends StatefulWidget {
   const listVideo({super.key});
+
+  @override
+  State<listVideo> createState() => _listVideoState();
+}
+  
+  void initState() {
+    user = FirebaseAuth.instance.currentUser;
+    final isSignedIn = user != null;
+  }
+  var user = FirebaseAuth.instance.currentUser;
+class _listVideoState extends State<listVideo> {
   @override
   Widget build(BuildContext context) {
     String uRlVideo = AppAssets.videoDefault;
@@ -148,7 +167,26 @@ class listVideo extends StatelessWidget {
               backgroundColor: MaterialStatePropertyAll<Color>(Colors.black),
             ),
           ),
+          TextButton(
+            onPressed: () async {
+              await FirebaseAuth.instance.signOut();
+              setState(() {
+                user = null;
+              });
+            },
+            child: Text('Logout'),
+            style: ButtonStyle(
+              backgroundColor: MaterialStatePropertyAll<Color>(Colors.black),
+            ),
+          )
         ]),
+        Center(
+          
+          child:Text(
+              '${user?.displayName}',
+              style: TextStyle(fontSize: 16.0),
+            ),
+        ),
         // Card(
         //   child: ListTile(
         //     isThreeLine: true,
