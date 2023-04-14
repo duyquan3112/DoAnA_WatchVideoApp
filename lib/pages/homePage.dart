@@ -126,6 +126,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
 
 class listVideo extends StatefulWidget {
+
   const listVideo({super.key});
 
   @override
@@ -232,9 +233,11 @@ class _listVideoState extends State<listVideo> {
                       shrinkWrap: true,
                       itemCount: snapshot.data!.docs.length,
                       itemBuilder: (context, index) => videoCard(
-                          uRLVideo: snapshot.data!.docs[index]['videoUrl'],
-                          title: snapshot.data!.docs[index]['title'],
-                          des: snapshot.data!.docs[index]['description'])
+                            uRLVideo: snapshot.data!.docs[index]['videoUrl'],
+                            title: snapshot.data!.docs[index]['title'],
+                            des: snapshot.data!.docs[index]['description'],
+                            vidId: snapshot.data!.docs[index].id,
+                          )
                       // Card(
                       //     child: ListTile(
                       //   isThreeLine: true,

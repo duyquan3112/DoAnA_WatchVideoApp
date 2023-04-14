@@ -1,9 +1,11 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:comment_box/comment/comment.dart';
 import 'package:do_an/models/commentModel.dart';
 import 'package:do_an/values/app_assets.dart';
 import 'package:do_an/values/app_colors.dart';
 import 'package:do_an/values/app_styles.dart';
 import 'package:do_an/widgets/comment.dart';
+import 'package:do_an/widgets/commentList.dart';
 import 'package:flick_video_player/flick_video_player.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
@@ -16,7 +18,8 @@ import 'package:visibility_detector/visibility_detector.dart';
 
 class watchingPage extends StatefulWidget {
   final String uRlVideo;
-  const watchingPage({super.key, required this.uRlVideo});
+  final String vidId;
+  const watchingPage({super.key, required this.uRlVideo, required this.vidId});
 
   @override
   State<watchingPage> createState() => _watchingPageState();
@@ -26,36 +29,9 @@ class _watchingPageState extends State<watchingPage> {
   late FlickManager flickManager;
   final formKey = GlobalKey<FormState>();
   final TextEditingController commentController = TextEditingController();
-  List filedata = [
-    {
-      'name': 'Chuks Okwuenu',
-      'pic': 'assets/icons/system/user.png',
-      'message': 'I love to code',
-      'date': '2021-01-01 12:00:00'
-    },
-    {
-      'name': 'Biggi Man',
-      'pic': 'assets/icons/system/user.png',
-      'message': 'Very cool',
-      'date': '2021-01-01 12:00:00'
-    },
-    {
-      'name': 'Tunde Martins',
-      'pic': 'assets/icons/system/user.png',
-      'message': 'Very cool',
-      'date': '2021-01-01 12:00:00'
-    },
-    {
-      'name': 'Biggi Man',
-      'pic': 'assets/icons/system/user.png',
-      'message': 'Very cool',
-      'date': '2021-01-01 12:00:00'
-    },
-  ];
 
   @override
   void initState() {
-    //fileData = [];
     super.initState();
     flickManager = FlickManager(
       videoPlayerController: VideoPlayerController.network(widget.uRlVideo),
@@ -68,6 +44,17 @@ class _watchingPageState extends State<watchingPage> {
   void dispose() {
     flickManager.dispose();
     super.dispose();
+  }
+
+  Future pushComment(commentModel comment) async {
+    await FirebaseFirestore.instance.collection('comment_list').add({
+      'name': comment.name,
+      'content': comment.content,
+      'avtUrl': comment.avtUrl,
+      'date': comment.date,
+      'vidId': comment.vidId
+      // 'type':
+    });
   }
 
   Future<bool> onLikeButtonTapped(bool isLiked) async {
@@ -188,20 +175,10 @@ class _watchingPageState extends State<watchingPage> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  Container(
-                    padding: EdgeInsets.only(left: 20),
-                    width: size.width * 1,
-                    child: Text(
-                      "Comment ${filedata.length}",
-                      textAlign: TextAlign.left,
-                      textDirection: TextDirection.ltr,
-                    ),
-                  ),
                   Expanded(
                     child: CommentBox(
                       userImage: CommentBox.commentImageParser(
                           imageURLorPath: "assets/icons/system/user.png"),
-                      child: CommentChild(data: filedata),
                       labelText: 'Write a comment...',
                       errorText: 'Comment cannot be blank',
                       withBorder: false,
@@ -209,13 +186,13 @@ class _watchingPageState extends State<watchingPage> {
                         if (formKey.currentState!.validate()) {
                           print(commentController.text);
                           setState(() {
-                            var value = {
-                              'name': 'New User',
-                              'pic': 'assets/icons/system/user.png',
-                              'message': commentController.text,
-                              'date': '2021-01-01 12:00:00'
-                            };
-                            filedata.insert(0, value);
+                            commentModel comment = new commentModel();
+                            comment.avtUrl = 'assets/icons/system/user.png';
+                            comment.content = commentController.text;
+                            comment.name = 'New User';
+                            comment.date = DateTime.now().toString();
+                            comment.vidId = widget.vidId;
+                            pushComment(comment);
                           });
                           commentController.clear();
                           FocusManager.instance.primaryFocus?.unfocus();
@@ -229,6 +206,9 @@ class _watchingPageState extends State<watchingPage> {
                       textColor: AppColors.blackGrey,
                       sendWidget: Icon(Icons.send_sharp,
                           size: 30, color: Color.fromARGB(255, 177, 177, 177)),
+                      child: commentList(
+                        vidId: widget.vidId,
+                      ),
                     ),
                   ),
                 ],
