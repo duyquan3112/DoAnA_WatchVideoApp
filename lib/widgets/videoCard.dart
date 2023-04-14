@@ -13,11 +13,13 @@ class videoCard extends StatefulWidget {
   final String uRLVideo;
   final String title;
   final String des;
+  final String vidId;
   const videoCard(
       {super.key,
       required this.uRLVideo,
       required this.title,
-      required this.des});
+      required this.des,
+      required this.vidId});
 
   @override
   State<videoCard> createState() => _videoCardState();
@@ -30,24 +32,17 @@ class _videoCardState extends State<videoCard> {
     return Card(
       child: InkWell(
         onTap: () {
+          print(widget.vidId);
           Navigator.push(
               context,
               MaterialPageRoute(
                   builder: (_) => watchingPage(
                         uRlVideo: widget.uRLVideo,
+                        vidId: widget.vidId,
                       )));
         },
         child: Column(
           children: [
-            // FutureBuilder(
-            //     future: getThumbnail(),
-            //     builder: ((context, snapshot) {
-            //       if (snapshot.hasData) {
-            //         File file = snapshot.data as File;
-            //         return Image.file(file);
-            //       }
-            //       return CircularProgressIndicator();
-            //     })),
             ListTile(
               isThreeLine: true,
               leading: CircleAvatar(),

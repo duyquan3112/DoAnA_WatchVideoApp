@@ -110,6 +110,11 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 }
 
+// Future<String> getVidId() {
+//   DocumentReference docRef =
+//       FirebaseFirestore.instance.collection('video_list').doc('doc');
+// }
+
 class listVideo extends StatelessWidget {
   const listVideo({super.key});
   @override
@@ -164,9 +169,11 @@ class listVideo extends StatelessWidget {
                       shrinkWrap: true,
                       itemCount: snapshot.data!.docs.length,
                       itemBuilder: (context, index) => videoCard(
-                          uRLVideo: snapshot.data!.docs[index]['videoUrl'],
-                          title: snapshot.data!.docs[index]['title'],
-                          des: snapshot.data!.docs[index]['description'])
+                            uRLVideo: snapshot.data!.docs[index]['videoUrl'],
+                            title: snapshot.data!.docs[index]['title'],
+                            des: snapshot.data!.docs[index]['description'],
+                            vidId: snapshot.data!.docs[index].id,
+                          )
                       // Card(
                       //     child: ListTile(
                       //   isThreeLine: true,
