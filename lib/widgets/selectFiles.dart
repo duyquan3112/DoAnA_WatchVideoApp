@@ -11,7 +11,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import '../api/firebase_api.dart';
 import '../pages/upLoadVideo.dart';
 
-const List<String> list = <String>['Musics', 'Games', 'Movies'];
+const List<String> list = <String>['Movies', 'Games', 'Musics'];
 
 class selectAndUploadFiles extends StatefulWidget {
   const selectAndUploadFiles({super.key});
@@ -30,9 +30,19 @@ class _selectAndUploadFilesState extends State<selectAndUploadFiles> {
   String? urlDownload;
 
   String dropdownValue = list.first;
+
+  int? _type;
+
+  var types = <String>[
+    'Movies',
+    'Games',
+    'Musics',
+  ];
   @override
   Widget build(BuildContext context) {
     final fileName = file != null ? basename(file!.path) : 'No File Selected';
+    value:
+    _type == null ? null : types[_type!];
     return Expanded(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -61,7 +71,8 @@ class _selectAndUploadFilesState extends State<selectAndUploadFiles> {
             onChanged: (String? value) {
               // This is called when the user selects an item.
               setState(() {
-                dropdownValue = value!;
+                  dropdownValue = value!;
+                _type = types.indexOf(value!);
               });
             },
             items: list.map<DropdownMenuItem<String>>((String value) {
@@ -71,6 +82,7 @@ class _selectAndUploadFilesState extends State<selectAndUploadFiles> {
               );
             }).toList(),
           ),
+          
           TextButton(
             onPressed: () async {
               await upLoadFile();
@@ -80,7 +92,6 @@ class _selectAndUploadFilesState extends State<selectAndUploadFiles> {
             child: Text('UpLoadVideo'),
           ),
           task != null ? buildUploadStatus(task!) : Container(),
-          
         ],
       ),
     );
@@ -125,12 +136,20 @@ class _selectAndUploadFilesState extends State<selectAndUploadFiles> {
       'title': title,
       'description': description,
       'videoUrl': urlDownload,
-      // 'type':
+      'type': await getTypeVideo(),
     });
   }
-  // Sring getTypeVideo(){
 
-  // };
+  Future<String> getTypeVideo() async {
+    String tmp = '';
+    if (_type == 0) {
+      return tmp = 'movies';
+    } else if (_type == 1) {
+      return tmp = 'games';
+    }
+    return tmp = 'musics';
+  }
+
   Future selectFile() async {
     final result = await FilePicker.platform.pickFiles(allowMultiple: false);
 

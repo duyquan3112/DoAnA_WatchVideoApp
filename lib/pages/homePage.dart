@@ -1,8 +1,10 @@
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:do_an/pages/signInPage.dart';
 import 'package:do_an/values/app_assets.dart';
 import 'package:do_an/widgets/videoCard.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:path/path.dart';
@@ -11,12 +13,18 @@ import 'package:slide_popup_dialog_null_safety/slide_popup_dialog.dart'
 
 import '../widgets/selectFiles.dart';
 
-class MyHomeApp extends StatelessWidget {
+class MyHomeApp extends StatefulWidget {
   const MyHomeApp({super.key});
 
   @override
+  State<MyHomeApp> createState() => _MyHomeAppState();
+}
+
+class _MyHomeAppState extends State<MyHomeApp> {
+  @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       title: 'Home Page',
       theme: ThemeData(
         primarySwatch: Colors.grey,
@@ -66,7 +74,12 @@ class _MyHomePageState extends State<MyHomePage> {
               backgroundColor: Colors.red,
               foregroundColor: Colors.white,
             ),
-            onPressed: () {},
+            onPressed: () { // Điều hướng qua Login 
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => signInPage()),
+              );
+            },
             child: const Text('Login'),
           ),
         ],
@@ -110,13 +123,50 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 }
 
-// Future<String> getVidId() {
-//   DocumentReference docRef =
-//       FirebaseFirestore.instance.collection('video_list').doc('doc');
-// }
 
-class listVideo extends StatelessWidget {
+
+class listVideo extends StatefulWidget {
+
   const listVideo({super.key});
+
+  @override
+  State<listVideo> createState() => _listVideoState();
+}
+  
+  void initState() {
+    user = FirebaseAuth.instance.currentUser;
+    final isSignedIn = user != null;
+  }
+  var user = FirebaseAuth.instance.currentUser;
+class _listVideoState extends State<listVideo> {
+
+  String? _username;
+  @override
+  void initState() {
+    super.initState();
+    _getUser();
+  }
+
+  Future<void> _getUser() async {
+    User? user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      setState(() {
+        _username = user.displayName;
+      });
+    } else {
+      setState(() {
+        _username = null;
+      });
+    }
+  }
+
+  void _handleLogout() async {
+    await FirebaseAuth.instance.signOut();
+    setState(() {
+      _username = null;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     String uRlVideo = AppAssets.videoDefault;
@@ -146,7 +196,21 @@ class listVideo extends StatelessWidget {
               backgroundColor: MaterialStatePropertyAll<Color>(Colors.black),
             ),
           ),
+          TextButton(
+            onPressed: _handleLogout,
+            child: Text('Logout'),
+            style: ButtonStyle(
+              backgroundColor: MaterialStatePropertyAll<Color>(Colors.black),
+            ),
+          )
         ]),
+        Center(
+          
+          child:
+              _username != null
+            ? Text('Welcome, $_username')
+            : const Text('Guest'),
+        ),
         // Card(
         //   child: ListTile(
         //     isThreeLine: true,
