@@ -71,8 +71,8 @@ class _selectAndUploadFilesState extends State<selectAndUploadFiles> {
             onChanged: (String? value) {
               // This is called when the user selects an item.
               setState(() {
-                  dropdownValue = value!;
-                _type = types.indexOf(value!);
+                dropdownValue = value!;
+                _type = types.indexOf(value);
               });
             },
             items: list.map<DropdownMenuItem<String>>((String value) {
@@ -82,7 +82,6 @@ class _selectAndUploadFilesState extends State<selectAndUploadFiles> {
               );
             }).toList(),
           ),
-          
           TextButton(
             onPressed: () async {
               await upLoadFile();
