@@ -29,6 +29,22 @@ class videoCard extends StatefulWidget {
 }
 
 class _videoCardState extends State<videoCard> {
+  String? _thumbnailUrl;
+
+  void genThumbnail() async {
+    _thumbnailUrl = await VideoThumbnail.thumbnailFile(
+        video: widget.infoVid.url!,
+        thumbnailPath: (await getTemporaryDirectory()).path,
+        imageFormat: ImageFormat.WEBP);
+    setState(() {});
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    genThumbnail();
+  }
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -45,6 +61,23 @@ class _videoCardState extends State<videoCard> {
         },
         child: Column(
           children: [
+            Stack(alignment: Alignment.center, children: [
+              if (_thumbnailUrl != null)
+                Image.file(
+                  File(_thumbnailUrl!),
+                  scale: 1,
+                  height: size.height * 1 / 5,
+                ),
+              CircleAvatar(
+                radius: 30,
+                backgroundColor: Colors.black45,
+                child: Icon(
+                  Icons.play_arrow,
+                  size: 40,
+                  color: Colors.white,
+                ),
+              ),
+            ]),
             ListTile(
               isThreeLine: true,
               leading: CircleAvatar(),
