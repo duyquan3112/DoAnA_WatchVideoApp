@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:do_an/models/infoVideo.dart';
 import 'package:do_an/pages/signInPage.dart';
 import 'package:do_an/values/app_assets.dart';
 import 'package:do_an/widgets/videoCard.dart';
@@ -74,7 +75,8 @@ class _MyHomePageState extends State<MyHomePage> {
               backgroundColor: Colors.red,
               foregroundColor: Colors.white,
             ),
-            onPressed: () { // Điều hướng qua Login 
+            onPressed: () {
+              // Điều hướng qua Login
               Navigator.push(
                 context,
                 MaterialPageRoute(builder: (context) => signInPage()),
@@ -123,23 +125,21 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 }
 
-
-
 class listVideo extends StatefulWidget {
-
   const listVideo({super.key});
 
   @override
   State<listVideo> createState() => _listVideoState();
 }
-  
-  void initState() {
-    user = FirebaseAuth.instance.currentUser;
-    final isSignedIn = user != null;
-  }
-  var user = FirebaseAuth.instance.currentUser;
-class _listVideoState extends State<listVideo> {
 
+void initState() {
+  user = FirebaseAuth.instance.currentUser;
+  final isSignedIn = user != null;
+}
+
+var user = FirebaseAuth.instance.currentUser;
+
+class _listVideoState extends State<listVideo> {
   String? _username;
   @override
   void initState() {
@@ -205,11 +205,9 @@ class _listVideoState extends State<listVideo> {
           )
         ]),
         Center(
-          
-          child:
-              _username != null
-            ? Text('Welcome, $_username')
-            : const Text('Guest'),
+          child: _username != null
+              ? Text('Welcome, $_username')
+              : const Text('Guest'),
         ),
         // Card(
         //   child: ListTile(
@@ -232,12 +230,21 @@ class _listVideoState extends State<listVideo> {
                   return ListView.builder(
                       shrinkWrap: true,
                       itemCount: snapshot.data!.docs.length,
-                      itemBuilder: (context, index) => videoCard(
-                            uRLVideo: snapshot.data!.docs[index]['videoUrl'],
-                            title: snapshot.data!.docs[index]['title'],
-                            des: snapshot.data!.docs[index]['description'],
-                            vidId: snapshot.data!.docs[index].id,
-                          )
+                      itemBuilder: (context, index) {
+                        infoVideo info = infoVideo();
+                        info.description =
+                            snapshot.data!.docs[index]['description'];
+                        info.title = snapshot.data!.docs[index]['title'];
+                        info.url = snapshot.data!.docs[index]['videoUrl'];
+                        info.vidId = snapshot.data!.docs[index].id;
+                        return videoCard(
+                          // uRLVideo: snapshot.data!.docs[index]['videoUrl'],
+                          // title: snapshot.data!.docs[index]['title'],
+                          // des: snapshot.data!.docs[index]['description'],
+                          // vidId: snapshot.data!.docs[index].id,
+                          infoVid: info,
+                        );
+                      }
                       // Card(
                       //     child: ListTile(
                       //   isThreeLine: true,

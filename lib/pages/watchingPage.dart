@@ -1,6 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:comment_box/comment/comment.dart';
+import 'package:date_format/date_format.dart';
 import 'package:do_an/models/commentModel.dart';
+import 'package:do_an/models/infoVideo.dart';
+import 'package:do_an/pages/profilePage.dart';
 import 'package:do_an/values/app_assets.dart';
 import 'package:do_an/values/app_colors.dart';
 import 'package:do_an/values/app_styles.dart';
@@ -17,9 +20,14 @@ import 'package:mock_data/mock_data.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 
 class watchingPage extends StatefulWidget {
+  final infoVideo info;
   final String uRlVideo;
   final String vidId;
-  const watchingPage({super.key, required this.uRlVideo, required this.vidId});
+  const watchingPage(
+      {super.key,
+      required this.uRlVideo,
+      required this.vidId,
+      required this.info});
 
   @override
   State<watchingPage> createState() => _watchingPageState();
@@ -108,32 +116,60 @@ class _watchingPageState extends State<watchingPage> {
               ),
             ),
             Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Text('This is an example video',
-                  style: AppStyles.h4.copyWith(
-                    color: Colors.black,
-                    fontWeight: FontWeight.bold,
-                  )),
+              padding: const EdgeInsets.all(10.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(widget.info.title!,
+                      style: AppStyles.h4.copyWith(
+                        color: Colors.black,
+                        fontWeight: FontWeight.bold,
+                      )),
+                  Text(
+                    'Description: ',
+                    style: AppStyles.h5.copyWith(
+                        color: AppColors.blackGrey,
+                        fontWeight: FontWeight.bold),
+                  ),
+                  Text(
+                    widget.info.description!,
+                    style: AppStyles.h5.copyWith(color: AppColors.blackGrey),
+                    softWrap: true,
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                  )
+                ],
+              ),
             ),
             SizedBox(
               width: size.width,
               child: Row(
                 children: [
-                  Container(
-                    padding: const EdgeInsets.all(10),
-                    child: const AvatarView(
-                      radius: 25,
-                      avatarType: AvatarType.CIRCLE,
-                      imagePath: "assets/icons/system/user.png",
+                  InkWell(
+                    onTap: () => Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (_) => MyProfilePage(title: 'title'))),
+                    child: Row(
+                      children: [
+                        Container(
+                          padding: const EdgeInsets.all(10),
+                          child: const AvatarView(
+                            radius: 25,
+                            avatarType: AvatarType.CIRCLE,
+                            imagePath: "assets/icons/system/user.png",
+                          ),
+                        ),
+                        Text(
+                          " Duy Quan",
+                          style: AppStyles.h4.copyWith(
+                              color: AppColors.blackGrey,
+                              fontWeight: FontWeight.bold),
+                        ),
+                      ],
                     ),
                   ),
-                  Text(
-                    " Duy Quan",
-                    style: AppStyles.h4.copyWith(
-                        color: AppColors.blackGrey,
-                        fontWeight: FontWeight.bold),
-                  ),
-                  Container(
+                  SizedBox(
                     width: size.width * 1 / 3,
                     child: LikeButton(
                       onTap: onLikeButtonTapped,
@@ -148,7 +184,7 @@ class _watchingPageState extends State<watchingPage> {
                         return ImageIcon(
                           AssetImage(AppAssets.heart),
                           color: isLiked
-                              ? Color.fromARGB(255, 238, 0, 52)
+                              ? const Color.fromARGB(255, 238, 0, 52)
                               : Colors.grey,
                         );
                       },
@@ -186,11 +222,23 @@ class _watchingPageState extends State<watchingPage> {
                         if (formKey.currentState!.validate()) {
                           print(commentController.text);
                           setState(() {
-                            commentModel comment = new commentModel();
+                            var date = DateTime.now();
+                            var formattedDate = formatDate(date, [
+                              dd,
+                              '/',
+                              mm,
+                              '/',
+                              yyyy,
+                              ' ',
+                              HH,
+                              ':',
+                              nn,
+                            ]);
+                            commentModel comment = commentModel();
                             comment.avtUrl = 'assets/icons/system/user.png';
                             comment.content = commentController.text;
                             comment.name = 'New User';
-                            comment.date = DateTime.now().toString();
+                            comment.date = formattedDate.toString();
                             comment.vidId = widget.vidId;
                             pushComment(comment);
                           });
@@ -202,9 +250,9 @@ class _watchingPageState extends State<watchingPage> {
                       },
                       formKey: formKey,
                       commentController: commentController,
-                      backgroundColor: Color.fromARGB(255, 255, 255, 255),
+                      backgroundColor: const Color.fromARGB(255, 255, 255, 255),
                       textColor: AppColors.blackGrey,
-                      sendWidget: Icon(Icons.send_sharp,
+                      sendWidget: const Icon(Icons.send_sharp,
                           size: 30, color: Color.fromARGB(255, 177, 177, 177)),
                       child: commentList(
                         vidId: widget.vidId,
