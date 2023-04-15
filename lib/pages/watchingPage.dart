@@ -21,13 +21,7 @@ import 'package:visibility_detector/visibility_detector.dart';
 
 class watchingPage extends StatefulWidget {
   final infoVideo info;
-  final String uRlVideo;
-  final String vidId;
-  const watchingPage(
-      {super.key,
-      required this.uRlVideo,
-      required this.vidId,
-      required this.info});
+  const watchingPage({super.key, required this.info});
 
   @override
   State<watchingPage> createState() => _watchingPageState();
@@ -42,7 +36,7 @@ class _watchingPageState extends State<watchingPage> {
   void initState() {
     super.initState();
     flickManager = FlickManager(
-      videoPlayerController: VideoPlayerController.network(widget.uRlVideo),
+      videoPlayerController: VideoPlayerController.network(widget.info.url!),
       autoInitialize: true,
       autoPlay: true,
     );
@@ -239,7 +233,7 @@ class _watchingPageState extends State<watchingPage> {
                             comment.content = commentController.text;
                             comment.name = 'New User';
                             comment.date = formattedDate.toString();
-                            comment.vidId = widget.vidId;
+                            comment.vidId = widget.info.vidId;
                             pushComment(comment);
                           });
                           commentController.clear();
@@ -255,7 +249,7 @@ class _watchingPageState extends State<watchingPage> {
                       sendWidget: const Icon(Icons.send_sharp,
                           size: 30, color: Color.fromARGB(255, 177, 177, 177)),
                       child: commentList(
-                        vidId: widget.vidId,
+                        vidId: widget.info.vidId!,
                       ),
                     ),
                   ),
