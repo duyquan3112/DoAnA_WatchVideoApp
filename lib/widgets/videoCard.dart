@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:do_an/models/infoVideo.dart';
 import 'package:do_an/pages/watchingPage.dart';
 import 'package:do_an/values/app_assets.dart';
 import 'package:flutter/material.dart';
@@ -10,16 +11,18 @@ import 'package:video_player/video_player.dart';
 import 'package:video_thumbnail/video_thumbnail.dart';
 
 class videoCard extends StatefulWidget {
-  final String uRLVideo;
-  final String title;
-  final String des;
-  final String vidId;
+  final infoVideo infoVid;
+  // final String uRLVideo;
+  // final String title;
+  // final String des;
+  // final String vidId;
   const videoCard(
       {super.key,
-      required this.uRLVideo,
-      required this.title,
-      required this.des,
-      required this.vidId});
+      // required this.uRLVideo,
+      // required this.title,
+      // required this.des,
+      // required this.vidId,
+      required this.infoVid});
 
   @override
   State<videoCard> createState() => _videoCardState();
@@ -32,13 +35,14 @@ class _videoCardState extends State<videoCard> {
     return Card(
       child: InkWell(
         onTap: () {
-          print(widget.vidId);
+          print(widget.infoVid.vidId);
           Navigator.push(
               context,
               MaterialPageRoute(
                   builder: (_) => watchingPage(
-                        uRlVideo: widget.uRLVideo,
-                        vidId: widget.vidId,
+                        uRlVideo: widget.infoVid.url!,
+                        vidId: widget.infoVid.vidId!,
+                        info: widget.infoVid,
                       )));
         },
         child: Column(
@@ -46,8 +50,8 @@ class _videoCardState extends State<videoCard> {
             ListTile(
               isThreeLine: true,
               leading: CircleAvatar(),
-              title: Text(widget.title),
-              subtitle: Text(widget.des),
+              title: Text(widget.infoVid.title!),
+              subtitle: Text(widget.infoVid.description!),
               trailing: Icon(Icons.more_vert),
             ),
           ],

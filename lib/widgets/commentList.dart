@@ -40,19 +40,23 @@ class _commentListState extends State<commentList> {
             ),
           );
         }
-        return ListView(
-          children: snapshot.data!.docs.map((DocumentSnapshot document) {
-            if (document['vidId'] == widget.vidId) {
-              return CommentChild(
-                  avtUrl: document['avtUrl'],
-                  name: document['name'],
-                  content: document['content'],
-                  date: document['date']);
-            }
-            return const SizedBox(
-              height: 0,
-            );
-          }).toList(),
+        return MediaQuery.removePadding(
+          context: context,
+          removeTop: true,
+          child: ListView(
+            children: snapshot.data!.docs.map((DocumentSnapshot document) {
+              if (document['vidId'] == widget.vidId) {
+                return CommentChild(
+                    avtUrl: document['avtUrl'],
+                    name: document['name'],
+                    content: document['content'],
+                    date: document['date']);
+              }
+              return const SizedBox(
+                height: 0,
+              );
+            }).toList(),
+          ),
         );
       },
     );
