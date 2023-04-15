@@ -218,7 +218,7 @@ class _signUpPageState extends State<signUpPage> {
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 10.0),
                         child: Text(
-                          'Or continue with',
+                          'Or',
                           style: TextStyle(
                             color: Colors.grey[700]),
                         ),
@@ -236,14 +236,14 @@ class _signUpPageState extends State<signUpPage> {
                 const SizedBox(height: 15),
         
                 // continue with gg apple
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: const [
-                    // google button
-                    // SquareTile(imagePath: 'assets/images/google.png'),
-                    SizedBox(width: 25),
-                  ],
-                ),
+                // Row(
+                //   mainAxisAlignment: MainAxisAlignment.center,
+                //   children: const [
+                //     // google button
+                //     // SquareTile(imagePath: 'assets/images/google.png'),
+                //     SizedBox(width: 25),
+                //   ],
+                // ),
       
                 const SizedBox(height: 15),
               
