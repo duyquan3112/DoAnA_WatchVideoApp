@@ -59,6 +59,33 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
+  String? _username;
+  @override
+  void initState() {
+    super.initState();
+    _getUser();
+  }
+
+  Future<void> _getUser() async {
+    User? user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      setState(() {
+        _username = user.displayName;
+      });
+    } else {
+      setState(() {
+        _username = null;
+      });
+    }
+  }
+
+  void _handleLogout() async {
+    await FirebaseAuth.instance.signOut();
+    setState(() {
+      _username = null;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -70,20 +97,39 @@ class _MyHomePageState extends State<MyHomePage> {
             onPressed: () {},
           ),
           IconButton(onPressed: () {}, icon: const Icon(Icons.search)),
-          TextButton(
-            style: TextButton.styleFrom(
-              backgroundColor: Colors.red,
-              foregroundColor: Colors.white,
-            ),
-            onPressed: () {
-              // Điều hướng qua Login
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => signInPage()),
-              );
-            },
-            child: const Text('Login'),
+          SizedBox(
+            child: Container(
+              child: _username != null
+                ? Center(
+                    child: Text('$_username  ',
+                    textAlign: TextAlign.center,),
+                )
+                : TextButton(
+                    style: TextButton.styleFrom(
+                    backgroundColor: Colors.red,
+                    foregroundColor: Colors.white,
+                    ),
+                    onPressed: () {
+                      // Điều hướng qua Login
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => signInPage()),
+                      );
+                    },
+                  child: const Text('Login'),
+                  ),
+                  ),
           ),
+          TextButton(
+            onPressed: () {
+              _handleLogout();
+            },
+            child: Text('Logout'),
+            style: ButtonStyle(
+              backgroundColor: MaterialStatePropertyAll<Color>(Colors.black),
+            ),
+          ),
+          
         ],
       ),
       body: _widgetOptions.elementAt(_selectedIndex),
@@ -131,42 +177,7 @@ class listVideo extends StatefulWidget {
   @override
   State<listVideo> createState() => _listVideoState();
 }
-
-void initState() {
-  user = FirebaseAuth.instance.currentUser;
-  final isSignedIn = user != null;
-}
-
-var user = FirebaseAuth.instance.currentUser;
-
 class _listVideoState extends State<listVideo> {
-  String? _username;
-  @override
-  void initState() {
-    super.initState();
-    _getUser();
-  }
-
-  Future<void> _getUser() async {
-    User? user = FirebaseAuth.instance.currentUser;
-    if (user != null) {
-      setState(() {
-        _username = user.displayName;
-      });
-    } else {
-      setState(() {
-        _username = null;
-      });
-    }
-  }
-
-  void _handleLogout() async {
-    await FirebaseAuth.instance.signOut();
-    setState(() {
-      _username = null;
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     String uRlVideo = AppAssets.videoDefault;
@@ -196,19 +207,7 @@ class _listVideoState extends State<listVideo> {
               backgroundColor: MaterialStatePropertyAll<Color>(Colors.black),
             ),
           ),
-          TextButton(
-            onPressed: _handleLogout,
-            child: Text('Logout'),
-            style: ButtonStyle(
-              backgroundColor: MaterialStatePropertyAll<Color>(Colors.black),
-            ),
-          )
         ]),
-        Center(
-          child: _username != null
-              ? Text('Welcome, $_username')
-              : const Text('Guest'),
-        ),
         // Card(
         //   child: ListTile(
         //     isThreeLine: true,
@@ -220,7 +219,7 @@ class _listVideoState extends State<listVideo> {
         // ),
         // videoCard(uRLVideo: uRlVideo),
 
-        Container(
+        SingleChildScrollView(
           child: StreamBuilder(
               stream: FirebaseFirestore.instance
                   .collection('video_list')
