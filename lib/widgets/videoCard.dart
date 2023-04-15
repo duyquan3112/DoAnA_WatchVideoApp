@@ -40,8 +40,6 @@ class _videoCardState extends State<videoCard> {
               context,
               MaterialPageRoute(
                   builder: (_) => watchingPage(
-                        uRlVideo: widget.infoVid.url!,
-                        vidId: widget.infoVid.vidId!,
                         info: widget.infoVid,
                       )));
         },
