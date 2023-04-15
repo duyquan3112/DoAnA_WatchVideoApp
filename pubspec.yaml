@@ -86,6 +86,7 @@ flutter:
     - assets/fonts/
     - assets/fonts/Inter/
     - assets/images/
+    - assets/images/google.png
     - assets/images/thumbnail/
     - assets/icons/system/2x/
     - assets/icons/system/3x/
