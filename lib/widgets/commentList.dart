@@ -46,11 +46,14 @@ class _commentListState extends State<commentList> {
           child: ListView(
             children: snapshot.data!.docs.map((DocumentSnapshot document) {
               if (document['vidId'] == widget.vidId) {
+                commentModel comment = commentModel();
+                comment.avtUrl = document['avtUrl'];
+                comment.name = document['name'];
+                comment.content = document['content'];
+                comment.date = document['date'];
                 return CommentChild(
-                    avtUrl: document['avtUrl'],
-                    name: document['name'],
-                    content: document['content'],
-                    date: document['date']);
+                  comment: comment,
+                );
               }
               return const SizedBox(
                 height: 0,
