@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:do_an/models/infoVideo.dart';
 import 'package:do_an/pages/signInPage.dart';
+import 'package:do_an/models/getUserData.dart';
 import 'package:do_an/values/app_assets.dart';
 import 'package:do_an/widgets/videoCard.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -59,23 +60,29 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
-  String? _username;
+  UserData _user = UserData.empty();
+  String username = '';
 
   @override
   void initState() {
     super.initState();
-    _getUser();
+    _initUser();
   }
 
-  Future<void> _getUser() async {
-    User? user = FirebaseAuth.instance.currentUser;
-    if (user != null) {
+  Future<void> _initUser() async {
+    User? firebaseUser = await FirebaseAuth.instance.currentUser;
+    if (firebaseUser != null) {
       setState(() {
-        _username = user.displayName;
+        _user = UserData(
+          uid: firebaseUser.uid ,
+          email: firebaseUser.email ?? '',
+          displayName: firebaseUser.displayName ?? '',
+          // photoUrl: firebaseUser.photoURL ?? '',
+        );
       });
     } else {
       setState(() {
-        _username = null;
+        _user = UserData.empty();
       });
     }
   }
@@ -83,8 +90,9 @@ class _MyHomePageState extends State<MyHomePage> {
   void _handleLogout() async {
     await FirebaseAuth.instance.signOut();
     setState(() {
-      _username = null;
+      _user.isSignedIn;
     });
+    _initUser();
   }
 
   @override
@@ -99,29 +107,30 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
           IconButton(onPressed: () {}, icon: const Icon(Icons.search)),
           SizedBox(
-            child: Container(
-              child: _username != null
-                  ? Center(
-                      child: Text(
-                        '$_username  ',
-                        textAlign: TextAlign.center,
-                      ),
-                    )
-                  : TextButton(
-                      style: TextButton.styleFrom(
-                        backgroundColor: Colors.red,
-                        foregroundColor: Colors.white,
-                      ),
-                      onPressed: () {
-                        // Điều hướng qua Login
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => signInPage()),
-                        );
-                      },
-                      child: const Text('Login'),
-                    ),
-            ),
+            child: _user.isSignedIn
+            ? Center(
+              child: Text(
+                '${_user.displayName}  ',
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 16,
+                ),
+                )
+              )
+            : TextButton(
+                style: TextButton.styleFrom(
+                  backgroundColor: Colors.red,
+                  foregroundColor: Colors.white,
+                ),
+                onPressed: () {
+                  // Điều hướng qua Login
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => signInPage()),
+                  );
+                },
+                child: const Text('Login'),
+              ),
           ),
           TextButton(
             onPressed: () {
