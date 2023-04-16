@@ -30,6 +30,12 @@ class videoCard extends StatefulWidget {
 
 class _videoCardState extends State<videoCard> {
   String? _thumbnailUrl;
+  @override
+  void setState(fn) {
+    if (mounted) {
+      super.setState(fn);
+    }
+  }
 
   void genThumbnail() async {
     _thumbnailUrl = await VideoThumbnail.thumbnailFile(
@@ -41,8 +47,8 @@ class _videoCardState extends State<videoCard> {
 
   @override
   void initState() {
-    super.initState();
     genThumbnail();
+    super.initState();
   }
 
   @override

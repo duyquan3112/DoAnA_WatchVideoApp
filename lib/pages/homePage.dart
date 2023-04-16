@@ -100,25 +100,27 @@ class _MyHomePageState extends State<MyHomePage> {
           SizedBox(
             child: Container(
               child: _username != null
-                ? Center(
-                    child: Text('$_username  ',
-                    textAlign: TextAlign.center,),
-                )
-                : TextButton(
-                    style: TextButton.styleFrom(
-                    backgroundColor: Colors.red,
-                    foregroundColor: Colors.white,
+                  ? Center(
+                      child: Text(
+                        '$_username  ',
+                        textAlign: TextAlign.center,
+                      ),
+                    )
+                  : TextButton(
+                      style: TextButton.styleFrom(
+                        backgroundColor: Colors.red,
+                        foregroundColor: Colors.white,
+                      ),
+                      onPressed: () {
+                        // Điều hướng qua Login
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => signInPage()),
+                        );
+                      },
+                      child: const Text('Login'),
                     ),
-                    onPressed: () {
-                      // Điều hướng qua Login
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => signInPage()),
-                      );
-                    },
-                  child: const Text('Login'),
-                  ),
-                  ),
+            ),
           ),
           TextButton(
             onPressed: () {
@@ -129,7 +131,6 @@ class _MyHomePageState extends State<MyHomePage> {
               backgroundColor: MaterialStatePropertyAll<Color>(Colors.black),
             ),
           ),
-          
         ],
       ),
       body: _widgetOptions.elementAt(_selectedIndex),
@@ -177,56 +178,49 @@ class listVideo extends StatefulWidget {
   @override
   State<listVideo> createState() => _listVideoState();
 }
+
 class _listVideoState extends State<listVideo> {
   @override
   Widget build(BuildContext context) {
     String uRlVideo = AppAssets.videoDefault;
 
-    return ListView(
-      padding: EdgeInsets.all(10),
-      children: [
-        Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
-          TextButton(
-            onPressed: () {},
-            child: Text('Music'),
-            style: ButtonStyle(
-              backgroundColor: MaterialStatePropertyAll<Color>(Colors.black),
-            ),
-          ),
-          TextButton(
-            onPressed: () {},
-            child: Text('Game'),
-            style: ButtonStyle(
-              backgroundColor: MaterialStatePropertyAll<Color>(Colors.black),
-            ),
-          ),
-          TextButton(
-            onPressed: () {},
-            child: Text('Movies'),
-            style: ButtonStyle(
-              backgroundColor: MaterialStatePropertyAll<Color>(Colors.black),
-            ),
-          ),
-        ]),
-        // Card(
-        //   child: ListTile(
-        //     isThreeLine: true,
-        //     leading: CircleAvatar(),
-        //     title: Text('Ten cua Video'),
-        //     subtitle: Text('Ho va ten nguoi dung'),
-        //     trailing: Icon(Icons.more_vert),
-        //   ),
-        // ),
-        // videoCard(uRLVideo: uRlVideo),
-
-        SingleChildScrollView(
-          child: StreamBuilder(
-              stream: FirebaseFirestore.instance
-                  .collection('video_list')
-                  .snapshots(),
-              builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
-                if (snapshot.hasData) {
-                  return ListView.builder(
+    return StreamBuilder(
+        stream: FirebaseFirestore.instance.collection('video_list').snapshots(),
+        builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+          if (snapshot.hasData) {
+            return Column(
+              children: [
+                Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      TextButton(
+                        onPressed: () {},
+                        child: Text('Music'),
+                        style: ButtonStyle(
+                          backgroundColor:
+                              MaterialStatePropertyAll<Color>(Colors.black),
+                        ),
+                      ),
+                      TextButton(
+                        onPressed: () {},
+                        child: Text('Game'),
+                        style: ButtonStyle(
+                          backgroundColor:
+                              MaterialStatePropertyAll<Color>(Colors.black),
+                        ),
+                      ),
+                      TextButton(
+                        onPressed: () {},
+                        child: Text('Movies'),
+                        style: ButtonStyle(
+                          backgroundColor:
+                              MaterialStatePropertyAll<Color>(Colors.black),
+                        ),
+                      ),
+                    ]),
+                Flexible(
+                  child: ListView.builder(
+                      physics: const BouncingScrollPhysics(),
                       shrinkWrap: true,
                       itemCount: snapshot.data!.docs.length,
                       itemBuilder: (context, index) {
@@ -252,14 +246,14 @@ class _listVideoState extends State<listVideo> {
                       //   subtitle: Text(snapshot.data!.docs[index]['description']),
                       //   trailing: Icon(Icons.more_vert),
                       // )),
-                      );
-                } else {
-                  return Center(child: const Text('No data'));
-                }
-              }),
-        )
-      ],
-    );
+                      ),
+                ),
+              ],
+            );
+          } else {
+            return Center(child: const Text('No data'));
+          }
+        });
   }
 }
 
