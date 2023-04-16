@@ -1,18 +1,11 @@
+import 'package:do_an/models/commentModel.dart';
 import 'package:flutter/material.dart';
 import 'package:comment_box/comment/comment.dart';
 
 class CommentChild extends StatefulWidget {
-  final String name;
-  final String avtUrl;
-  final String content;
-  final String date;
+  final commentModel comment;
 
-  const CommentChild(
-      {super.key,
-      required this.avtUrl,
-      required this.name,
-      required this.content,
-      required this.date});
+  const CommentChild({super.key, required this.comment});
 
   @override
   State<CommentChild> createState() => _CommentChildState();
@@ -38,15 +31,15 @@ class _CommentChildState extends State<CommentChild> {
             child: CircleAvatar(
                 radius: 50,
                 backgroundImage: CommentBox.commentImageParser(
-                    imageURLorPath: widget.avtUrl)),
+                    imageURLorPath: widget.comment.avtUrl!)),
           ),
         ),
         title: Text(
-          widget.name,
+          widget.comment.name!,
           style: TextStyle(fontWeight: FontWeight.bold),
         ),
-        subtitle: Text(widget.content),
-        trailing: Text(widget.date, style: TextStyle(fontSize: 10)),
+        subtitle: Text(widget.comment.content!),
+        trailing: Text(widget.comment.date!, style: TextStyle(fontSize: 10)),
       ),
     );
   }
