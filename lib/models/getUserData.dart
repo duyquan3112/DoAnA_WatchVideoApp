@@ -1,33 +1,36 @@
 import 'package:firebase_auth/firebase_auth.dart';
 
-class User {
+class UserData {
   final String uid;
-  final String email;
-  final String displayName;
-  final String photoUrl;
+  final String? email;
+  final String? displayName;
+  final String? photoUrl;
 
-  User({
+  UserData({
     required this.uid,
-    required this.email,
-    required this.displayName,
-    required this.photoUrl
+    this.email,
+    this.displayName,
+    this.photoUrl,
   });
-
-  factory User.fromFirebase(User firebaseUser) {
-    return User(
+  
+  factory UserData.fromFirebase(User? firebaseUser) {
+    if (firebaseUser == null) {
+      return UserData(uid: '');
+    }
+    return UserData(
       uid: firebaseUser.uid,
-      email: firebaseUser.email ?? '',
-      displayName: firebaseUser.displayName ?? '',
-      photoUrl: firebaseUser.photoUrl ?? '',
+      email: firebaseUser.email,
+      displayName: firebaseUser.displayName,
+      photoUrl: firebaseUser.photoURL,
     );
   }
 
-  factory User.empty() {
-    return User(
+  factory UserData.empty() {
+    return UserData(
       uid: "",
       displayName: "",
       email: "",
-      photoUrl: "",
+      // photoUrl: "",
     );
   }
 
