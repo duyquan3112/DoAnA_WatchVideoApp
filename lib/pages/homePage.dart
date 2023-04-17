@@ -14,6 +14,7 @@ import 'package:slide_popup_dialog_null_safety/slide_popup_dialog.dart'
     as slideDialog;
 
 import '../widgets/selectFiles.dart';
+import 'package:do_an/pages/musicPage.dart';
 
 class MyHomeApp extends StatefulWidget {
   const MyHomeApp({super.key});
@@ -147,29 +148,6 @@ class _MyHomePageState extends State<MyHomePage> {
               backgroundColor: MaterialStatePropertyAll<Color>(Colors.black),
             ),
           ),
-          IconButton(
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => searchPage()),
-              );
-            },
-            icon: const Icon(Icons.search),
-          ),
-          TextButton(
-            style: TextButton.styleFrom(
-              backgroundColor: Colors.red,
-              foregroundColor: Colors.white,
-            ),
-            onPressed: () {
-              // Điều hướng qua Login
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => signInPage()),
-              );
-            },
-            child: const Text('Login'),
-          ),
         ],
       ),
       body: _widgetOptions.elementAt(_selectedIndex),
@@ -233,7 +211,13 @@ class _listVideoState extends State<listVideo> {
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
                       TextButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => (MyMusicApp())),
+                          );
+                        },
                         child: Text('Music'),
                         style: ButtonStyle(
                           backgroundColor:

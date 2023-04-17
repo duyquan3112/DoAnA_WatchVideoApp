@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
+import '../models/infoVideo.dart';
 import '../widgets/videoCard.dart';
 
 class searchPage extends StatefulWidget {
@@ -45,13 +46,22 @@ class searchPageState extends State<StatefulWidget> {
                         var data = snapshot.data!.docs[index].data()
                             as Map<String, dynamic>;
                         if (title.isEmpty) {
-                          return videoCard(
-                              uRLVideo: snapshot.data!.docs[index]['videoUrl'],
-                              title: snapshot.data!.docs[index]['title'],
-                              des: snapshot.data!.docs[index]['description']);
+                          // return videoCard(
+                          //     uRLVideo: snapshot.data!.docs[index]['videoUrl'],
+                          //     title: snapshot.data!.docs[index]['title'],
+                          //     des: snapshot.data!.docs[index]['description']);
+
+                          infoVideo info = infoVideo();
+                          info.description =
+                              snapshot.data!.docs[index]['description'];
+                          info.title = snapshot.data!.docs[index]['title'];
+                          info.url = snapshot.data!.docs[index]['videoUrl'];
+                          info.vidId = snapshot.data!.docs[index].id;
+                          return videoCard(infoVid: info);
                         }
                         if (data['title']
                             .toString()
+                            .toLowerCase()
                             .startsWith(title.toLowerCase())) {
                           return (ListTile(
                             title: Text(data['title']),
