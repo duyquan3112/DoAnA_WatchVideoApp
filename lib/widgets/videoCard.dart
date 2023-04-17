@@ -69,29 +69,33 @@ class _videoCardState extends State<videoCard> {
         },
         child: Column(
           children: [
-            Stack(alignment: Alignment.center, children: [
+            Stack(fit: StackFit.loose, alignment: Alignment.center, children: [
               if (_thumbnailUrl != null)
-                Image.file(
-                  File(_thumbnailUrl!),
-                  scale: 1,
-                  height: size.height * 1 / 5,
-                ),
-              CircleAvatar(
-                radius: 30,
-                backgroundColor: Colors.black45,
-                child: Icon(
-                  Icons.play_arrow,
-                  size: 40,
-                  color: Colors.white,
-                ),
-              ),
+                Stack(alignment: Alignment.center, children: [
+                  Image.file(
+                    File(_thumbnailUrl!),
+                    scale: 1,
+                    height: size.height * 1 / 5,
+                  ),
+                  const CircleAvatar(
+                    radius: 30,
+                    backgroundColor: Colors.black45,
+                    child: Icon(
+                      Icons.play_arrow,
+                      size: 40,
+                      color: Colors.white,
+                    ),
+                  ),
+                ])
+              else
+                const CircularProgressIndicator()
             ]),
             ListTile(
               isThreeLine: true,
-              leading: CircleAvatar(),
+              leading: const CircleAvatar(),
               title: Text(widget.infoVid.title!),
               subtitle: Text(widget.infoVid.description!),
-              trailing: Icon(Icons.more_vert),
+              trailing: const Icon(Icons.more_vert),
             ),
           ],
         ),
