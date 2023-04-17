@@ -222,6 +222,7 @@ class _listVideoState extends State<listVideo> {
                 Flexible(
                   child: ListView.builder(
                       physics: const BouncingScrollPhysics(),
+                      padding: const EdgeInsets.all(8),
                       shrinkWrap: true,
                       itemCount: snapshot.data!.docs.length,
                       itemBuilder: (context, index) {
