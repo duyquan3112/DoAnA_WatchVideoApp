@@ -1,5 +1,5 @@
 import 'dart:io';
-
+import 'package:do_an/pages/searchPage.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:do_an/pages/signInPage.dart';
 import 'package:do_an/values/app_assets.dart';
@@ -62,13 +62,22 @@ class _MyHomePageState extends State<MyHomePage> {
             icon: const Icon(Icons.notifications),
             onPressed: () {},
           ),
-          IconButton(onPressed: () {}, icon: const Icon(Icons.search)),
+          IconButton(
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => searchPage()),
+              );
+            },
+            icon: const Icon(Icons.search),
+          ),
           TextButton(
             style: TextButton.styleFrom(
               backgroundColor: Colors.red,
               foregroundColor: Colors.white,
             ),
-            onPressed: () { // Điều hướng qua Login 
+            onPressed: () {
+              // Điều hướng qua Login
               Navigator.push(
                 context,
                 MaterialPageRoute(builder: (context) => signInPage()),
