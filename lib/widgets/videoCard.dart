@@ -56,7 +56,7 @@ class _videoCardState extends State<videoCard> {
     Size size = MediaQuery.of(context).size;
     return Card(
       shadowColor: Colors.black87,
-      elevation: 6,
+      elevation: 8,
       child: InkWell(
         onTap: () {
           print(widget.infoVid.vidId);
@@ -70,32 +70,49 @@ class _videoCardState extends State<videoCard> {
         child: Column(
           children: [
             Stack(fit: StackFit.loose, alignment: Alignment.center, children: [
-              if (_thumbnailUrl != null)
-                Stack(alignment: Alignment.center, children: [
-                  Image.file(
-                    File(_thumbnailUrl!),
-                    scale: 1,
-                    height: size.height * 1 / 5,
-                  ),
-                  const CircleAvatar(
-                    radius: 30,
-                    backgroundColor: Colors.black45,
-                    child: Icon(
-                      Icons.play_arrow,
-                      size: 40,
-                      color: Colors.white,
-                    ),
-                  ),
-                ])
-              else
-                const CircularProgressIndicator()
+              Container(
+                height: size.height * 1 / 5,
+                width: size.width,
+                color: Colors.black,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    if (_thumbnailUrl != null)
+                      Stack(alignment: Alignment.center, children: [
+                        Container(
+                          width: size.width * 1 / 5,
+                          color: Colors.black,
+                        ),
+                        Image.file(
+                          File(_thumbnailUrl!),
+                          scale: 1,
+                          height: size.height * 1 / 5,
+                        ),
+                        const CircleAvatar(
+                          radius: 30,
+                          backgroundColor: Colors.black45,
+                          child: Icon(
+                            Icons.play_arrow,
+                            size: 40,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ])
+                    else
+                      const CircularProgressIndicator()
+                  ],
+                ),
+              )
             ]),
-            ListTile(
-              isThreeLine: true,
-              leading: const CircleAvatar(),
-              title: Text(widget.infoVid.title!),
-              subtitle: Text(widget.infoVid.description!),
-              trailing: const Icon(Icons.more_vert),
+            Container(
+              color: Colors.white,
+              child: ListTile(
+                isThreeLine: true,
+                leading: const CircleAvatar(),
+                title: Text(widget.infoVid.title!),
+                subtitle: Text(widget.infoVid.description!),
+                trailing: const Icon(Icons.more_vert),
+              ),
             ),
           ],
         ),
