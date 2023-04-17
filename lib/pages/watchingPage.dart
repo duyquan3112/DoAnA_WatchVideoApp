@@ -1,9 +1,14 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:comment_box/comment/comment.dart';
+import 'package:date_format/date_format.dart';
 import 'package:do_an/models/commentModel.dart';
+import 'package:do_an/models/infoVideo.dart';
+import 'package:do_an/pages/profilePage.dart';
 import 'package:do_an/values/app_assets.dart';
 import 'package:do_an/values/app_colors.dart';
 import 'package:do_an/values/app_styles.dart';
 import 'package:do_an/widgets/comment.dart';
+import 'package:do_an/widgets/commentList.dart';
 import 'package:flick_video_player/flick_video_player.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
@@ -15,8 +20,8 @@ import 'package:mock_data/mock_data.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 
 class watchingPage extends StatefulWidget {
-  final String uRlVideo;
-  const watchingPage({super.key, required this.uRlVideo});
+  final infoVideo info;
+  const watchingPage({super.key, required this.info});
 
   @override
   State<watchingPage> createState() => _watchingPageState();
@@ -26,39 +31,12 @@ class _watchingPageState extends State<watchingPage> {
   late FlickManager flickManager;
   final formKey = GlobalKey<FormState>();
   final TextEditingController commentController = TextEditingController();
-  List filedata = [
-    {
-      'name': 'Chuks Okwuenu',
-      'pic': 'assets/icons/system/user.png',
-      'message': 'I love to code',
-      'date': '2021-01-01 12:00:00'
-    },
-    {
-      'name': 'Biggi Man',
-      'pic': 'assets/icons/system/user.png',
-      'message': 'Very cool',
-      'date': '2021-01-01 12:00:00'
-    },
-    {
-      'name': 'Tunde Martins',
-      'pic': 'assets/icons/system/user.png',
-      'message': 'Very cool',
-      'date': '2021-01-01 12:00:00'
-    },
-    {
-      'name': 'Biggi Man',
-      'pic': 'assets/icons/system/user.png',
-      'message': 'Very cool',
-      'date': '2021-01-01 12:00:00'
-    },
-  ];
 
   @override
   void initState() {
-    //fileData = [];
     super.initState();
     flickManager = FlickManager(
-      videoPlayerController: VideoPlayerController.network(widget.uRlVideo),
+      videoPlayerController: VideoPlayerController.network(widget.info.url!),
       autoInitialize: true,
       autoPlay: true,
     );
@@ -68,6 +46,17 @@ class _watchingPageState extends State<watchingPage> {
   void dispose() {
     flickManager.dispose();
     super.dispose();
+  }
+
+  Future pushComment(commentModel comment) async {
+    await FirebaseFirestore.instance.collection('comment_list').add({
+      'name': comment.name,
+      'content': comment.content,
+      'avtUrl': comment.avtUrl,
+      'date': comment.date,
+      'vidId': comment.vidId
+      // 'type':
+    });
   }
 
   Future<bool> onLikeButtonTapped(bool isLiked) async {
@@ -121,32 +110,60 @@ class _watchingPageState extends State<watchingPage> {
               ),
             ),
             Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Text('This is an example video',
-                  style: AppStyles.h4.copyWith(
-                    color: Colors.black,
-                    fontWeight: FontWeight.bold,
-                  )),
+              padding: const EdgeInsets.all(10.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(widget.info.title!,
+                      style: AppStyles.h4.copyWith(
+                        color: Colors.black,
+                        fontWeight: FontWeight.bold,
+                      )),
+                  Text(
+                    'Description: ',
+                    style: AppStyles.h5.copyWith(
+                        color: AppColors.blackGrey,
+                        fontWeight: FontWeight.bold),
+                  ),
+                  Text(
+                    widget.info.description!,
+                    style: AppStyles.h5.copyWith(color: AppColors.blackGrey),
+                    softWrap: true,
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                  )
+                ],
+              ),
             ),
             SizedBox(
               width: size.width,
               child: Row(
                 children: [
-                  Container(
-                    padding: const EdgeInsets.all(10),
-                    child: const AvatarView(
-                      radius: 25,
-                      avatarType: AvatarType.CIRCLE,
-                      imagePath: "assets/icons/system/user.png",
+                  InkWell(
+                    onTap: () => Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (_) => MyProfilePage(title: 'title'))),
+                    child: Row(
+                      children: [
+                        Container(
+                          padding: const EdgeInsets.all(10),
+                          child: const AvatarView(
+                            radius: 25,
+                            avatarType: AvatarType.CIRCLE,
+                            imagePath: "assets/icons/system/user.png",
+                          ),
+                        ),
+                        Text(
+                          " Duy Quan",
+                          style: AppStyles.h4.copyWith(
+                              color: AppColors.blackGrey,
+                              fontWeight: FontWeight.bold),
+                        ),
+                      ],
                     ),
                   ),
-                  Text(
-                    " Duy Quan",
-                    style: AppStyles.h4.copyWith(
-                        color: AppColors.blackGrey,
-                        fontWeight: FontWeight.bold),
-                  ),
-                  Container(
+                  SizedBox(
                     width: size.width * 1 / 3,
                     child: LikeButton(
                       onTap: onLikeButtonTapped,
@@ -161,7 +178,7 @@ class _watchingPageState extends State<watchingPage> {
                         return ImageIcon(
                           AssetImage(AppAssets.heart),
                           color: isLiked
-                              ? Color.fromARGB(255, 238, 0, 52)
+                              ? const Color.fromARGB(255, 238, 0, 52)
                               : Colors.grey,
                         );
                       },
@@ -188,20 +205,10 @@ class _watchingPageState extends State<watchingPage> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  Container(
-                    padding: EdgeInsets.only(left: 20),
-                    width: size.width * 1,
-                    child: Text(
-                      "Comment ${filedata.length}",
-                      textAlign: TextAlign.left,
-                      textDirection: TextDirection.ltr,
-                    ),
-                  ),
                   Expanded(
                     child: CommentBox(
                       userImage: CommentBox.commentImageParser(
                           imageURLorPath: "assets/icons/system/user.png"),
-                      child: CommentChild(data: filedata),
                       labelText: 'Write a comment...',
                       errorText: 'Comment cannot be blank',
                       withBorder: false,
@@ -209,13 +216,25 @@ class _watchingPageState extends State<watchingPage> {
                         if (formKey.currentState!.validate()) {
                           print(commentController.text);
                           setState(() {
-                            var value = {
-                              'name': 'New User',
-                              'pic': 'assets/icons/system/user.png',
-                              'message': commentController.text,
-                              'date': '2021-01-01 12:00:00'
-                            };
-                            filedata.insert(0, value);
+                            var date = DateTime.now();
+                            var formattedDate = formatDate(date, [
+                              dd,
+                              '/',
+                              mm,
+                              '/',
+                              yyyy,
+                              ' ',
+                              HH,
+                              ':',
+                              nn,
+                            ]);
+                            commentModel comment = commentModel();
+                            comment.avtUrl = 'assets/icons/system/user.png';
+                            comment.content = commentController.text;
+                            comment.name = 'New User';
+                            comment.date = formattedDate.toString();
+                            comment.vidId = widget.info.vidId;
+                            pushComment(comment);
                           });
                           commentController.clear();
                           FocusManager.instance.primaryFocus?.unfocus();
@@ -225,10 +244,13 @@ class _watchingPageState extends State<watchingPage> {
                       },
                       formKey: formKey,
                       commentController: commentController,
-                      backgroundColor: Color.fromARGB(255, 255, 255, 255),
+                      backgroundColor: const Color.fromARGB(255, 255, 255, 255),
                       textColor: AppColors.blackGrey,
-                      sendWidget: Icon(Icons.send_sharp,
+                      sendWidget: const Icon(Icons.send_sharp,
                           size: 30, color: Color.fromARGB(255, 177, 177, 177)),
+                      child: commentList(
+                        vidId: widget.info.vidId!,
+                      ),
                     ),
                   ),
                 ],
