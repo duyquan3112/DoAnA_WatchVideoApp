@@ -47,14 +47,16 @@ class _videoCardState extends State<videoCard> {
 
   @override
   void initState() {
-    genThumbnail();
     super.initState();
+    genThumbnail();
   }
 
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Card(
+      shadowColor: Colors.black87,
+      elevation: 6,
       child: InkWell(
         onTap: () {
           print(widget.infoVid.vidId);
