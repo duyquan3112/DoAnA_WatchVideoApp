@@ -63,10 +63,12 @@ class searchPageState extends State<StatefulWidget> {
                             .toString()
                             .toLowerCase()
                             .startsWith(title.toLowerCase())) {
-                          return (ListTile(
-                            title: Text(data['title']),
-                            subtitle: Text(data['description']),
-                          ));
+                          infoVideo info = infoVideo();
+                          info.description = data['description'];
+                          info.title = data['title'];
+                          info.url = data['videoUrl'];
+
+                          return videoCard(infoVid: info);
                         }
 
                         // Card(
