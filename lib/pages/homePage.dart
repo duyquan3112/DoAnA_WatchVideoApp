@@ -1,4 +1,6 @@
 import 'dart:io';
+import 'package:do_an/pages/gamePage.dart';
+import 'package:do_an/pages/moviePage.dart';
 import 'package:do_an/pages/searchPage.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:do_an/models/infoVideo.dart';
@@ -225,7 +227,13 @@ class _listVideoState extends State<listVideo> {
                         ),
                       ),
                       TextButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => (MyGameApp())),
+                          );
+                        },
                         child: Text('Game'),
                         style: ButtonStyle(
                           backgroundColor:
@@ -233,7 +241,13 @@ class _listVideoState extends State<listVideo> {
                         ),
                       ),
                       TextButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => (MyMoviesApp())),
+                          );
+                        },
                         child: Text('Movies'),
                         style: ButtonStyle(
                           backgroundColor:
