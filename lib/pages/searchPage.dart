@@ -39,48 +39,29 @@ class searchPageState extends State<StatefulWidget> {
                   .snapshots(),
               builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
                 if (snapshot.hasData) {
-                  return ListView.builder(
-                      shrinkWrap: true,
-                      itemCount: snapshot.data!.docs.length,
-                      itemBuilder: (context, index) {
-                        var data = snapshot.data!.docs[index].data()
-                            as Map<String, dynamic>;
-                        if (title.isEmpty) {
-                          // return videoCard(
-                          //     uRLVideo: snapshot.data!.docs[index]['videoUrl'],
-                          //     title: snapshot.data!.docs[index]['title'],
-                          //     des: snapshot.data!.docs[index]['description']);
-
-                          infoVideo info = infoVideo();
-                          info.description =
-                              snapshot.data!.docs[index]['description'];
-                          info.title = snapshot.data!.docs[index]['title'];
-                          info.url = snapshot.data!.docs[index]['videoUrl'];
-                          info.vidId = snapshot.data!.docs[index].id;
-                          return videoCard(infoVid: info);
-                        }
-                        if (data['title']
+                  List<infoVideo> infoVideos = [];
+                  snapshot.data!.docs.forEach((doc) {
+                    var data = doc.data() as Map<String, dynamic>;
+                    if (title.isEmpty ||
+                        data['title']
                             .toString()
                             .toLowerCase()
-                            .startsWith(title.toLowerCase())) {
-                          infoVideo info = infoVideo();
-                          info.description = data['description'];
-                          info.title = data['title'];
-                          info.url = data['videoUrl'];
+                            .contains(title.toLowerCase())) {
+                      infoVideo info = infoVideo();
+                      info.description = data['description'];
+                      info.title = data['title'];
+                      info.url = data['videoUrl'];
 
-                          return videoCard(infoVid: info);
-                        }
-
-                        // Card(
-                      }
-                      //     child: ListTile(
-                      //   isThreeLine: true,
-                      //   leading: CircleAvatar(),
-                      //   title: Text(snapshot.data!.docs[index]['title']),
-                      //   subtitle: Text(snapshot.data!.docs[index]['description']),
-                      //   trailing: Icon(Icons.more_vert),
-                      // )),
-                      );
+                      infoVideos.add(info);
+                    }
+                  });
+                  return ListView.builder(
+                    shrinkWrap: true,
+                    itemCount: infoVideos.length,
+                    itemBuilder: (context, index) {
+                      return videoCard(infoVid: infoVideos[index]);
+                    },
+                  );
                 } else {
                   return Center(child: const Text('No data'));
                 }
@@ -88,3 +69,52 @@ class searchPageState extends State<StatefulWidget> {
         ));
   }
 }
+
+
+
+
+
+// return ListView.builder(
+                  //     shrinkWrap: true,
+                  //     itemCount: snapshot.data!.docs.length,
+                  //     itemBuilder: (context, index) {
+                  //       var data = snapshot.data!.docs[index].data()
+                  //           as Map<String, dynamic>;
+                  //       if (title.isEmpty) {
+                  //         // return videoCard(
+                  //         //     uRLVideo: snapshot.data!.docs[index]['videoUrl'],
+                  //         //     title: snapshot.data!.docs[index]['title'],
+                  //         //     des: snapshot.data!.docs[index]['description']);
+
+                  //         infoVideo info = infoVideo();
+                  //         info.description =
+                  //             snapshot.data!.docs[index]['description'];
+                  //         info.title = snapshot.data!.docs[index]['title'];
+                  //         info.url = snapshot.data!.docs[index]['videoUrl'];
+                  //         info.vidId = snapshot.data!.docs[index].id;
+                  //         return videoCard(infoVid: info);
+                  //       }
+
+                  //       if (data['title']
+                  //           .toString()
+                  //           .toLowerCase()
+                  //           .startsWith(title.toLowerCase())) {
+                  //         infoVideo info = infoVideo();
+                  //         info.description = data['description'];
+                  //         info.title = data['title'];
+                  //         info.url = data['videoUrl'];
+
+                  //         return videoCard(infoVid: info);
+                  //       }
+                  //     }
+
+                  //     // Card(
+
+                  //     //     child: ListTile(
+                  //     //   isThreeLine: true,
+                  //     //   leading: CircleAvatar(),
+                  //     //   title: Text(snapshot.data!.docs[index]['title']),
+                  //     //   subtitle: Text(snapshot.data!.docs[index]['description']),
+                  //     //   trailing: Icon(Icons.more_vert),
+                  //     // )),
+                  //     );
