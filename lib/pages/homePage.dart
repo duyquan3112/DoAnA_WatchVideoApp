@@ -1,5 +1,5 @@
 import 'dart:io';
-
+import 'package:do_an/pages/searchPage.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:do_an/models/infoVideo.dart';
 import 'package:do_an/pages/signInPage.dart';
@@ -14,6 +14,7 @@ import 'package:slide_popup_dialog_null_safety/slide_popup_dialog.dart'
     as slideDialog;
 
 import '../widgets/selectFiles.dart';
+import 'package:do_an/pages/musicPage.dart';
 
 class MyHomeApp extends StatefulWidget {
   const MyHomeApp({super.key});
@@ -74,7 +75,7 @@ class _MyHomePageState extends State<MyHomePage> {
     if (firebaseUser != null) {
       setState(() {
         _user = UserData(
-          uid: firebaseUser.uid ,
+          uid: firebaseUser.uid,
           email: firebaseUser.email ?? '',
           displayName: firebaseUser.displayName ?? '',
           // photoUrl: firebaseUser.photoURL ?? '',
@@ -105,32 +106,38 @@ class _MyHomePageState extends State<MyHomePage> {
             icon: const Icon(Icons.notifications),
             onPressed: () {},
           ),
-          IconButton(onPressed: () {}, icon: const Icon(Icons.search)),
+          IconButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => searchPage()),
+                );
+              },
+              icon: const Icon(Icons.search)),
           SizedBox(
             child: _user.isSignedIn
-            ? Center(
-              child: Text(
-                '${_user.displayName}  ',
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 16,
-                ),
-                )
-              )
-            : TextButton(
-                style: TextButton.styleFrom(
-                  backgroundColor: Colors.red,
-                  foregroundColor: Colors.white,
-                ),
-                onPressed: () {
-                  // Điều hướng qua Login
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => signInPage()),
-                  );
-                },
-                child: const Text('Login'),
-              ),
+                ? Center(
+                    child: Text(
+                    '${_user.displayName}  ',
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 16,
+                    ),
+                  ))
+                : TextButton(
+                    style: TextButton.styleFrom(
+                      backgroundColor: Colors.red,
+                      foregroundColor: Colors.white,
+                    ),
+                    onPressed: () {
+                      // Điều hướng qua Login
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => signInPage()),
+                      );
+                    },
+                    child: const Text('Login'),
+                  ),
           ),
           TextButton(
             onPressed: () {
@@ -204,7 +211,13 @@ class _listVideoState extends State<listVideo> {
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
                       TextButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => (MyMusicApp())),
+                          );
+                        },
                         child: Text('Music'),
                         style: ButtonStyle(
                           backgroundColor:
