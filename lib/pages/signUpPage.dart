@@ -37,7 +37,7 @@ class _signUpPageState extends State<signUpPage> {
         
         // String defaultAvatarUrl = 'assets/images/default.jpg';
         User user = userCredential.user!;
-        await user.updateDisplayName('${firstnameController.text} ${lastnameController.text}');
+        await user.updateDisplayName('${usernameController.text}'); 
         // await user.updatePhotoURL(defaultAvatarUrl);
 
         ///Store User data from signup to Firestore
@@ -47,6 +47,7 @@ class _signUpPageState extends State<signUpPage> {
         'username': usernameController.text,
         'email': emailController.text,
         'password' : passwordController.text,
+        'uid' : user.uid,
         // 'avatarUrl': defaultAvatarUrl,
         });
       } else {
