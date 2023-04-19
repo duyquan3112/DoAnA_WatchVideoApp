@@ -52,7 +52,7 @@ class _watchingPageState extends State<watchingPage> {
         width: MediaQuery.of(context).size.width,
         decoration: const BoxDecoration(),
         //height: MediaQuery.of(context).size.height,
-        height: double.infinity,
+        height: size.height,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -72,16 +72,17 @@ class _watchingPageState extends State<watchingPage> {
                       }
                     },
                     child: SizedBox(
-                      height: size.height * 1 / 3.5,
+                      height: size.height * 1 / 3,
                       child: FlickVideoPlayer(
                         flickManager: flickManager,
                         flickVideoWithControls: const FlickVideoWithControls(
-                          videoFit: BoxFit.fitHeight,
+                          videoFit: BoxFit.contain,
                           closedCaptionTextStyle: TextStyle(fontSize: 8),
                           controls: FlickPortraitControls(),
                         ),
                         flickVideoWithControlsFullscreen:
                             const FlickVideoWithControls(
+                          videoFit: BoxFit.contain,
                           controls: FlickLandscapeControls(),
                         ),
                       ),
