@@ -42,6 +42,7 @@ class _signUpPageState extends State<signUpPage> {
 
         ///Store User data from signup to Firestore
         FirebaseFirestore.instance.collection('users').add({
+        'uid' : user.uid,
         'lastName' : lastnameController.text,
         'firstName' : firstnameController.text,
         'username': usernameController.text,
