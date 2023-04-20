@@ -29,13 +29,13 @@ class _signInPageState extends State<signInPage> {
       email: emailController.text, 
       password: passwordController.text,
       );
-      // Truy xuất thông tin người dùng từ Firestore
+    // Truy xuất thông tin người dùng từ Firestore
     QuerySnapshot querySnapshot = await FirebaseFirestore.instance
       .collection('users')
       .where('uid', isEqualTo: userCredential.user!.uid)
       .get();
     if (querySnapshot.docs.isNotEmpty) {
-      // Lấy dữ liệu từ Firestore
+      // Lấy dữ liệu từ Firestore để lưu trữ vô UserData
       UserData userData = UserData.fromFirestore(querySnapshot.docs.first);
       UserData.setCurrentUser(userData);
       // Chuyển sang màn hình chính
