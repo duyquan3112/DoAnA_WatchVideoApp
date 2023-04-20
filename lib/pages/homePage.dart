@@ -34,14 +34,13 @@ class _MyHomeAppState extends State<MyHomeApp> {
       theme: ThemeData(
         primarySwatch: Colors.grey,
       ),
-      home: const MyHomePage(title: 'Home Page'),
+      home: const MyHomePage(title: 'Home Page',),
     );
   }
 }
 
 class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
-
+  const MyHomePage({super.key, required this.title,});
   final String title;
 
   @override
@@ -64,12 +63,21 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   UserData _user = UserData.empty();
-  String username = '';
 
   @override
   void initState() {
     super.initState();
     _initUser();
+  }
+
+  void getUserData() async {
+    User? user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      DocumentSnapshot documentSnapshot = await FirebaseFirestore.instance.collection('users').doc(user.uid).get();
+      setState(() {
+        _user = UserData.fromFirestore(documentSnapshot);
+      });
+    }
   }
 
   Future<void> _initUser() async {
@@ -100,6 +108,8 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
+    UserData userData = UserData.getCurrentUser()!;
+    String username = "${userData.username}";
     return Scaffold(
       appBar: AppBar(
         title: Center(child: Text(widget.title)),
@@ -120,7 +130,7 @@ class _MyHomePageState extends State<MyHomePage> {
             child: _user.isSignedIn
                 ? Center(
                     child: Text(
-                    '${_user.displayName}  ',
+                    '$username  ',
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 16,
