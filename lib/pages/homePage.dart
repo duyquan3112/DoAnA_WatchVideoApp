@@ -82,7 +82,6 @@ class _MyHomePageState extends State<MyHomePage> {
     }
   }
 
-
   void _handleLogout() async {
     await FirebaseAuth.instance.signOut();
     setState(() {

@@ -36,8 +36,9 @@ class _signInPageState extends State<signInPage> {
       .get();
     if (querySnapshot.docs.isNotEmpty) {
       // Lấy dữ liệu từ Firestore để lưu trữ vô UserData
+      // print(querySnapshot.docs.first.data()! as Map<String, dynamic>); Lưu SharePrefs , tạo biến xong lưu thành 1 cục, tạo 1 class chứa key
       UserData userData = UserData.fromFirestore(querySnapshot.docs.first);
-      UserData.setCurrentUser(userData);
+      UserData.setCurrentUser(userData); // Lưu SharedPreferences
       // Chuyển sang màn hình chính
       Navigator.pushReplacement(
         context,
