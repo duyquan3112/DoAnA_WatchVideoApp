@@ -44,17 +44,13 @@ class UserData {
     );
   }
 
-  factory UserData.empty() {
+  static UserData empty() {
     return UserData(
-      uid: "",
-      displayName: "",
-      email: "",
-      firstName: "",
-      lastName: "",
-      username: "",
-      // photoUrl: "",
+      uid: '',
+      username: '',
+      firstName: '',
+      lastName: '',
+      email: '',
     );
   }
-
-  bool get isSignedIn => uid.isNotEmpty;
 }

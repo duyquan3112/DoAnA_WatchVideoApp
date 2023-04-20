@@ -34,13 +34,13 @@ class _MyHomeAppState extends State<MyHomeApp> {
       theme: ThemeData(
         primarySwatch: Colors.grey,
       ),
-      home: const MyHomePage(title: 'Home Page',),
+      home: const MyHomePage(title: 'Home Page'),
     );
   }
 }
 
 class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title,});
+  const MyHomePage({super.key, required this.title});
   final String title;
 
   @override
@@ -62,54 +62,37 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
-  UserData _user = UserData.empty();
+  UserData _userData = UserData.empty();
+  bool _isLoggedIn = false;
 
   @override
   void initState() {
     super.initState();
-    _initUser();
-  }
-
-  void getUserData() async {
-    User? user = FirebaseAuth.instance.currentUser;
-    if (user != null) {
-      DocumentSnapshot documentSnapshot = await FirebaseFirestore.instance.collection('users').doc(user.uid).get();
+    UserData? currentUser = UserData.getCurrentUser();
+    if (currentUser != null) {
       setState(() {
-        _user = UserData.fromFirestore(documentSnapshot);
-      });
-    }
-  }
-
-  Future<void> _initUser() async {
-    User? firebaseUser = await FirebaseAuth.instance.currentUser;
-    if (firebaseUser != null) {
-      setState(() {
-        _user = UserData(
-          uid: firebaseUser.uid,
-          email: firebaseUser.email ?? '',
-          displayName: firebaseUser.displayName ?? '',
-          // photoUrl: firebaseUser.photoURL ?? '',
-        );
+        _userData = currentUser;
+        _isLoggedIn = true;
       });
     } else {
       setState(() {
-        _user = UserData.empty();
+        _userData = UserData.empty();
+        _isLoggedIn = false;
       });
     }
   }
+
 
   void _handleLogout() async {
     await FirebaseAuth.instance.signOut();
     setState(() {
-      _user.isSignedIn;
+      _isLoggedIn = false;
     });
-    _initUser();
   }
+    
 
   @override
   Widget build(BuildContext context) {
-    UserData userData = UserData.getCurrentUser()!;
-    String username = "${userData.username}";
     return Scaffold(
       appBar: AppBar(
         title: Center(child: Text(widget.title)),
@@ -127,10 +110,10 @@ class _MyHomePageState extends State<MyHomePage> {
               },
               icon: const Icon(Icons.search)),
           SizedBox(
-            child: _user.isSignedIn
+            child: _isLoggedIn
                 ? Center(
                     child: Text(
-                    '$username  ',
+                    '${_userData.username}  ',
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 16,
