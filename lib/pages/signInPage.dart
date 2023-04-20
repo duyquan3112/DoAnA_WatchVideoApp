@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:do_an/models/getUserData.dart';
 import 'package:do_an/pages/homePage.dart';
 import 'package:do_an/pages/signUpPage.dart';
 import 'package:do_an/widgets/auth_button.dart';
@@ -21,29 +23,41 @@ class _signInPageState extends State<signInPage> {
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
 
-  void signUserIn() async {
+  Future<void> signUserIn() async {
     try {
-      await FirebaseAuth.instance.signInWithEmailAndPassword(
+      UserCredential userCredential = await FirebaseAuth.instance.signInWithEmailAndPassword(
       email: emailController.text, 
       password: passwordController.text,
       );
-    
-    ///
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(
-        builder: (context) => MyHomeApp()),
+    // Truy xuất thông tin người dùng từ Firestore
+    QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+      .collection('users')
+      .where('uid', isEqualTo: userCredential.user!.uid)
+      .get();
+    if (querySnapshot.docs.isNotEmpty) {
+      // Lấy dữ liệu từ Firestore để lưu trữ vô UserData
+      UserData userData = UserData.fromFirestore(querySnapshot.docs.first);
+      UserData.setCurrentUser(userData);
+      // Chuyển sang màn hình chính
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => MyHomeApp()),
       );
+    } else {
+      throw Exception('Không tìm thấy tài khoản của người dùng');
+    }
     } on FirebaseAuthException catch (e) {
       ///Pop off loading circle
       Navigator.pop(context);
       if (e.code == 'user-not-found'){
         // wrongEmailPopup();
-        print(e);
+        print("Không tìm thấy tài khoản người dùng");
       } else if (e.code == 'wrong-password') {
         // wrongPasswordPopup();
-        print(e);
+        print("Sai pass");
       }
+    } catch (e) {
+      print(e);
     }
   }
   
