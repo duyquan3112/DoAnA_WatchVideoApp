@@ -1,38 +1,56 @@
+import 'dart:math';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class UserData {
-  final String uid;
-  final String? email;
-  final String? displayName;
-  final String? photoUrl;
+  String uid;
+  String? email;
+  String? displayName;
+  String? photoUrl;
+  String? username;
+  String? firstName;
+  String? lastName;
 
   UserData({
     required this.uid,
     this.email,
     this.displayName,
     this.photoUrl,
+    this.username,
+    this.firstName,
+    this.lastName,
   });
-  
-  factory UserData.fromFirebase(User? firebaseUser) {
-    if (firebaseUser == null) {
-      return UserData(uid: '');
-    }
+
+  static UserData? _currentUser;
+
+  static void setCurrentUser(UserData userData) {
+    _currentUser = userData;
+  }
+
+  static UserData? getCurrentUser() {
+    return _currentUser;
+  }
+
+  factory UserData.fromFirestore(DocumentSnapshot snapshot) {
+    Map<String, dynamic> data = snapshot.data()! as Map<String, dynamic>;
     return UserData(
-      uid: firebaseUser.uid,
-      email: firebaseUser.email,
-      displayName: firebaseUser.displayName,
-      photoUrl: firebaseUser.photoURL,
+      uid: data['uid'],
+      displayName: data['displayName'],
+      firstName: data['firstName'],
+      lastName: data['lastName'],
+      username: data['username'],
+      email: data['email'],
     );
   }
 
-  factory UserData.empty() {
+  static UserData empty() {
     return UserData(
-      uid: "",
-      displayName: "",
-      email: "",
-      // photoUrl: "",
+      uid: '',
+      username: '',
+      firstName: '',
+      lastName: '',
+      email: '',
     );
   }
-
-  bool get isSignedIn => uid.isNotEmpty;
 }

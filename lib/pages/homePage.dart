@@ -1,5 +1,7 @@
 import 'dart:io';
-
+import 'package:do_an/pages/gamePage.dart';
+import 'package:do_an/pages/moviePage.dart';
+import 'package:do_an/pages/searchPage.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:do_an/models/infoVideo.dart';
 import 'package:do_an/pages/signInPage.dart';
@@ -14,6 +16,7 @@ import 'package:slide_popup_dialog_null_safety/slide_popup_dialog.dart'
     as slideDialog;
 
 import '../widgets/selectFiles.dart';
+import 'package:do_an/pages/musicPage.dart';
 
 class MyHomeApp extends StatefulWidget {
   const MyHomeApp({super.key});
@@ -38,7 +41,6 @@ class _MyHomeAppState extends State<MyHomeApp> {
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key, required this.title});
-
   final String title;
 
   @override
@@ -60,29 +62,22 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
-  UserData _user = UserData.empty();
-  String username = '';
+  UserData _userData = UserData.empty();
+  bool _isLoggedIn = false;
 
   @override
   void initState() {
     super.initState();
-    _initUser();
-  }
-
-  Future<void> _initUser() async {
-    User? firebaseUser = await FirebaseAuth.instance.currentUser;
-    if (firebaseUser != null) {
+    UserData? currentUser = UserData.getCurrentUser();
+    if (currentUser != null) {
       setState(() {
-        _user = UserData(
-          uid: firebaseUser.uid ,
-          email: firebaseUser.email ?? '',
-          displayName: firebaseUser.displayName ?? '',
-          // photoUrl: firebaseUser.photoURL ?? '',
-        );
+        _userData = currentUser;
+        _isLoggedIn = true;
       });
     } else {
       setState(() {
-        _user = UserData.empty();
+        _userData = UserData.empty();
+        _isLoggedIn = false;
       });
     }
   }
@@ -90,10 +85,10 @@ class _MyHomePageState extends State<MyHomePage> {
   void _handleLogout() async {
     await FirebaseAuth.instance.signOut();
     setState(() {
-      _user.isSignedIn;
+      _isLoggedIn = false;
     });
-    _initUser();
   }
+    
 
   @override
   Widget build(BuildContext context) {
@@ -105,32 +100,38 @@ class _MyHomePageState extends State<MyHomePage> {
             icon: const Icon(Icons.notifications),
             onPressed: () {},
           ),
-          IconButton(onPressed: () {}, icon: const Icon(Icons.search)),
+          IconButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => searchPage()),
+                );
+              },
+              icon: const Icon(Icons.search)),
           SizedBox(
-            child: _user.isSignedIn
-            ? Center(
-              child: Text(
-                '${_user.displayName}  ',
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 16,
-                ),
-                )
-              )
-            : TextButton(
-                style: TextButton.styleFrom(
-                  backgroundColor: Colors.red,
-                  foregroundColor: Colors.white,
-                ),
-                onPressed: () {
-                  // Điều hướng qua Login
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => signInPage()),
-                  );
-                },
-                child: const Text('Login'),
-              ),
+            child: _isLoggedIn
+                ? Center(
+                    child: Text(
+                    '${_userData.username}  ',
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 16,
+                    ),
+                  ))
+                : TextButton(
+                    style: TextButton.styleFrom(
+                      backgroundColor: Colors.red,
+                      foregroundColor: Colors.white,
+                    ),
+                    onPressed: () {
+                      // Điều hướng qua Login
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => signInPage()),
+                      );
+                    },
+                    child: const Text('Login'),
+                  ),
           ),
           TextButton(
             onPressed: () {
@@ -204,7 +205,13 @@ class _listVideoState extends State<listVideo> {
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
                       TextButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => (MyMusicApp())),
+                          );
+                        },
                         child: Text('Music'),
                         style: ButtonStyle(
                           backgroundColor:
@@ -212,7 +219,13 @@ class _listVideoState extends State<listVideo> {
                         ),
                       ),
                       TextButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => (MyGameApp())),
+                          );
+                        },
                         child: Text('Game'),
                         style: ButtonStyle(
                           backgroundColor:
@@ -220,7 +233,13 @@ class _listVideoState extends State<listVideo> {
                         ),
                       ),
                       TextButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => (MyMoviesApp())),
+                          );
+                        },
                         child: Text('Movies'),
                         style: ButtonStyle(
                           backgroundColor:
@@ -231,6 +250,7 @@ class _listVideoState extends State<listVideo> {
                 Flexible(
                   child: ListView.builder(
                       physics: const BouncingScrollPhysics(),
+                      padding: const EdgeInsets.all(8),
                       shrinkWrap: true,
                       itemCount: snapshot.data!.docs.length,
                       itemBuilder: (context, index) {
