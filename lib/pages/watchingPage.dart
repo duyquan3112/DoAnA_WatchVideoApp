@@ -1,3 +1,4 @@
+import 'package:do_an/models/getUserData.dart';
 import 'package:do_an/models/infoVideo.dart';
 import 'package:do_an/values/app_assets.dart';
 import 'package:do_an/values/app_colors.dart';
@@ -12,7 +13,8 @@ import 'package:visibility_detector/visibility_detector.dart';
 
 class watchingPage extends StatefulWidget {
   final infoVideo info;
-  const watchingPage({super.key, required this.info});
+  final UserData users;
+  const watchingPage({super.key, required this.info, required this.users});
 
   @override
   State<watchingPage> createState() => _watchingPageState();
@@ -102,7 +104,10 @@ class _watchingPageState extends State<watchingPage> {
               ],
             ),
             videoInfo(info: widget.info),
-            const ownerTag(),
+            ownerTag(
+              users: widget.users,
+              infoVid: widget.info,
+            ),
             const Divider(
               color: Colors.black,
               height: 25,

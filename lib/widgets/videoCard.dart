@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:do_an/models/getUserData.dart';
 import 'package:do_an/models/infoVideo.dart';
 import 'package:do_an/pages/watchingPage.dart';
 import 'package:do_an/values/app_assets.dart';
@@ -12,12 +13,14 @@ import 'package:video_thumbnail/video_thumbnail.dart';
 
 class videoCard extends StatefulWidget {
   final infoVideo infoVid;
+  final UserData users;
   // final String uRLVideo;
   // final String title;
   // final String des;
   // final String vidId;
   const videoCard(
       {super.key,
+      required this.users,
       // required this.uRLVideo,
       // required this.title,
       // required this.des,
@@ -64,6 +67,7 @@ class _videoCardState extends State<videoCard> {
               context,
               MaterialPageRoute(
                   builder: (_) => watchingPage(
+                        users: widget.users,
                         info: widget.infoVid,
                       )));
         },
