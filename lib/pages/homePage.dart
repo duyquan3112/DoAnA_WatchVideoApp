@@ -18,30 +18,10 @@ import 'package:slide_popup_dialog_null_safety/slide_popup_dialog.dart'
 import '../widgets/selectFiles.dart';
 import 'package:do_an/pages/musicPage.dart';
 
-class MyHomeApp extends StatefulWidget {
-  const MyHomeApp({super.key});
-
-  @override
-  State<MyHomeApp> createState() => _MyHomeAppState();
-}
-
-class _MyHomeAppState extends State<MyHomeApp> {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'Home Page',
-      theme: ThemeData(
-        primarySwatch: Colors.grey,
-      ),
-      home: const MyHomePage(title: 'Home Page'),
-    );
-  }
-}
-
 class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
-  final String title;
+  final UserData users;
+  final String userId;
+  const MyHomePage({super.key, required this.users, required this.userId});
 
   @override
   State<MyHomePage> createState() => _MyHomePageState();
@@ -50,11 +30,6 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   int _selectedIndex = 0;
   File? file;
-  final List<Widget> _widgetOptions = [
-    listVideo(),
-    Text(''),
-    likedVideo(),
-  ];
 
   void _onItemTapped(int index) {
     setState(() {
@@ -62,21 +37,21 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
-  UserData _userData = UserData.empty();
+  //UserData _userData = UserData.empty();
   bool _isLoggedIn = false;
 
   @override
   void initState() {
     super.initState();
     UserData? currentUser = UserData.getCurrentUser();
-    if (currentUser != null) {
+    if (widget.users.username != null) {
       setState(() {
-        _userData = currentUser;
+        //_userData = currentUser;
         _isLoggedIn = true;
       });
     } else {
       setState(() {
-        _userData = UserData.empty();
+        //_userData = UserData.empty();
         _isLoggedIn = false;
       });
     }
@@ -88,13 +63,20 @@ class _MyHomePageState extends State<MyHomePage> {
       _isLoggedIn = false;
     });
   }
-    
 
   @override
   Widget build(BuildContext context) {
+    final List<Widget> _widgetOptions = [
+      listVideo(
+        users: widget.users,
+        userId: widget.userId,
+      ),
+      Text(''),
+      likedVideo(),
+    ];
     return Scaffold(
       appBar: AppBar(
-        title: Center(child: Text(widget.title)),
+        // title: Center(child: Text(widget.title)),
         actions: <Widget>[
           IconButton(
             icon: const Icon(Icons.notifications),
@@ -104,15 +86,18 @@ class _MyHomePageState extends State<MyHomePage> {
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => searchPage()),
+                  MaterialPageRoute(
+                      builder: (context) => searchPage(
+                            users: widget.users,
+                          )),
                 );
               },
               icon: const Icon(Icons.search)),
           SizedBox(
-            child: _isLoggedIn
+            child: (widget.users.username != null && _isLoggedIn)
                 ? Center(
                     child: Text(
-                    '${_userData.username}  ',
+                    widget.users.username!,
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 16,
@@ -156,11 +141,16 @@ class _MyHomePageState extends State<MyHomePage> {
                   color: Colors.indigo,
                 ),
                 onPressed: () {
-                  _showDialog();
+                  if (_isLoggedIn) {
+                    _showDialog();
+                  } else {
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (_) => signInPage()));
+                  }
                 },
               ),
               label: ''),
-          BottomNavigationBarItem(
+          const BottomNavigationBarItem(
               icon: Icon(Icons.library_add_outlined), label: ''),
         ],
         currentIndex: _selectedIndex,
@@ -175,7 +165,10 @@ class _MyHomePageState extends State<MyHomePage> {
     final fileName = file != null ? basename(file!.path) : 'No File Selected';
     slideDialog.showSlideDialog(
       context: this.context,
-      child: selectAndUploadFiles(),
+      child: selectAndUploadFiles(
+        users: widget.users,
+        userId: widget.userId,
+      ),
       // barrierColor: Colors.white.withOpacity(0.7),
       // pillColor: Colors.red,
       // backgroundColor: Colors.yellow,
@@ -184,7 +177,9 @@ class _MyHomePageState extends State<MyHomePage> {
 }
 
 class listVideo extends StatefulWidget {
-  const listVideo({super.key});
+  final UserData users;
+  final String userId;
+  const listVideo({super.key, required this.users, required this.userId});
 
   @override
   State<listVideo> createState() => _listVideoState();
@@ -209,7 +204,9 @@ class _listVideoState extends State<listVideo> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => (MyMusicApp())),
+                                builder: (context) => (MyMusicApp(
+                                      users: widget.users,
+                                    ))),
                           );
                         },
                         child: Text('Music'),
@@ -223,7 +220,9 @@ class _listVideoState extends State<listVideo> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => (MyGameApp())),
+                                builder: (context) => (MyGameApp(
+                                      users: widget.users,
+                                    ))),
                           );
                         },
                         child: Text('Game'),
@@ -237,7 +236,9 @@ class _listVideoState extends State<listVideo> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => (MyMoviesApp())),
+                                builder: (context) => (MyMoviesApp(
+                                      users: widget.users,
+                                    ))),
                           );
                         },
                         child: Text('Movies'),
@@ -260,7 +261,13 @@ class _listVideoState extends State<listVideo> {
                         info.title = snapshot.data!.docs[index]['title'];
                         info.url = snapshot.data!.docs[index]['videoUrl'];
                         info.vidId = snapshot.data!.docs[index].id;
+                        info.userId = snapshot.data!.docs[index]['ownerId'];
+                        info.types = snapshot.data!.docs[index]['type'];
+                        info.ownerName =
+                            snapshot.data!.docs[index]['ownerName'];
+
                         return videoCard(
+                          users: widget.users,
                           // uRLVideo: snapshot.data!.docs[index]['videoUrl'],
                           // title: snapshot.data!.docs[index]['title'],
                           // des: snapshot.data!.docs[index]['description'],

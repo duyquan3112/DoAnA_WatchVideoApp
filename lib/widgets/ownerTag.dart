@@ -1,4 +1,7 @@
 import 'package:avatar_view/avatar_view.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:do_an/models/getUserData.dart';
+import 'package:do_an/models/infoVideo.dart';
 import 'package:do_an/pages/profilePage.dart';
 import 'package:do_an/values/app_assets.dart';
 import 'package:do_an/values/app_colors.dart';
@@ -10,7 +13,9 @@ import 'package:like_button/like_button.dart';
 import '../values/app_styles.dart';
 
 class ownerTag extends StatefulWidget {
-  const ownerTag({super.key});
+  final infoVideo infoVid;
+  final UserData users;
+  const ownerTag({super.key, required this.infoVid, required this.users});
 
   @override
   State<ownerTag> createState() => _ownerTagState();
@@ -25,6 +30,12 @@ class _ownerTagState extends State<ownerTag> {
     // return success? !isLiked:isLiked;
 
     return !isLiked;
+  }
+
+  @override
+  void initState() {
+    setState(() {});
+    super.initState();
   }
 
   @override
@@ -50,7 +61,7 @@ class _ownerTagState extends State<ownerTag> {
                   ),
                 ),
                 Text(
-                  " Duy Quan",
+                  widget.infoVid.ownerName!,
                   style: AppStyles.h4.copyWith(
                       color: AppColors.blackGrey, fontWeight: FontWeight.bold),
                 ),

@@ -1,18 +1,21 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
+import '../models/getUserData.dart';
 import '../models/infoVideo.dart';
 import '../widgets/videoCard.dart';
 
 class MyMusicApp extends StatefulWidget {
+  final UserData users;
+  const MyMusicApp({super.key, required this.users});
   @override
-  State<StatefulWidget> createState() {
+  State<MyMusicApp> createState() {
     // TODO: implement createState
     return MyMusicAppState();
   }
 }
 
-class MyMusicAppState extends State<StatefulWidget> {
+class MyMusicAppState extends State<MyMusicApp> {
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
@@ -41,6 +44,7 @@ class MyMusicAppState extends State<StatefulWidget> {
                             // title: snapshot.data!.docs[index]['title'],
                             // des: snapshot.data!.docs[index]['description'],
                             // vidId: snapshot.data!.docs[index].id,
+                            users: widget.users,
                             infoVid: info,
                           );
                         }

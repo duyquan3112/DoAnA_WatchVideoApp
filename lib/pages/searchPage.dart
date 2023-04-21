@@ -1,19 +1,21 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:do_an/models/getUserData.dart';
 import 'package:flutter/material.dart';
 
 import '../models/infoVideo.dart';
 import '../widgets/videoCard.dart';
 
 class searchPage extends StatefulWidget {
-  const searchPage({super.key});
+  final UserData users;
+  const searchPage({super.key, required this.users});
   @override
-  State<StatefulWidget> createState() {
+  State<searchPage> createState() {
     // TODO: implement createState
     return searchPageState();
   }
 }
 
-class searchPageState extends State<StatefulWidget> {
+class searchPageState extends State<searchPage> {
   String title = '';
   @override
   Widget build(BuildContext context) {
@@ -59,7 +61,8 @@ class searchPageState extends State<StatefulWidget> {
                     shrinkWrap: true,
                     itemCount: infoVideos.length,
                     itemBuilder: (context, index) {
-                      return videoCard(infoVid: infoVideos[index]);
+                      return videoCard(
+                          users: widget.users, infoVid: infoVideos[index]);
                     },
                   );
                 } else {

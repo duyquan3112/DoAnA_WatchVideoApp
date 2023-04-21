@@ -1,6 +1,7 @@
 import 'dart:ffi';
 import 'dart:io';
 
+import 'package:do_an/models/getUserData.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -14,7 +15,10 @@ import '../pages/upLoadVideo.dart';
 const List<String> list = <String>['Movies', 'Games', 'Musics'];
 
 class selectAndUploadFiles extends StatefulWidget {
-  const selectAndUploadFiles({super.key});
+  final UserData users;
+  final String userId;
+  const selectAndUploadFiles(
+      {super.key, required this.users, required this.userId});
 
   @override
   State<selectAndUploadFiles> createState() => _selectAndUploadFilesState();
@@ -136,6 +140,8 @@ class _selectAndUploadFilesState extends State<selectAndUploadFiles> {
       'description': description,
       'videoUrl': urlDownload,
       'type': await getTypeVideo(),
+      'ownerId': widget.userId,
+      'ownerName': widget.users.username
     });
   }
 

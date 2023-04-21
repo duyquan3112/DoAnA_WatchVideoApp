@@ -18,39 +18,44 @@ class signInPage extends StatefulWidget {
 }
 
 class _signInPageState extends State<signInPage> {
-
   ///Get Input Data
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
 
   Future<void> signUserIn() async {
     try {
-      UserCredential userCredential = await FirebaseAuth.instance.signInWithEmailAndPassword(
-      email: emailController.text, 
-      password: passwordController.text,
+      UserCredential userCredential =
+          await FirebaseAuth.instance.signInWithEmailAndPassword(
+        email: emailController.text,
+        password: passwordController.text,
       );
-    // Truy xuất thông tin người dùng từ Firestore
-    QuerySnapshot querySnapshot = await FirebaseFirestore.instance
-      .collection('users')
-      .where('uid', isEqualTo: userCredential.user!.uid)
-      .get();
-    if (querySnapshot.docs.isNotEmpty) {
-      // Lấy dữ liệu từ Firestore để lưu trữ vô UserData
-      // print(querySnapshot.docs.first.data()! as Map<String, dynamic>); Lưu SharePrefs , tạo biến xong lưu thành 1 cục, tạo 1 class chứa key
-      UserData userData = UserData.fromFirestore(querySnapshot.docs.first);
-      UserData.setCurrentUser(userData); // Lưu SharedPreferences
-      // Chuyển sang màn hình chính
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => MyHomeApp()),
-      );
-    } else {
-      throw Exception('Không tìm thấy tài khoản của người dùng');
-    }
+      // Truy xuất thông tin người dùng từ Firestore
+      QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+          .collection('users')
+          .where('uid', isEqualTo: userCredential.user!.uid)
+          .get();
+      if (querySnapshot.docs.isNotEmpty) {
+        // Lấy dữ liệu từ Firestore để lưu trữ vô UserData
+        // print(querySnapshot.docs.first.data()! as Map<String, dynamic>); Lưu SharePrefs , tạo biến xong lưu thành 1 cục, tạo 1 class chứa key
+        UserData userData = UserData.fromFirestore(querySnapshot.docs.first);
+        String userId = querySnapshot.docs.first.id;
+        UserData.setCurrentUser(userData); // Lưu SharedPreferences
+        // Chuyển sang màn hình chính
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+              builder: (context) => MyHomePage(
+                    users: userData,
+                    userId: userId,
+                  )),
+        );
+      } else {
+        throw Exception('Không tìm thấy tài khoản của người dùng');
+      }
     } on FirebaseAuthException catch (e) {
       ///Pop off loading circle
       Navigator.pop(context);
-      if (e.code == 'user-not-found'){
+      if (e.code == 'user-not-found') {
         // wrongEmailPopup();
         print("Không tìm thấy tài khoản người dùng");
       } else if (e.code == 'wrong-password') {
@@ -61,12 +66,16 @@ class _signInPageState extends State<signInPage> {
       print(e);
     }
   }
-  
+
   //Navigate Function
   void navigateToHomePage() {
     Navigator.pushReplacement(
       context,
-      MaterialPageRoute(builder: (context) => MyHomeApp()),
+      MaterialPageRoute(
+          builder: (context) => MyHomePage(
+                users: UserData(uid: ''),
+                userId: '',
+              )),
     );
   }
 
@@ -77,7 +86,6 @@ class _signInPageState extends State<signInPage> {
     );
   }
 
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -87,17 +95,17 @@ class _signInPageState extends State<signInPage> {
           child: SingleChildScrollView(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
-              children:  [
+              children: [
                 const SizedBox(height: 0),
-          
+
                 // Logo App
                 const Icon(
                   Icons.lock,
                   size: 50,
                 ),
-          
+
                 const SizedBox(height: 5),
-          
+
                 // Welcome Text
                 Text(
                   'Welcome back!!',
@@ -114,27 +122,27 @@ class _signInPageState extends State<signInPage> {
                     fontSize: 16,
                   ),
                 ),
-          
+
                 const SizedBox(height: 5),
-          
+
                 // Emailname textfield
                 MyTextField(
                   controller: emailController,
                   hintText: 'Email',
-                  obscureText: false,               
+                  obscureText: false,
                 ),
-          
+
                 const SizedBox(height: 10),
-          
-                // password textfield           
+
+                // password textfield
                 MyTextField(
                   controller: passwordController,
                   hintText: 'Password',
-                  obscureText: true,               
+                  obscureText: true,
                 ),
-          
+
                 const SizedBox(height: 10),
-          
+
                 // forgot password?
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 25.0),
@@ -148,9 +156,9 @@ class _signInPageState extends State<signInPage> {
                     ],
                   ),
                 ),
-          
+
                 const SizedBox(height: 20),
-          
+
                 // sign in button
                 // authButton(
                 //   options: "Sign In",
@@ -165,7 +173,6 @@ class _signInPageState extends State<signInPage> {
                       color: Colors.black,
                       borderRadius: BorderRadius.circular(8),
                     ),
-                  
                     child: Center(
                       child: Text(
                         'Sign In',
@@ -178,11 +185,9 @@ class _signInPageState extends State<signInPage> {
                     ),
                   ),
                 ),
-          
-          
-          
+
                 const SizedBox(height: 15),
-          
+
                 // or continue with
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 25.0),
@@ -198,8 +203,7 @@ class _signInPageState extends State<signInPage> {
                         padding: const EdgeInsets.symmetric(horizontal: 10.0),
                         child: Text(
                           'Or continue with',
-                          style: TextStyle(
-                            color: Colors.grey[700]),
+                          style: TextStyle(color: Colors.grey[700]),
                         ),
                       ),
                       Expanded(
@@ -211,9 +215,9 @@ class _signInPageState extends State<signInPage> {
                     ],
                   ),
                 ),
-                
+
                 const SizedBox(height: 15),
-                
+
                 // continue with gg apple
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -223,9 +227,9 @@ class _signInPageState extends State<signInPage> {
                     SizedBox(width: 25),
                   ],
                 ),
-          
+
                 const SizedBox(height: 15),
-              
+
                 // Navigate to Register
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -251,9 +255,9 @@ class _signInPageState extends State<signInPage> {
                     ),
                   ],
                 ),
-          
+
                 const SizedBox(height: 15),
-          
+
                 //Continue as Guest
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
