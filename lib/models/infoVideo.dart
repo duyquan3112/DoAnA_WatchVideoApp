@@ -5,6 +5,7 @@ class infoVideo {
   String? userId;
   String? vidId;
   String? types;
+  String? ownerName;
 
   infoVideo({
     this.title,
@@ -13,5 +14,6 @@ class infoVideo {
     this.userId,
     this.vidId,
     this.types,
+    this.ownerName,
   });
 }

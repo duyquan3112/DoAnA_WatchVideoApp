@@ -1,18 +1,21 @@
 import "package:cloud_firestore/cloud_firestore.dart";
 import "package:flutter/material.dart";
 
+import "../models/getUserData.dart";
 import "../models/infoVideo.dart";
 import "../widgets/videoCard.dart";
 
 class MyMoviesApp extends StatefulWidget {
+  final UserData users;
+  const MyMoviesApp({super.key, required this.users});
   @override
-  State<StatefulWidget> createState() {
+  State<MyMoviesApp> createState() {
     // TODO: implement createState
     return MyMoviesAppState();
   }
 }
 
-class MyMoviesAppState extends State<StatefulWidget> {
+class MyMoviesAppState extends State<MyMoviesApp> {
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
@@ -37,6 +40,7 @@ class MyMoviesAppState extends State<StatefulWidget> {
                         info.types = snapshot.data!.docs[index]['type'];
                         if (info.types == 'movies') {
                           return videoCard(
+                            users: widget.users,
                             // uRLVideo: snapshot.data!.docs[index]['videoUrl'],
                             // title: snapshot.data!.docs[index]['title'],
                             // des: snapshot.data!.docs[index]['description'],
