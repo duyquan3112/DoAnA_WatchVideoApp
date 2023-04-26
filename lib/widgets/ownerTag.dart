@@ -49,7 +49,7 @@ class _ownerTagState extends State<ownerTag> {
             onTap: () => Navigator.push(
                 context,
                 MaterialPageRoute(
-                    builder: (_) => MyProfilePage(title: 'title'))),
+                    builder: (_) => MyProfilePage(info: widget.infoVid,))),
             child: Row(
               children: [
                 Container(

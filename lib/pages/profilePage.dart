@@ -1,27 +1,15 @@
+import 'package:do_an/models/infoVideo.dart';
+import 'package:do_an/widgets/editVideo.dart';
 import 'package:flutter/material.dart';
+import 'package:slide_popup_dialog_null_safety/slide_popup_dialog.dart'
+    as slideDialog;
 
-void main() {
-  runApp(const MyApp());
-}
-
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Profile Page',
-      theme: ThemeData(
-        primarySwatch: Colors.grey,
-      ),
-      home: const MyProfilePage(title: 'Profile Page'),
-    );
-  }
-}
+import '../widgets/deleteVideo.dart';
+import '../widgets/editVideo.dart';
 
 class MyProfilePage extends StatefulWidget {
-  const MyProfilePage({super.key, required this.title});
-  final String title;
+  const MyProfilePage({super.key, required this.info});
+  final infoVideo info;
 
   @override
   State<MyProfilePage> createState() => _MyProfilePageState();
@@ -32,15 +20,14 @@ class _MyProfilePageState extends State<MyProfilePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Center(child: Text(widget.title)),
-        // actions: <Widget>[
-        //   Row(
-        //     children: [
-        //       IconButton(onPressed: () {}, icon: Icon(Icons.arrow_back))
-        //     ],
-        //   )
-        // ],
-      ),
+          // actions: <Widget>[
+          //   Row(
+          //     children: [
+          //       IconButton(onPressed: () {}, icon: Icon(Icons.arrow_back))
+          //     ],
+          //   )
+          // ],
+          ),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         children: <Widget>[
@@ -166,7 +153,37 @@ class _MyProfilePageState extends State<MyProfilePage> {
                         foregroundColor: Colors.black,
                       ),
                     ),
-                  )
+                  ),
+                  Container(
+                    decoration: BoxDecoration(
+                      color: Colors.black,
+                      border: Border.all(width: 4),
+                      borderRadius: BorderRadius.circular(15),
+                    ),
+                    child: TextButton(
+                      onPressed: () {
+                        _showDialog();
+                      },
+                      child: Text("Edit"),
+                      style: TextButton.styleFrom(
+                        padding: EdgeInsets.zero,
+                        tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                        // padding: EdgeInsets.fromLTRB(0, 20, 0, 20),
+                        textStyle: TextStyle(fontSize: 20),
+                        foregroundColor: Colors.white,
+                      ),
+                    ),
+                  ),
+                  Container(
+                    decoration: BoxDecoration(
+                      color: Colors.black,
+                      border: Border.all(width: 4),
+                      borderRadius: BorderRadius.circular(15),
+                    ),
+                    child: deleteVideo(info: widget.info,),
+                     
+                    ),
+                  
                 ],
               ),
             ),
@@ -174,6 +191,17 @@ class _MyProfilePageState extends State<MyProfilePage> {
         ],
       ),
       // This trailing comma makes auto-formatting nicer for build methods.
+    );
+  }
+  
+  
+
+  void _showDialog() {
+    slideDialog.showSlideDialog(
+      context: this.context,
+      child: editVideo(
+        info: widget.info,
+      ),
     );
   }
 }
