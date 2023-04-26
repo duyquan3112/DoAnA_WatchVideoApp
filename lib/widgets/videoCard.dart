@@ -4,6 +4,7 @@ import 'package:do_an/models/getUserData.dart';
 import 'package:do_an/models/infoVideo.dart';
 import 'package:do_an/pages/watchingPage.dart';
 import 'package:do_an/values/app_assets.dart';
+import 'package:do_an/widgets/deleteVideo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
@@ -115,7 +116,7 @@ class _videoCardState extends State<videoCard> {
                 leading: const CircleAvatar(),
                 title: Text(widget.infoVid.title!),
                 subtitle: Text(widget.infoVid.description!),
-                trailing: const Icon(Icons.more_vert),
+                trailing: IconButton(icon:const Icon(Icons.more_vert_outlined) ,onPressed: () => deleteVideo(info: widget.infoVid),),
               ),
             ),
           ],
