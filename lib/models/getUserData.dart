@@ -7,7 +7,7 @@ class UserData {
   String uid;
   String? email;
   String? displayName;
-  String? photoUrl;
+  String? avatarUrl;
   String? username;
   String? firstName;
   String? lastName;
@@ -16,7 +16,7 @@ class UserData {
     required this.uid,
     this.email,
     this.displayName,
-    this.photoUrl,
+    this.avatarUrl,
     this.username,
     this.firstName,
     this.lastName,
@@ -41,6 +41,7 @@ class UserData {
       lastName: data['lastName'],
       username: data['username'],
       email: data['email'],
+      avatarUrl: data['avatarUrl']
     );
   }
 
@@ -51,6 +52,7 @@ class UserData {
       firstName: '',
       lastName: '',
       email: '',
+      avatarUrl: '',
     );
   }
 }
