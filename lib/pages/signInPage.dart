@@ -1,8 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:do_an/models/getUserData.dart';
+import 'package:do_an/pages/forgotPage.dart';
 import 'package:do_an/pages/homePage.dart';
 import 'package:do_an/pages/signUpPage.dart';
 import 'package:do_an/widgets/auth_button.dart';
+import 'package:do_an/widgets/error_SnackBar.dart';
 import 'package:do_an/widgets/square_tile.dart';
 import 'package:do_an/widgets/textfield.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -36,10 +38,11 @@ class _signInPageState extends State<signInPage> {
           .get();
       if (querySnapshot.docs.isNotEmpty) {
         // Lấy dữ liệu từ Firestore để lưu trữ vô UserData
-        // print(querySnapshot.docs.first.data()! as Map<String, dynamic>); Lưu SharePrefs , tạo biến xong lưu thành 1 cục, tạo 1 class chứa key
         UserData userData = UserData.fromFirestore(querySnapshot.docs.first);
+        // Lấy ID của document user trong kết quả trả về.
         String userId = querySnapshot.docs.first.id;
-        UserData.setCurrentUser(userData); // Lưu SharedPreferences
+        // Lưu dữ liệu của người dùng vô class userData
+        UserData.setCurrentUser(userData);
         // Chuyển sang màn hình chính
         Navigator.pushReplacement(
           context,
@@ -49,21 +52,20 @@ class _signInPageState extends State<signInPage> {
                     userId: userId,
                   )),
         );
-      } else {
-        throw Exception('Không tìm thấy tài khoản của người dùng');
       }
     } on FirebaseAuthException catch (e) {
-      ///Pop off loading circle
-      Navigator.pop(context);
+      String errorMessage = '';
       if (e.code == 'user-not-found') {
-        // wrongEmailPopup();
-        print("Không tìm thấy tài khoản người dùng");
+        // Không có dữ liệu người dùng
+        errorMessage = 'Không tìm thấy người dùng có địa chỉ email này';
       } else if (e.code == 'wrong-password') {
-        // wrongPasswordPopup();
-        print("Sai pass");
-      }
-    } catch (e) {
-      print(e);
+        // Sai pass
+        errorMessage = 'Mật khẩu không chính xác, vui lòng thử lại';
+      } else {
+        errorMessage = 'Đã xảy ra lỗi khi đăng nhập';
+      };
+      // Gọi hàm errorSnackBar để hiển thị lỗi
+      errorSnackBar(errMess: errorMessage).build(context);
     }
   }
 
@@ -76,6 +78,13 @@ class _signInPageState extends State<signInPage> {
                 users: UserData(uid: ''),
                 userId: '',
               )),
+    );
+  }
+
+  void navigateToForgotPassword() {
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(builder: (context) => forgotPage()),
     );
   }
 
@@ -149,21 +158,22 @@ class _signInPageState extends State<signInPage> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
-                      Text(
+                      GestureDetector(
+                      onTap: navigateToForgotPassword,
+                      child: const Text(
                         'Forgot Password?',
-                        style: TextStyle(color: Colors.grey[600]),
+                        style: TextStyle(
+                          color: Colors.blue,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
+                    ),
                     ],
                   ),
                 ),
 
                 const SizedBox(height: 20),
 
-                // sign in button
-                // authButton(
-                //   options: "Sign In",
-                //   onTap: signUserIn,
-                // ),
                 GestureDetector(
                   onTap: signUserIn,
                   child: Container(
