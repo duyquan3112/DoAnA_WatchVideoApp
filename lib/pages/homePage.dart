@@ -140,32 +140,59 @@ class _MyHomePageState extends State<MyHomePage> {
         ],
       ),
       body: _widgetOptions.elementAt(_selectedIndex),
+      
+      floatingActionButton: FloatingActionButton(
+        child: Icon(Icons.add),
+        onPressed: () {
+          if (_isLoggedIn) {
+                  _showDialog();
+                } else {
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (_) => signInPage()));
+                }
+        },
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
 
-      bottomNavigationBar: BottomNavigationBar(
-        items: <BottomNavigationBarItem>[
-          BottomNavigationBarItem(icon: const Icon(Icons.home), label: ''),
-          BottomNavigationBarItem(
-              icon: IconButton(
-                icon: const Icon(
-                  Icons.add_circle_outline,
-                  color: Colors.indigo,
-                ),
-                onPressed: () {
-                  if (_isLoggedIn) {
-                    _showDialog();
-                  } else {
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (_) => signInPage()));
-                  }
-                },
-              ),
-              label: ''),
-          const BottomNavigationBarItem(
-              icon: Icon(Icons.library_add_outlined), label: ''),
-        ],
-        currentIndex: _selectedIndex,
-        selectedItemColor: Colors.amber[800],
-        onTap: _onItemTapped,
+      bottomNavigationBar: Container(
+        decoration: BoxDecoration(
+          border: Border(
+            top: BorderSide(
+              color: Colors.grey,
+              width: 1.0,
+            ),
+          ),
+        ),
+        child: BottomNavigationBar(
+          items: <BottomNavigationBarItem>[
+            BottomNavigationBarItem(
+              icon: const Icon(
+                Icons.home), 
+              label: 'Home',
+            ),
+      
+            const BottomNavigationBarItem(
+              icon: Icon(
+                Icons.library_add_outlined
+              ), 
+              label: 'Liked Video'
+             ),
+          ],
+          currentIndex: _selectedIndex,
+          selectedItemColor: Color.fromARGB(255, 0, 94, 255),
+          selectedIconTheme: IconThemeData(
+            size: 30,
+          ),
+          selectedLabelStyle: TextStyle(
+            fontWeight: FontWeight.bold
+          ),
+          unselectedItemColor: Colors.black,
+          showUnselectedLabels: true,
+          backgroundColor: Color.fromARGB(255, 190, 227, 255),
+      
+          onTap: _onItemTapped,
+          
+        ),
       ),
       // This trailing comma makes auto-formatting nicer for build methods.
     );
@@ -207,57 +234,67 @@ class _listVideoState extends State<listVideo> {
             return Column(
               children: [
                 Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      TextButton(
-                        onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => (MyMusicApp(
-                                      users: widget.users,
-                                    ))),
-                          );
-                        },
-                        child: Text('Music'),
-                        style: ButtonStyle(
-                          backgroundColor:
-                              MaterialStatePropertyAll<Color>(Colors.black),
-                        ),
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    TextButton(
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => (MyMusicApp(
+                                    users: widget.users,
+                                  ))),
+                        );
+                      },
+                      child: Text('Music'),
+                      style: ButtonStyle(
+                        backgroundColor:
+                            MaterialStatePropertyAll<Color>(Colors.black),
                       ),
-                      TextButton(
-                        onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => (MyGameApp(
-                                      users: widget.users,
-                                    ))),
-                          );
-                        },
-                        child: Text('Game'),
-                        style: ButtonStyle(
-                          backgroundColor:
-                              MaterialStatePropertyAll<Color>(Colors.black),
-                        ),
+                    ),
+                    TextButton(
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => (MyGameApp(
+                                    users: widget.users,
+                                  ))),
+                        );
+                      },
+                      child: Text('Game'),
+                      style: ButtonStyle(
+                        backgroundColor:
+                            MaterialStatePropertyAll<Color>(Colors.black),
                       ),
-                      TextButton(
-                        onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => (MyMoviesApp(
-                                      users: widget.users,
-                                    ))),
-                          );
-                        },
-                        child: Text('Movies'),
-                        style: ButtonStyle(
-                          backgroundColor:
-                              MaterialStatePropertyAll<Color>(Colors.black),
-                        ),
+                    ),
+                    TextButton(
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => (MyMoviesApp(
+                                    users: widget.users,
+                                  ))),
+                        );
+                      },
+                      child: Text('Movies'),
+                      style: ButtonStyle(
+                        backgroundColor:
+                            MaterialStatePropertyAll<Color>(Colors.black),
                       ),
-                    ]),
+                    ),
+                  ]
+                ),
+                
+                Divider(
+                  height: 1,
+                  color: Colors.grey,
+                  thickness: 1,
+                  indent: 16,
+                  endIndent: 16,
+                ),
+                
                 Flexible(
                   child: ListView.builder(
                       physics: const BouncingScrollPhysics(),
