@@ -96,13 +96,23 @@ class _MyHomePageState extends State<MyHomePage> {
           SizedBox(
             child: (widget.users.username != null && _isLoggedIn)
                 ? Center(
-                    child: Text(
-                    widget.users.username!,
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 16,
+                    child: Row(
+                      children: [
+                        CircleAvatar(
+                          backgroundImage: NetworkImage(widget.users.avatarUrl!),
+                        ),
+                        SizedBox(width: 10),
+                        Text(
+                          widget.users.username!,
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 16,
+                          ),
+                        ),
+                        SizedBox(width: 10),
+                      ],
                     ),
-                  ))
+                  )
                 : TextButton(
                     style: TextButton.styleFrom(
                       backgroundColor: Colors.red,
