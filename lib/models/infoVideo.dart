@@ -6,6 +6,7 @@ class infoVideo {
   String? vidId;
   String? types;
   String? ownerName;
+  int likedCount;
 
   infoVideo({
     this.title,
@@ -15,5 +16,6 @@ class infoVideo {
     this.vidId,
     this.types,
     this.ownerName,
+    this.likedCount = 0,
   });
 }

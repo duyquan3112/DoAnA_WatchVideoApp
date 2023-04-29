@@ -14,7 +14,7 @@ import 'package:video_thumbnail/video_thumbnail.dart';
 
 class videoCard extends StatefulWidget {
   final infoVideo infoVid;
-  final UserData users;
+  final UserData? users;
   // final String uRLVideo;
   // final String title;
   // final String des;
@@ -34,6 +34,7 @@ class videoCard extends StatefulWidget {
 
 class _videoCardState extends State<videoCard> {
   String? _thumbnailUrl;
+  UserData? currentUser;
   @override
   void setState(fn) {
     if (mounted) {
@@ -53,6 +54,7 @@ class _videoCardState extends State<videoCard> {
   void initState() {
     super.initState();
     genThumbnail();
+    currentUser = widget.users;
   }
 
   @override
@@ -68,7 +70,7 @@ class _videoCardState extends State<videoCard> {
               context,
               MaterialPageRoute(
                   builder: (_) => watchingPage(
-                        users: widget.users,
+                        users: currentUser,
                         info: widget.infoVid,
                       )));
         },

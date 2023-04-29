@@ -6,7 +6,7 @@ import "../models/infoVideo.dart";
 import "../widgets/videoCard.dart";
 
 class MyGameApp extends StatefulWidget {
-  final UserData users;
+  final UserData? users;
   const MyGameApp({super.key, required this.users});
 
   @override
@@ -17,6 +17,7 @@ class MyGameAppState extends State<MyGameApp> {
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
+
     return (Scaffold(
         appBar: AppBar(title: const Text('This is Game Page')),
         body: StreamBuilder(
@@ -57,5 +58,6 @@ class MyGameAppState extends State<MyGameApp> {
               } else
                 return Text('No Game');
             })));
+
   }
 }

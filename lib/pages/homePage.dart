@@ -1,5 +1,7 @@
 import 'dart:io';
 import 'package:do_an/pages/gamePage.dart';
+import 'package:do_an/pages/likedVideoPage.dart';
+import 'package:do_an/pages/listVideoPage.dart';
 import 'package:do_an/pages/moviePage.dart';
 import 'package:do_an/pages/searchPage.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -28,9 +30,10 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int _selectedIndex = 0;
+  late int _selectedIndex;
   File? file;
-
+  UserData? currentUser;
+  String? userId;
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
@@ -42,9 +45,12 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   void initState() {
+    _selectedIndex = 0;
     super.initState();
-    UserData? currentUser = UserData.getCurrentUser();
-    if (widget.users.username != null) {
+    //UserData? currentUser = UserData.getCurrentUser();
+    userId = widget.userId;
+    currentUser = widget.users;
+    if (currentUser?.username != null) {
       setState(() {
         //_userData = currentUser;
         _isLoggedIn = true;
@@ -60,16 +66,19 @@ class _MyHomePageState extends State<MyHomePage> {
   void _handleLogout() async {
     await FirebaseAuth.instance.signOut();
     setState(() {
+      currentUser = null;
+      userId = null;
       _isLoggedIn = false;
+      _selectedIndex = 0;
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    final List<Widget> _widgetOptions = [
+    List<Widget> _widgetOptions = [
       listVideo(
-        users: widget.users,
-        userId: widget.userId,
+        users: currentUser,
+        userId: userId,
       ),
       Text(''),
       likedVideo(),
@@ -349,3 +358,4 @@ class likedVideo extends StatelessWidget {
     return Center(child: Text("This is liked video"));
   }
 }
+
