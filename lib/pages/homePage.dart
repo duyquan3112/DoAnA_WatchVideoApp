@@ -105,13 +105,23 @@ class _MyHomePageState extends State<MyHomePage> {
           SizedBox(
             child: (widget.users.username != null && _isLoggedIn)
                 ? Center(
-                    child: Text(
-                    widget.users.username!,
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 16,
+                    child: Row(
+                      children: [
+                        CircleAvatar(
+                          backgroundImage: NetworkImage(widget.users.avatarUrl!),
+                        ),
+                        SizedBox(width: 10),
+                        Text(
+                          widget.users.username!,
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 16,
+                          ),
+                        ),
+                        SizedBox(width: 10),
+                      ],
                     ),
-                  ))
+                  )
                 : TextButton(
                     style: TextButton.styleFrom(
                       backgroundColor: Colors.red,
@@ -139,32 +149,59 @@ class _MyHomePageState extends State<MyHomePage> {
         ],
       ),
       body: _widgetOptions.elementAt(_selectedIndex),
+      
+      floatingActionButton: FloatingActionButton(
+        child: Icon(Icons.add),
+        onPressed: () {
+          if (_isLoggedIn) {
+                  _showDialog();
+                } else {
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (_) => signInPage()));
+                }
+        },
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
 
-      bottomNavigationBar: BottomNavigationBar(
-        items: <BottomNavigationBarItem>[
-          BottomNavigationBarItem(icon: const Icon(Icons.home), label: ''),
-          BottomNavigationBarItem(
-              icon: IconButton(
-                icon: const Icon(
-                  Icons.add_circle_outline,
-                  color: Colors.indigo,
-                ),
-                onPressed: () {
-                  if (_isLoggedIn) {
-                    _showDialog();
-                  } else {
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (_) => signInPage()));
-                  }
-                },
-              ),
-              label: ''),
-          const BottomNavigationBarItem(
-              icon: Icon(Icons.library_add_outlined), label: ''),
-        ],
-        currentIndex: _selectedIndex,
-        selectedItemColor: Colors.amber[800],
-        onTap: _onItemTapped,
+      bottomNavigationBar: Container(
+        decoration: BoxDecoration(
+          border: Border(
+            top: BorderSide(
+              color: Colors.grey,
+              width: 1.0,
+            ),
+          ),
+        ),
+        child: BottomNavigationBar(
+          items: <BottomNavigationBarItem>[
+            BottomNavigationBarItem(
+              icon: const Icon(
+                Icons.home), 
+              label: 'Home',
+            ),
+      
+            const BottomNavigationBarItem(
+              icon: Icon(
+                Icons.library_add_outlined
+              ), 
+              label: 'Liked Video'
+             ),
+          ],
+          currentIndex: _selectedIndex,
+          selectedItemColor: Color.fromARGB(255, 0, 94, 255),
+          selectedIconTheme: IconThemeData(
+            size: 30,
+          ),
+          selectedLabelStyle: TextStyle(
+            fontWeight: FontWeight.bold
+          ),
+          unselectedItemColor: Colors.black,
+          showUnselectedLabels: true,
+          backgroundColor: Color.fromARGB(255, 190, 227, 255),
+      
+          onTap: _onItemTapped,
+          
+        ),
       ),
       // This trailing comma makes auto-formatting nicer for build methods.
     );
@@ -184,3 +221,141 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 }
+
+class listVideo extends StatefulWidget {
+  final UserData users;
+  final String userId;
+  const listVideo({super.key, required this.users, required this.userId});
+
+  @override
+  State<listVideo> createState() => _listVideoState();
+}
+
+class _listVideoState extends State<listVideo> {
+  @override
+  Widget build(BuildContext context) {
+    String uRlVideo = AppAssets.videoDefault;
+
+    return StreamBuilder(
+        stream: FirebaseFirestore.instance.collection('video_list').snapshots(),
+        builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+          if (snapshot.hasData) {
+            return Column(
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    TextButton(
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => (MyMusicApp(
+                                    users: widget.users,
+                                  ))),
+                        );
+                      },
+                      child: Text('Music'),
+                      style: ButtonStyle(
+                        backgroundColor:
+                            MaterialStatePropertyAll<Color>(Colors.black),
+                      ),
+                    ),
+                    TextButton(
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => (MyGameApp(
+                                    users: widget.users,
+                                  ))),
+                        );
+                      },
+                      child: Text('Game'),
+                      style: ButtonStyle(
+                        backgroundColor:
+                            MaterialStatePropertyAll<Color>(Colors.black),
+                      ),
+                    ),
+                    TextButton(
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => (MyMoviesApp(
+                                    users: widget.users,
+                                  ))),
+                        );
+                      },
+                      child: Text('Movies'),
+                      style: ButtonStyle(
+                        backgroundColor:
+                            MaterialStatePropertyAll<Color>(Colors.black),
+                      ),
+                    ),
+                  ]
+                ),
+                
+                Divider(
+                  height: 1,
+                  color: Colors.grey,
+                  thickness: 1,
+                  indent: 16,
+                  endIndent: 16,
+                ),
+                
+                Flexible(
+                  child: ListView.builder(
+                      physics: const BouncingScrollPhysics(),
+                      padding: const EdgeInsets.all(8),
+                      shrinkWrap: true,
+                      itemCount: snapshot.data!.docs.length,
+                      itemBuilder: (context, index) {
+                        infoVideo info = infoVideo();
+                        info.description =
+                            snapshot.data!.docs[index]['description'];
+                        info.title = snapshot.data!.docs[index]['title'];
+                        info.url = snapshot.data!.docs[index]['videoUrl'];
+                        info.vidId = snapshot.data!.docs[index].id;
+                        info.userId = snapshot.data!.docs[index]['ownerId'];
+                        info.types = snapshot.data!.docs[index]['type'];
+                        info.ownerName =
+                            snapshot.data!.docs[index]['ownerName'];
+
+                        return videoCard(
+                          users: widget.users,
+                          // uRLVideo: snapshot.data!.docs[index]['videoUrl'],
+                          // title: snapshot.data!.docs[index]['title'],
+                          // des: snapshot.data!.docs[index]['description'],
+                          // vidId: snapshot.data!.docs[index].id,
+                          infoVid: info,
+                        );
+                      }
+                      // Card(
+                      //     child: ListTile(
+                      //   isThreeLine: true,
+                      //   leading: CircleAvatar(),
+                      //   title: Text(snapshot.data!.docs[index]['title']),
+                      //   subtitle: Text(snapshot.data!.docs[index]['description']),
+                      //   trailing: Icon(Icons.more_vert),
+                      // )),
+                      ),
+                ),
+              ],
+            );
+          } else {
+            return Center(child: const Text('No data'));
+          }
+        });
+  }
+}
+
+class likedVideo extends StatelessWidget {
+  const likedVideo({super.key});
+  @override
+  Widget build(BuildContext context) {
+    // TODO: implement build
+    return Center(child: Text("This is liked video"));
+  }
+}
+

@@ -54,6 +54,8 @@ dependencies:
   video_thumbnail: ^0.5.3
   path_provider: ^2.0.14
   date_format: ^2.0.7
+  another_flushbar: ^1.12.29
+  
   
 
 
@@ -87,6 +89,7 @@ flutter:
     - assets/fonts/Inter/
     - assets/images/
     - assets/images/google.png
+    - assets/images/default_avatar.jpg
     - assets/images/thumbnail/
     - assets/icons/system/2x/
     - assets/icons/system/3x/

@@ -1,9 +1,13 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:do_an/pages/signInPage.dart';
 import 'package:do_an/widgets/auth_button.dart';
 import 'package:do_an/widgets/textfield.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
 
@@ -23,6 +27,7 @@ class _signUpPageState extends State<signUpPage> {
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
   final confirmPasswordController = TextEditingController();
+  final Reference storageReference = FirebaseStorage.instance.ref();
 
 
   //SignUp User
@@ -35,10 +40,18 @@ class _signUpPageState extends State<signUpPage> {
           password: passwordController.text,
         );
         
-        // String defaultAvatarUrl = 'assets/images/default.jpg';
+        // Upload default avatar to Cloud Storage
+        final defaultAvatarRef = FirebaseStorage.instance.ref().child('default_avatar.jpg');
+        final defaultAvatarFile = await rootBundle.load('assets/images/default_avatar.jpg');
+        await defaultAvatarRef.putData(defaultAvatarFile.buffer.asUint8List());
+
+        // Get download URL of default avatar
+        final defaultAvatarUrl = await defaultAvatarRef.getDownloadURL();
+
+        // Update user data to fireAuth
         User user = userCredential.user!;
         await user.updateDisplayName('${usernameController.text}'); 
-        // await user.updatePhotoURL(defaultAvatarUrl);
+        await user.updatePhotoURL(defaultAvatarUrl);
 
         ///Store User data from signup to Firestore
         FirebaseFirestore.instance.collection('users').add({
@@ -48,15 +61,9 @@ class _signUpPageState extends State<signUpPage> {
         'username': usernameController.text,
         'email': emailController.text,
         'password' : passwordController.text,
-        'uid' : user.uid,
-        // 'avatarUrl': defaultAvatarUrl,
+        'avatarUrl': defaultAvatarUrl,
         });
-      } else {
-        Navigator.pop(context);
-        // return Passnotsame();
       }
-
-    
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found'){
         // wrongEmailPopup();
@@ -79,9 +86,11 @@ class _signUpPageState extends State<signUpPage> {
 
   //Navigate to SignIn
   void navigateToSignIn() {
-    Navigator.pushReplacement(
+    Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => signInPage()),
+      MaterialPageRoute(
+        builder: (context) => signInPage(),
+      ),
     );
   }
 
