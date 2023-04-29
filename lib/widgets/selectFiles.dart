@@ -141,7 +141,8 @@ class _selectAndUploadFilesState extends State<selectAndUploadFiles> {
       'videoUrl': urlDownload,
       'type': await getTypeVideo(),
       'ownerId': widget.userId,
-      'ownerName': widget.users.username
+      'ownerName': widget.users.username,
+      'likedCount': 0,
     });
   }
 
