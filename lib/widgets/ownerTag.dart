@@ -60,29 +60,33 @@ class _ownerTagState extends State<ownerTag> {
       width: size.width,
       child: Row(
         children: [
-          InkWell(
-            onTap: () => Navigator.push(
-                context,
-                MaterialPageRoute(
-
-                    builder: (_) => MyProfilePage(info: widget.infoVid,))),
-
-            child: Row(
-              children: [
-                Container(
-                  padding: const EdgeInsets.all(10),
-                  child: const AvatarView(
-                    radius: 25,
-                    avatarType: AvatarType.CIRCLE,
-                    imagePath: "assets/icons/system/user.png",
+          SizedBox(
+            width: size.width * 1 / 1.8,
+            child: InkWell(
+              onTap: () => Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (_) => MyProfilePage(
+                            info: widget.infoVid,
+                          ))),
+              child: Row(
+                children: [
+                  Container(
+                    padding: const EdgeInsets.all(10),
+                    child: const AvatarView(
+                      radius: 25,
+                      avatarType: AvatarType.CIRCLE,
+                      imagePath: "assets/icons/system/user.png",
+                    ),
                   ),
-                ),
-                Text(
-                  widget.infoVid.ownerName!,
-                  style: AppStyles.h4.copyWith(
-                      color: AppColors.blackGrey, fontWeight: FontWeight.bold),
-                ),
-              ],
+                  Text(
+                    widget.infoVid.ownerName!,
+                    style: AppStyles.h4.copyWith(
+                        color: AppColors.blackGrey,
+                        fontWeight: FontWeight.bold),
+                  ),
+                ],
+              ),
             ),
           ),
           SizedBox(
