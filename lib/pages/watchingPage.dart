@@ -13,7 +13,7 @@ import 'package:visibility_detector/visibility_detector.dart';
 
 class watchingPage extends StatefulWidget {
   final infoVideo info;
-  final UserData users;
+  final UserData? users;
   const watchingPage({super.key, required this.info, required this.users});
 
   @override
@@ -24,10 +24,11 @@ class _watchingPageState extends State<watchingPage> {
   late FlickManager flickManager;
   final formKey = GlobalKey<FormState>();
   final TextEditingController commentController = TextEditingController();
-
+  UserData? currentUser;
   @override
   void initState() {
     super.initState();
+    currentUser = widget.users;
     flickManager = FlickManager(
       videoPlayerController: VideoPlayerController.network(widget.info.url!),
       autoInitialize: true,
@@ -105,17 +106,21 @@ class _watchingPageState extends State<watchingPage> {
             ),
             videoInfo(info: widget.info),
             ownerTag(
-              users: widget.users,
+              users: currentUser,
               infoVid: widget.info,
             ),
             const Divider(
               color: Colors.black,
-              height: 25,
+              height: 5,
               thickness: 2,
               indent: 5,
               endIndent: 5,
             ),
-            commentArea(info: widget.info)
+            currentUser?.username != null
+                ? commentArea(info: widget.info)
+                : Center(
+                    heightFactor: size.height * 1 / 100,
+                    child: Text('Please Login to comment and react video!'))
           ],
         ),
       ),

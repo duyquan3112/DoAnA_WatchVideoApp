@@ -5,6 +5,7 @@ import 'package:do_an/models/infoVideo.dart';
 import 'package:do_an/pages/profilePage.dart';
 import 'package:do_an/values/app_assets.dart';
 import 'package:do_an/values/app_colors.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
@@ -14,7 +15,7 @@ import '../values/app_styles.dart';
 
 class ownerTag extends StatefulWidget {
   final infoVideo infoVid;
-  final UserData users;
+  final UserData? users;
   const ownerTag({super.key, required this.infoVid, required this.users});
 
   @override
@@ -22,14 +23,27 @@ class ownerTag extends StatefulWidget {
 }
 
 class _ownerTagState extends State<ownerTag> {
-  Future<bool> onLikeButtonTapped(bool isLiked) async {
-    /// send your request here
-    // final bool success= await sendRequest();
-
-    /// if failed, you can do nothing
-    // return success? !isLiked:isLiked;
-
-    return !isLiked;
+  bool? isLikedFlag = false;
+  Future<bool> onLikeButtonTapped(isLikedFlag) async {
+    if (widget.users?.username == null) {
+      final snackbar = SnackBar(
+        content: Text('Please Login to react!'),
+        showCloseIcon: true,
+        duration: Duration(seconds: 2),
+      );
+      ScaffoldMessenger.of(context).showSnackBar(snackbar);
+      return false;
+    } else {
+      var likedCountRef = FirebaseFirestore.instance
+          .collection('video_list')
+          .doc(widget.infoVid.vidId);
+      isLikedFlag
+          ? await likedCountRef
+              .update({'likedCount': --widget.infoVid.likedCount})
+          : await likedCountRef
+              .update({'likedCount': ++widget.infoVid.likedCount});
+      return !isLikedFlag;
+    }
   }
 
   @override
@@ -42,6 +56,7 @@ class _ownerTagState extends State<ownerTag> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return SizedBox(
+      height: size.height * 1 / 12,
       width: size.width,
       child: Row(
         children: [
@@ -49,7 +64,7 @@ class _ownerTagState extends State<ownerTag> {
             onTap: () => Navigator.push(
                 context,
                 MaterialPageRoute(
-                    builder: (_) => MyProfilePage(title: 'title'))),
+                    builder: (_) => const MyProfilePage(title: 'title'))),
             child: Row(
               children: [
                 Container(
@@ -79,15 +94,15 @@ class _ownerTagState extends State<ownerTag> {
                 dotPrimaryColor: Color(0xff33b5e5),
                 dotSecondaryColor: Color(0xff0099cc),
               ),
-              likeBuilder: (bool isLiked) {
+              likeBuilder: (isLikedFlag) {
                 return ImageIcon(
                   AssetImage(AppAssets.heart),
-                  color: isLiked
+                  color: isLikedFlag
                       ? const Color.fromARGB(255, 238, 0, 52)
                       : Colors.grey,
                 );
               },
-              likeCount: 0,
+              likeCount: widget.infoVid.likedCount,
               countDecoration: (count, likeCount) {
                 return Text(
                   '$likeCount',

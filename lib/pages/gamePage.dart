@@ -6,7 +6,7 @@ import "../models/infoVideo.dart";
 import "../widgets/videoCard.dart";
 
 class MyGameApp extends StatefulWidget {
-  final UserData users;
+  final UserData? users;
   const MyGameApp({super.key, required this.users});
 
   @override
@@ -38,7 +38,7 @@ class MyGameAppState extends State<MyGameApp> {
                         info.types = snapshot.data!.docs[index]['type'];
                         if (info.types == 'games') {
                           return videoCard(
-                            users: widget.users,
+                            users: widget.users!,
                             // uRLVideo: snapshot.data!.docs[index]['videoUrl'],
                             // title: snapshot.data!.docs[index]['title'],
                             // des: snapshot.data!.docs[index]['description'],
