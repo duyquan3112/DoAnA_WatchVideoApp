@@ -14,7 +14,12 @@ import 'package:visibility_detector/visibility_detector.dart';
 class watchingPage extends StatefulWidget {
   final infoVideo info;
   final UserData? users;
-  const watchingPage({super.key, required this.info, required this.users});
+  final bool isLogin;
+  const watchingPage(
+      {super.key,
+      required this.info,
+      required this.users,
+      required this.isLogin});
 
   @override
   State<watchingPage> createState() => _watchingPageState();
@@ -108,6 +113,7 @@ class _watchingPageState extends State<watchingPage> {
             ownerTag(
               users: currentUser,
               infoVid: widget.info,
+              isLogin: widget.isLogin,
             ),
             const Divider(
               color: Colors.black,
@@ -116,8 +122,11 @@ class _watchingPageState extends State<watchingPage> {
               indent: 5,
               endIndent: 5,
             ),
-            currentUser?.username != null
-                ? commentArea(info: widget.info)
+            widget.isLogin
+                ? commentArea(
+                    info: widget.info,
+                    currentUser: widget.users!,
+                  )
                 : Center(
                     heightFactor: size.height * 1 / 100,
                     child: Text('Please Login to comment and react video!'))

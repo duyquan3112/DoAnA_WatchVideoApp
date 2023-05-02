@@ -11,6 +11,7 @@ class UserData {
   String? username;
   String? firstName;
   String? lastName;
+  String? docId;
 
   UserData({
     required this.uid,
@@ -20,6 +21,7 @@ class UserData {
     this.username,
     this.firstName,
     this.lastName,
+    this.docId,
   });
 
   static UserData? _currentUser;
@@ -35,24 +37,24 @@ class UserData {
   factory UserData.fromFirestore(DocumentSnapshot snapshot) {
     Map<String, dynamic> data = snapshot.data()! as Map<String, dynamic>;
     return UserData(
-      uid: data['uid'],
-      displayName: data['displayName'],
-      firstName: data['firstName'],
-      lastName: data['lastName'],
-      username: data['username'],
-      email: data['email'],
-      avatarUrl: data['avatarUrl']
-    );
+        uid: data['uid'],
+        displayName: data['displayName'],
+        firstName: data['firstName'],
+        lastName: data['lastName'],
+        username: data['username'],
+        email: data['email'],
+        avatarUrl: data['avatarUrl'],
+        docId: snapshot.id);
   }
 
   static UserData empty() {
     return UserData(
-      uid: '',
-      username: '',
-      firstName: '',
-      lastName: '',
-      email: '',
-      avatarUrl: '',
-    );
+        uid: '',
+        username: '',
+        firstName: '',
+        lastName: '',
+        email: '',
+        avatarUrl: '',
+        docId: '');
   }
 }

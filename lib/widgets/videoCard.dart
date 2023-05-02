@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:date_format/date_format.dart';
 import 'package:do_an/models/getUserData.dart';
 import 'package:do_an/models/infoVideo.dart';
 import 'package:do_an/pages/watchingPage.dart';
@@ -15,6 +16,7 @@ import 'package:video_thumbnail/video_thumbnail.dart';
 class videoCard extends StatefulWidget {
   final infoVideo infoVid;
   final UserData? users;
+  final bool isLogin;
   // final String uRLVideo;
   // final String title;
   // final String des;
@@ -26,7 +28,8 @@ class videoCard extends StatefulWidget {
       // required this.title,
       // required this.des,
       // required this.vidId,
-      required this.infoVid});
+      required this.infoVid,
+      required this.isLogin});
 
   @override
   State<videoCard> createState() => _videoCardState();
@@ -72,6 +75,7 @@ class _videoCardState extends State<videoCard> {
                   builder: (_) => watchingPage(
                         users: currentUser,
                         info: widget.infoVid,
+                        isLogin: widget.isLogin,
                       )));
         },
         child: Column(
@@ -118,7 +122,10 @@ class _videoCardState extends State<videoCard> {
                 leading: const CircleAvatar(),
                 title: Text(widget.infoVid.title!),
                 subtitle: Text(widget.infoVid.description!),
-                trailing: IconButton(icon:const Icon(Icons.more_vert_outlined) ,onPressed: () => deleteVideo(info: widget.infoVid),),
+                trailing: IconButton(
+                  icon: const Icon(Icons.more_vert_outlined),
+                  onPressed: () => deleteVideo(info: widget.infoVid),
+                ),
               ),
             ),
           ],

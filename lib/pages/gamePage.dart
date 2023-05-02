@@ -7,7 +7,8 @@ import "../widgets/videoCard.dart";
 
 class MyGameApp extends StatefulWidget {
   final UserData? users;
-  const MyGameApp({super.key, required this.users});
+  final bool isLogin;
+  const MyGameApp({super.key, required this.users, required this.isLogin});
 
   @override
   State<MyGameApp> createState() => MyGameAppState();
@@ -48,6 +49,7 @@ class MyGameAppState extends State<MyGameApp> {
                                 // des: snapshot.data!.docs[index]['description'],
                                 // vidId: snapshot.data!.docs[index].id,
                                 infoVid: info,
+                                isLogin: widget.isLogin,
                               );
                             }
                             return Container();
@@ -58,6 +60,5 @@ class MyGameAppState extends State<MyGameApp> {
               } else
                 return Text('No Game');
             })));
-
   }
 }
