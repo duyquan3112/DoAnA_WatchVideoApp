@@ -6,8 +6,9 @@ import "../models/infoVideo.dart";
 import "../widgets/videoCard.dart";
 
 class MyMoviesApp extends StatefulWidget {
-  final UserData users;
-  const MyMoviesApp({super.key, required this.users});
+  final UserData? users;
+  final bool isLogin;
+  const MyMoviesApp({super.key, required this.users, required this.isLogin});
   @override
   State<MyMoviesApp> createState() {
     // TODO: implement createState
@@ -53,6 +54,7 @@ class MyMoviesAppState extends State<MyMoviesApp> {
                                 // des: snapshot.data!.docs[index]['description'],
                                 // vidId: snapshot.data!.docs[index].id,
                                 infoVid: info,
+                                isLogin: widget.isLogin,
                               );
                             }
                             return Container();

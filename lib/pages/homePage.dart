@@ -1,6 +1,6 @@
 import 'dart:io';
 import 'package:do_an/pages/gamePage.dart';
-import 'package:do_an/pages/likedVideoPage.dart';
+import 'package:do_an/pages/listLikedVideoPage.dart';
 import 'package:do_an/pages/listVideoPage.dart';
 import 'package:do_an/pages/moviePage.dart';
 import 'package:do_an/pages/searchPage.dart';
@@ -14,6 +14,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:path/path.dart';
+
 import 'package:slide_popup_dialog_null_safety/slide_popup_dialog.dart'
     as slideDialog;
 
@@ -51,12 +52,10 @@ class _MyHomePageState extends State<MyHomePage> {
     userId = widget.userId;
     if (currentUser?.username != null) {
       setState(() {
-        //_userData = currentUser;
         _isLoggedIn = true;
       });
     } else {
       setState(() {
-        //_userData = UserData.empty();
         _isLoggedIn = false;
       });
     }
@@ -78,9 +77,9 @@ class _MyHomePageState extends State<MyHomePage> {
       listVideo(
         users: currentUser,
         userId: userId,
+        isLogin: _isLoggedIn,
       ),
-      Text(''),
-      likedVideo(),
+      likedVideo(isLogin: _isLoggedIn),
     ];
     return Scaffold(
       appBar: AppBar(
@@ -97,6 +96,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   MaterialPageRoute(
                       builder: (context) => searchPage(
                             users: currentUser!,
+                            isLogin: _isLoggedIn,
                           )),
                 );
               },
@@ -148,7 +148,33 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
         ],
       ),
-      body: _widgetOptions.elementAt(_selectedIndex),
+      body: _selectedIndex == 0
+          ? _widgetOptions.elementAt(_selectedIndex)
+          : _isLoggedIn
+              ? _widgetOptions.elementAt(_selectedIndex)
+              : AlertDialog(
+                  content: Text('Please Login to use'),
+                  actions: <Widget>[
+                    TextButton(
+                      child: const Text('Cancel'),
+                      onPressed: () {
+                        setState(() {
+                          _selectedIndex = 0;
+                        });
+                        _widgetOptions.elementAt(_selectedIndex);
+                      },
+                    ),
+                    TextButton(
+                      child: const Text('Login'),
+                      onPressed: () {
+                        Navigator.of(context).pushAndRemoveUntil(
+                            MaterialPageRoute(
+                                builder: (context) => signInPage()),
+                            (route) => false);
+                      },
+                    ),
+                  ],
+                ),
 
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.add),

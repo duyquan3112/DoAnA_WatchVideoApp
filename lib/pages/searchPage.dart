@@ -7,7 +7,8 @@ import '../widgets/videoCard.dart';
 
 class searchPage extends StatefulWidget {
   final UserData users;
-  const searchPage({super.key, required this.users});
+  final bool isLogin;
+  const searchPage({super.key, required this.users, required this.isLogin});
   @override
   State<searchPage> createState() {
     // TODO: implement createState
@@ -62,7 +63,10 @@ class searchPageState extends State<searchPage> {
                     itemCount: infoVideos.length,
                     itemBuilder: (context, index) {
                       return videoCard(
-                          users: widget.users, infoVid: infoVideos[index]);
+                        users: widget.users,
+                        infoVid: infoVideos[index],
+                        isLogin: widget.isLogin,
+                      );
                     },
                   );
                 } else {

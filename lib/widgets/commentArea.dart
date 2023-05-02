@@ -6,13 +6,16 @@ import 'package:do_an/widgets/commentList.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
+import 'package:path/path.dart';
 
 import '../models/commentModel.dart';
+import '../models/getUserData.dart';
 import '../models/infoVideo.dart';
 
 class commentArea extends StatefulWidget {
   final infoVideo info;
-  const commentArea({super.key, required this.info});
+  final UserData currentUser;
+  const commentArea({super.key, required this.info, required this.currentUser});
 
   @override
   State<commentArea> createState() => _commentAreaState();
@@ -42,7 +45,7 @@ class _commentAreaState extends State<commentArea> {
           Expanded(
             child: CommentBox(
               userImage: CommentBox.commentImageParser(
-                  imageURLorPath: "assets/icons/system/user.png"),
+                  imageURLorPath: widget.currentUser.avatarUrl),
               labelText: 'Write a comment...',
               errorText: 'Comment cannot be blank',
               withBorder: false,
@@ -63,9 +66,9 @@ class _commentAreaState extends State<commentArea> {
                       nn,
                     ]);
                     commentModel comment = commentModel();
-                    comment.avtUrl = 'assets/icons/system/user.png';
+                    comment.avtUrl = widget.currentUser.avatarUrl;
                     comment.content = commentController.text;
-                    comment.name = 'New User';
+                    comment.name = widget.currentUser.username;
                     comment.date = formattedDate.toString();
                     comment.vidId = widget.info.vidId;
                     pushComment(comment);

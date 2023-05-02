@@ -12,7 +12,12 @@ import '../values/app_assets.dart';
 class listVideo extends StatefulWidget {
   final UserData? users;
   final String? userId;
-  const listVideo({super.key, required this.users, required this.userId});
+  final bool isLogin;
+  const listVideo(
+      {super.key,
+      required this.users,
+      required this.userId,
+      required this.isLogin});
 
   @override
   State<listVideo> createState() => _listVideoState();
@@ -29,10 +34,12 @@ class _listVideoState extends State<listVideo> {
 
   @override
   Widget build(BuildContext context) {
-    String uRlVideo = AppAssets.videoDefault;
+    //String uRlVideo = AppAssets.videoDefault;
 
     return StreamBuilder(
-        stream: FirebaseFirestore.instance.collection('video_list').snapshots(),
+        stream: FirebaseFirestore.instance
+            .collection('video_list')
+            .snapshots(includeMetadataChanges: true),
         builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
           if (snapshot.hasData) {
             return Column(
@@ -46,7 +53,8 @@ class _listVideoState extends State<listVideo> {
                             context,
                             MaterialPageRoute(
                                 builder: (context) => (MyMusicApp(
-                                      users: widget.users!,
+                                      users: widget.users,
+                                      isLogin: widget.isLogin,
                                     ))),
                           );
                         },
@@ -63,6 +71,7 @@ class _listVideoState extends State<listVideo> {
                             MaterialPageRoute(
                                 builder: (context) => (MyGameApp(
                                       users: widget.users,
+                                      isLogin: widget.isLogin,
                                     ))),
                           );
                         },
@@ -78,7 +87,8 @@ class _listVideoState extends State<listVideo> {
                             context,
                             MaterialPageRoute(
                                 builder: (context) => (MyMoviesApp(
-                                      users: widget.users!,
+                                      users: widget.users,
+                                      isLogin: widget.isLogin,
                                     ))),
                           );
                         },
@@ -115,6 +125,7 @@ class _listVideoState extends State<listVideo> {
                           // des: snapshot.data!.docs[index]['description'],
                           // vidId: snapshot.data!.docs[index].id,
                           infoVid: info,
+                          isLogin: widget.isLogin,
                         );
                       }
                       // Card(
