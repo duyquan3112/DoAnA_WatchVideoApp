@@ -74,17 +74,12 @@ class _likedVideoState extends State<likedVideo> {
                                     isLogin: widget.isLogin,
                                   );
                                 }
-                                return Center(
-                                  child: Transform.scale(
-                                    scale: 1,
-                                    child: CircularProgressIndicator(),
-                                  ),
-                                );
+
+                                return const SizedBox();
                               });
                         }
-                        return const SizedBox(
-                          height: 0,
-                        );
+
+                        return const SizedBox();
                       }),
                 ),
               ],
