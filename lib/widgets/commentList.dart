@@ -23,8 +23,9 @@ class _commentListState extends State<commentList> {
 
   @override
   Widget build(BuildContext context) {
-    CollectionReference comments =
-        FirebaseFirestore.instance.collection('comment_list');
+    var comments = FirebaseFirestore.instance
+        .collection('comment_list')
+        .orderBy('date', descending: false);
     return StreamBuilder<QuerySnapshot>(
       stream: comments.snapshots(),
       builder: (context, snapshot) {
