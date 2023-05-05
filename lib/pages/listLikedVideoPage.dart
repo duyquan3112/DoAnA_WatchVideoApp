@@ -51,38 +51,34 @@ class _likedVideoState extends State<likedVideo> {
             FirebaseFirestore.instance.collection('liked_video').snapshots(),
         builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
           if (snapshot.hasData) {
-            return Column(
-              children: [
-                Flexible(
-                  child: ListView.builder(
-                      physics: const BouncingScrollPhysics(),
-                      padding: const EdgeInsets.all(8),
-                      shrinkWrap: true,
-                      itemCount: snapshot.data!.docs.length,
-                      itemBuilder: (context, index) {
-                        infoVideo info = infoVideo();
-                        if (snapshot.data!.docs[index]['userId'] ==
-                            currentUser!.docId) {
-                          return FutureBuilder(
-                              future: getInfoVideo(
-                                  snapshot.data!.docs[index]['vidId'], info),
-                              builder: (context, snap) {
-                                if (snap.hasData) {
-                                  return videoCard(
-                                    users: currentUser,
-                                    infoVid: info,
-                                    isLogin: widget.isLogin,
-                                  );
-                                }
+            return Flexible(
+              child: ListView.builder(
+                  physics: const BouncingScrollPhysics(),
+                  padding: const EdgeInsets.all(8),
+                  shrinkWrap: true,
+                  itemCount: snapshot.data!.docs.length,
+                  itemBuilder: (context, index) {
+                    infoVideo info = infoVideo();
+                    if (snapshot.data!.docs[index]['userId'] ==
+                        currentUser!.docId) {
+                      return FutureBuilder(
+                          future: getInfoVideo(
+                              snapshot.data!.docs[index]['vidId'], info),
+                          builder: (context, snap) {
+                            if (snap.hasData) {
+                              return videoCard(
+                                users: currentUser,
+                                infoVid: info,
+                                isLogin: widget.isLogin,
+                              );
+                            }
 
-                                return const SizedBox();
-                              });
-                        }
+                            return const SizedBox();
+                          });
+                    }
 
-                        return const SizedBox();
-                      }),
-                ),
-              ],
+                    return const SizedBox();
+                  }),
             );
           } else {
             return Center(child: const Text('No data'));
