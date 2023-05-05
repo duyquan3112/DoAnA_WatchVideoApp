@@ -1,200 +1,151 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:do_an/models/infoVideo.dart';
+import 'package:do_an/pages/listVideoPage.dart';
 import 'package:do_an/widgets/editVideo.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:slide_popup_dialog_null_safety/slide_popup_dialog.dart'
     as slideDialog;
 
+import '../models/getUserData.dart';
 import '../widgets/deleteVideo.dart';
 import '../widgets/editVideo.dart';
 
 class MyProfilePage extends StatefulWidget {
-  const MyProfilePage({super.key, required this.info});
+  const MyProfilePage(
+      {super.key,
+      required this.info,
+      required this.user,
+      required this.isLogin});
   final infoVideo info;
-
+  final UserData? user;
+  final bool isLogin;
   @override
   State<MyProfilePage> createState() => _MyProfilePageState();
 }
 
 class _MyProfilePageState extends State<MyProfilePage> {
   @override
-  Widget build(BuildContext context) {
+  build(BuildContext context) {
+    final user1 = widget.user;
+    final isLogin = widget.isLogin;
+    final docid = user1?.docId;
+    //QuerySnapshot vidbelongtodocid = await firestore.collection('videos').where
     return Scaffold(
-      appBar: AppBar(
-          // actions: <Widget>[
-          //   Row(
-          //     children: [
-          //       IconButton(onPressed: () {}, icon: Icon(Icons.arrow_back))
-          //     ],
-          //   )
-          // ],
-          ),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         children: <Widget>[
-          Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              Padding(
-                padding: const EdgeInsets.fromLTRB(0, 0, 200, 0),
-                child: IconButton(
-                  icon: Icon(Icons.arrow_back),
+          Container(
+            color: Colors.blue,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(0, 0, 200, 0),
+                  child: IconButton(
+                    icon: Icon(Icons.arrow_back),
+                    onPressed: () {},
+                    iconSize: 40,
+                  ),
+                ),
+                IconButton(
+                  icon: Icon(Icons.alarm),
                   onPressed: () {},
+                  alignment: Alignment.center,
                   iconSize: 40,
                 ),
-              ),
-              IconButton(
-                icon: Icon(Icons.alarm),
-                onPressed: () {},
-                alignment: Alignment.center,
-                iconSize: 40,
-              ),
-              IconButton(
-                icon: Icon(Icons.search),
-                onPressed: () {},
-                alignment: Alignment.center,
-                iconSize: 40,
-              )
-            ],
+                IconButton(
+                  icon: Icon(Icons.search),
+                  onPressed: () {},
+                  alignment: Alignment.center,
+                  iconSize: 40,
+                )
+              ],
+            ),
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Column(
                 children: [
-                  Stack(
-                    alignment: AlignmentDirectional.bottomCenter,
-                    children: [
-                      Container(
-                        height: 100,
-                        width: 411,
-                        child: Image.network(
-                            'https://media.istockphoto.com/id/1145618475/vi/anh/villefranche-tr%C3%AAn-bi%E1%BB%83n-v%C3%A0o-bu%E1%BB%95i-t%E1%BB%91i.jpg?s=1024x1024&w=is&k=20&c=XoPFOytGtsMJwiH_dZu6Hf19Y9NUGN6mos4aiONb8bc=',
-                            fit: BoxFit.fill),
-                      ),
-                      // ignore: prefer_const_constructors
-                      Positioned(
-                        bottom: -10,
-                        child: CircleAvatar(
-                          backgroundColor: Colors.red,
-                        ),
-                      ),
-                    ],
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: CircleAvatar(
+                      backgroundImage: NetworkImage(user1?.avatarUrl as String),
+                      backgroundColor: Colors.red,
+                    ),
                   )
                 ],
               )
             ],
           ),
           Padding(
-            padding: const EdgeInsets.fromLTRB(0, 30, 0, 0),
+            padding: const EdgeInsets.fromLTRB(0, 0, 0, 10),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Column(
                   children: [
-                    TextButton(
-                      style: TextButton.styleFrom(
-                          textStyle: TextStyle(fontSize: 20),
-                          backgroundColor: Colors.black,
-                          foregroundColor: Colors.white,
-                          padding: EdgeInsets.all(5)),
-                      onPressed: () {},
-                      child: const Text("Edit Profile"),
-                    ),
-                    Text('Name')
+                    Text(
+                      '${user1?.username}',
+                      style: TextStyle(fontSize: 30),
+                    )
                   ],
                 )
               ],
             ),
           ),
-          Padding(
-            padding: const EdgeInsets.fromLTRB(0, 20, 0, 20),
-            child: Container(
-              decoration: BoxDecoration(
-                border: Border(
-                  top: BorderSide(width: 2, color: Colors.black),
-                  bottom: BorderSide(width: 2, color: Colors.black),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              Container(
+                decoration: BoxDecoration(
+                  color: Colors.black,
+                  border: Border.all(width: 4),
+                  borderRadius: BorderRadius.circular(15),
+                ),
+                child: TextButton(
+                  onPressed: () {
+                    _showDialog();
+                  },
+                  child: Text("Edit video"),
+                  style: TextButton.styleFrom(
+                    padding: EdgeInsets.zero,
+                    tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                    // padding: EdgeInsets.fromLTRB(0, 20, 0, 20),
+
+                    foregroundColor: Colors.white,
+                  ),
                 ),
               ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  Container(
-                    decoration: BoxDecoration(
-                      color: Colors.black,
-                      border: Border.all(width: 4),
-                      borderRadius: BorderRadius.circular(15),
-                    ),
-                    child: TextButton(
-                      onPressed: () {},
-                      child: Text("Home"),
-                      style: TextButton.styleFrom(
-                        padding: EdgeInsets.zero,
-                        tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                        // padding: EdgeInsets.fromLTRB(0, 20, 0, 20),
-                        textStyle: TextStyle(fontSize: 20),
-                        foregroundColor: Colors.white,
-                      ),
-                    ),
-                  ),
-                  Container(
-                    decoration: BoxDecoration(
-                      border: Border.all(width: 3),
-                      borderRadius: BorderRadius.circular(15),
-                    ),
-                    child: TextButton(
-                      onPressed: () {},
-                      child: Text("Liked Video"),
-                      style: TextButton.styleFrom(
-                        padding: EdgeInsets.zero,
-                        tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                        // padding: EdgeInsets.fromLTRB(0, 20, 0, 20),
-                        textStyle: TextStyle(fontSize: 20),
-                        // backgroundColor: Colors.white,
-                        foregroundColor: Colors.black,
-                      ),
-                    ),
-                  ),
-                  Container(
-                    decoration: BoxDecoration(
-                      color: Colors.black,
-                      border: Border.all(width: 4),
-                      borderRadius: BorderRadius.circular(15),
-                    ),
-                    child: TextButton(
-                      onPressed: () {
-                        _showDialog();
-                      },
-                      child: Text("Edit"),
-                      style: TextButton.styleFrom(
-                        padding: EdgeInsets.zero,
-                        tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                        // padding: EdgeInsets.fromLTRB(0, 20, 0, 20),
-                        textStyle: TextStyle(fontSize: 20),
-                        foregroundColor: Colors.white,
-                      ),
-                    ),
-                  ),
-                  Container(
-                    decoration: BoxDecoration(
-                      color: Colors.black,
-                      border: Border.all(width: 4),
-                      borderRadius: BorderRadius.circular(15),
-                    ),
-                    child: deleteVideo(info: widget.info,),
-                     
-                    ),
-                  
-                ],
+              Container(
+                decoration: BoxDecoration(
+                  color: Colors.black,
+                  border: Border.all(width: 4),
+                  borderRadius: BorderRadius.circular(15),
+                ),
+                child: deleteVideo(
+                  info: widget.info,
+                ),
               ),
-            ),
-          )
+            ],
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              TextButton(
+                  style: TextButton.styleFrom(
+                    primary: Colors.purpleAccent,
+                    backgroundColor: Colors.black,
+                  ),
+                  onPressed: () => print('chang to manage profile page'),
+                  child: Text('Manage Profile'))
+            ],
+          ),
         ],
       ),
-      // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
-  
-  
 
   void _showDialog() {
     slideDialog.showSlideDialog(
