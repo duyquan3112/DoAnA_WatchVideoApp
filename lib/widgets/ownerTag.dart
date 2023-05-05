@@ -45,6 +45,8 @@ class _ownerTagState extends State<ownerTag> {
                   MaterialPageRoute(
                       builder: (_) => MyProfilePage(
                             info: widget.infoVid,
+                            user: widget.users,
+                            isLogin: widget.isLogin,
                           ))),
               child: Row(
                 children: [

@@ -6,7 +6,6 @@ import 'package:flutter/src/widgets/placeholder.dart';
 import '../models/infoVideo.dart';
 
 class deleteVideo extends StatefulWidget {
-  
   final infoVideo info;
 
   const deleteVideo({super.key, required this.info});
@@ -19,10 +18,13 @@ class _deleteVideoState extends State<deleteVideo> {
   @override
   Widget build(BuildContext context) {
     return TextButton(
+      style: TextButton.styleFrom(
+        tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+      ),
       onPressed: () => showDialog<String>(
         context: context,
         builder: (BuildContext context) => AlertDialog(
-          title: const Text('Delete'),
+          title: const Text('Delete video'),
           content: const Text('Are you sure delete video'),
           actions: <Widget>[
             TextButton(
@@ -30,7 +32,9 @@ class _deleteVideoState extends State<deleteVideo> {
               child: const Text('No'),
             ),
             TextButton(
-              onPressed: () async { Navigator.pop(context,await yes());} ,
+              onPressed: () async {
+                Navigator.pop(context, await yes());
+              },
               child: const Text('Yes'),
             ),
           ],
@@ -40,13 +44,12 @@ class _deleteVideoState extends State<deleteVideo> {
     );
   }
 
-  Future yes()async{
-  var db = FirebaseFirestore.instance;
-  var docRef = db.collection("video_list").doc(widget.info.vidId);
+  Future yes() async {
+    var db = FirebaseFirestore.instance;
+    var docRef = db.collection("video_list").doc(widget.info.vidId);
 
-  return docRef.delete();
-  // FirebaseFirestore.instance.collection("video_list").doc(widget.info.vidId)  
-  //   .collection("messages").snapshots().doc(widget.info.vidId).
+    return docRef.delete();
+    // FirebaseFirestore.instance.collection("video_list").doc(widget.info.vidId)
+    //   .collection("messages").snapshots().doc(widget.info.vidId).
+  }
 }
-}
-
