@@ -103,7 +103,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   context,
                   MaterialPageRoute(
                       builder: (context) => searchPage(
-                            users: currentUser!,
+                            users: widget.users,
                             isLogin: _isLoggedIn,
                           )),
                 );
