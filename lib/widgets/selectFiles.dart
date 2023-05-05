@@ -1,6 +1,7 @@
 import 'dart:ffi';
 import 'dart:io';
 
+import 'package:date_format/date_format.dart';
 import 'package:do_an/models/getUserData.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -135,6 +136,18 @@ class _selectAndUploadFilesState extends State<selectAndUploadFiles> {
   }
 
   Future pushFile(String title, String description) async {
+    var date = DateTime.now();
+                    var formattedDate = formatDate(date, [
+                      dd,
+                      '/',
+                      mm,
+                      '/',
+                      yyyy,
+                      ' ',
+                      HH,
+                      ':',
+                      nn,
+                    ]);
     await FirebaseFirestore.instance.collection('video_list').add({
       'title': title,
       'description': description,
@@ -143,6 +156,7 @@ class _selectAndUploadFilesState extends State<selectAndUploadFiles> {
       'ownerId': widget.userId,
       'ownerName': widget.users.username,
       'likedCount': 0,
+      'date': formattedDate, 
     });
   }
 
