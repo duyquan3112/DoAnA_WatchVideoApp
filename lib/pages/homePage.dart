@@ -21,6 +21,8 @@ import 'package:slide_popup_dialog_null_safety/slide_popup_dialog.dart'
 import '../widgets/selectFiles.dart';
 import 'package:do_an/pages/musicPage.dart';
 
+const List<String> list = <String>['Newest', 'Oldest', 'Likest'];
+
 class MyHomePage extends StatefulWidget {
   final UserData users;
   final String userId;
@@ -31,6 +33,10 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  String dropdownValue = list.first;
+  String filter = 'date';
+  bool isDes = false;
+
   late int _selectedIndex;
   File? file;
   UserData? currentUser;
@@ -75,6 +81,8 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     List<Widget> _widgetOptions = [
       listVideo(
+        isDes: isDes,
+        filter: filter,
         users: currentUser,
         userId: userId,
         isLogin: _isLoggedIn,
@@ -148,33 +156,117 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
         ],
       ),
-      body: _selectedIndex == 0
-          ? _widgetOptions.elementAt(_selectedIndex)
-          : _isLoggedIn
+      body: Column(
+        children: [
+          Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
+            TextButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => (MyMusicApp(
+                            users: currentUser,
+                            isLogin: _isLoggedIn,
+                          ))),
+                );
+              },
+              child: Text('Music'),
+              style: ButtonStyle(
+                backgroundColor: MaterialStatePropertyAll<Color>(Colors.black),
+              ),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => (MyGameApp(
+                            users: currentUser,
+                            isLogin: _isLoggedIn,
+                          ))),
+                );
+              },
+              child: Text('Game'),
+              style: ButtonStyle(
+                backgroundColor: MaterialStatePropertyAll<Color>(Colors.black),
+              ),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => (MyMoviesApp(
+                            users: currentUser,
+                            isLogin: _isLoggedIn,
+                          ))),
+                );
+              },
+              child: Text('Movies'),
+              style: ButtonStyle(
+                backgroundColor: MaterialStatePropertyAll<Color>(Colors.black),
+              ),
+            ),
+            DropdownButton<String>(
+              value: dropdownValue,
+              icon: const Icon(Icons.arrow_downward),
+              elevation: 16,
+              style: const TextStyle(color: Color.fromARGB(255, 0, 0, 0)),
+              underline: Container(
+                height: 2,
+                color: Color.fromARGB(255, 0, 0, 0),
+              ),
+              onChanged: (String? value) {
+                dropdownValue = value!;
+                if (list.indexOf(value) == 0) {
+                  filter = 'date';
+                  isDes = true;
+                } else if (list.indexOf(value) == 1) {
+                  filter = 'date';
+                  isDes = false;
+                } else {
+                  filter = 'likedCount';
+                  isDes = true;
+                }
+                setState(() {});
+              },
+              items: list.map<DropdownMenuItem<String>>((String value) {
+                return DropdownMenuItem<String>(
+                  value: value,
+                  child: Text(value),
+                );
+              }).toList(),
+            ),
+          ]),
+          _selectedIndex == 0
               ? _widgetOptions.elementAt(_selectedIndex)
-              : AlertDialog(
-                  content: Text('Please Login to use'),
-                  actions: <Widget>[
-                    TextButton(
-                      child: const Text('Cancel'),
-                      onPressed: () {
-                        setState(() {
-                          _selectedIndex = 0;
-                        });
-                        _widgetOptions.elementAt(_selectedIndex);
-                      },
+              : _isLoggedIn
+                  ? _widgetOptions.elementAt(_selectedIndex)
+                  : AlertDialog(
+                      content: Text('Please Login to use'),
+                      actions: <Widget>[
+                        TextButton(
+                          child: const Text('Cancel'),
+                          onPressed: () {
+                            setState(() {
+                              _selectedIndex = 0;
+                            });
+                            _widgetOptions.elementAt(_selectedIndex);
+                          },
+                        ),
+                        TextButton(
+                          child: const Text('Login'),
+                          onPressed: () {
+                            Navigator.of(context).pushAndRemoveUntil(
+                                MaterialPageRoute(
+                                    builder: (context) => signInPage()),
+                                (route) => false);
+                          },
+                        ),
+                      ],
                     ),
-                    TextButton(
-                      child: const Text('Login'),
-                      onPressed: () {
-                        Navigator.of(context).pushAndRemoveUntil(
-                            MaterialPageRoute(
-                                builder: (context) => signInPage()),
-                            (route) => false);
-                      },
-                    ),
-                  ],
-                ),
+        ],
+      ),
 
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.add),
