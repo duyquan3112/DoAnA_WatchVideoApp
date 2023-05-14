@@ -26,6 +26,8 @@ class _commentListState extends State<commentList> {
     var comments = FirebaseFirestore.instance
         .collection('comment_list')
         .orderBy('date', descending: false);
+
+    //Hien thi comment, cap nhat lien tuc khi co du lieu moi hoac thay doi du lieu
     return StreamBuilder<QuerySnapshot>(
       stream: comments.snapshots(),
       builder: (context, snapshot) {
@@ -42,9 +44,11 @@ class _commentListState extends State<commentList> {
           );
         }
         return MediaQuery.removePadding(
+          //xoa khoang trang mac dinh
           context: context,
           removeTop: true,
           child: ListView(
+            //hien thi list cac comment cua video
             children: snapshot.data!.docs.map((DocumentSnapshot document) {
               if (document['vidId'] == widget.vidId) {
                 commentModel comment = commentModel();

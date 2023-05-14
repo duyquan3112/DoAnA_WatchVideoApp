@@ -18,6 +18,8 @@ class likedVideo extends StatefulWidget {
 class _likedVideoState extends State<likedVideo> {
   UserData? currentUser;
 
+  ///Ham de lay info video tu Firebase bang docId
+  ///Khi tra ve se tra ve 1 object thuoc lop infoVideo
   Future<infoVideo> getInfoVideo(String docId, infoVideo info) async {
     var collection = FirebaseFirestore.instance.collection('video_list');
     var doc = collection.doc(docId).get();
@@ -46,12 +48,14 @@ class _likedVideoState extends State<likedVideo> {
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
+    // StreamBuilder de cap nhat gia tri lien tuc, co the thay doi bang widget khac neu muon
     return StreamBuilder(
         stream:
             FirebaseFirestore.instance.collection('liked_video').snapshots(),
         builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
           if (snapshot.hasData) {
             return Flexible(
+              //ListView se hien thi cac widget tuong ung voi moi data tra ve
               child: ListView.builder(
                   physics: const BouncingScrollPhysics(),
                   padding: const EdgeInsets.all(8),
@@ -61,6 +65,7 @@ class _likedVideoState extends State<likedVideo> {
                     infoVideo info = infoVideo();
                     if (snapshot.data!.docs[index]['userId'] ==
                         currentUser!.docId) {
+                      //FutureBuilder se xu ly ham async truoc, khi du lieu tra ve se render ra
                       return FutureBuilder(
                           future: getInfoVideo(
                               snapshot.data!.docs[index]['vidId'], info),
