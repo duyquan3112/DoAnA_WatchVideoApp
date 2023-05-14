@@ -207,6 +207,9 @@ class _MyHomePageState extends State<MyHomePage> {
                 backgroundColor: MaterialStatePropertyAll<Color>(Colors.black),
               ),
             ),
+
+            ///menu chon loai sort video
+
             DropdownButton<String>(
               value: dropdownValue,
               icon: const Icon(Icons.arrow_downward),
@@ -217,6 +220,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 color: Color.fromARGB(255, 0, 0, 0),
               ),
               onChanged: (String? value) {
+                //khi chon loai sort thi gia tri bien filter va isDes se thay doi theo
                 dropdownValue = value!;
                 if (list.indexOf(value) == 0) {
                   filter = 'date';
@@ -231,6 +235,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 setState(() {});
               },
               items: list.map<DropdownMenuItem<String>>((String value) {
+                //hien thi loai sort da chon
                 return DropdownMenuItem<String>(
                   value: value,
                   child: Text(value),

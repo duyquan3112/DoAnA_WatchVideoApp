@@ -38,6 +38,12 @@ class videoCard extends StatefulWidget {
 class _videoCardState extends State<videoCard> {
   String? _thumbnailUrl;
   UserData? currentUser;
+
+  ///Viet lai ham setState
+  ///Neu widget hien tai xuat hien tren khu vuc xem duoc cua man hinh
+  ///thi moi render ra widget do
+  ///Neu khong (nguoi dung vuot xuong widget khac, widget hien tai khong thuoc khu vuc xem duoc)
+  ///thi cac object cua widget se null
   @override
   void setState(fn) {
     if (mounted) {
@@ -45,6 +51,8 @@ class _videoCardState extends State<videoCard> {
     }
   }
 
+  ///Ham khoi tao thumbnail cho video
+  ///Thumbnail la frame dau tien cua video
   void genThumbnail() async {
     _thumbnailUrl = await VideoThumbnail.thumbnailFile(
         video: widget.infoVid.url!,
