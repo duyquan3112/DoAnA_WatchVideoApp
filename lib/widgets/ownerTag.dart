@@ -33,7 +33,7 @@ class _ownerTagState extends State<ownerTag> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return SizedBox(
-      height: size.height * 1 / 12,
+      height: size.height * 1 / 15,
       width: size.width,
       child: Row(
         children: [
@@ -49,12 +49,12 @@ class _ownerTagState extends State<ownerTag> {
                             isLogin: widget.isLogin,
                           ))),
               child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   Container(
                     padding: const EdgeInsets.all(10),
                     child: const AvatarView(
-                      radius: 25,
+                      radius: 16,
                       avatarType: AvatarType.CIRCLE,
                       imagePath: "assets/icons/system/user.png",
                     ),
@@ -64,7 +64,7 @@ class _ownerTagState extends State<ownerTag> {
                     style: AppStyles.h4.copyWith(
                       color: AppColors.blackGrey,
                       fontWeight: FontWeight.bold,
-                      fontSize: 20,
+                      fontSize: 18,
                     ),
                   ),
                 ],
