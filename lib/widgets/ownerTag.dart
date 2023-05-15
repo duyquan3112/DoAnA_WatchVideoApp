@@ -49,6 +49,7 @@ class _ownerTagState extends State<ownerTag> {
                             isLogin: widget.isLogin,
                           ))),
               child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   Container(
                     padding: const EdgeInsets.all(10),
@@ -61,8 +62,10 @@ class _ownerTagState extends State<ownerTag> {
                   Text(
                     widget.infoVid.ownerName!,
                     style: AppStyles.h4.copyWith(
-                        color: AppColors.blackGrey,
-                        fontWeight: FontWeight.bold),
+                      color: AppColors.blackGrey,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 20,
+                    ),
                   ),
                 ],
               ),

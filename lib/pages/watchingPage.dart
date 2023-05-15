@@ -15,6 +15,7 @@ class watchingPage extends StatefulWidget {
   final infoVideo info;
   final UserData? users;
   final bool isLogin;
+
   const watchingPage(
       {super.key,
       required this.info,
@@ -51,6 +52,7 @@ class _watchingPageState extends State<watchingPage> {
   bool showPopButton = false;
   @override
   Widget build(BuildContext context) {
+    // final UserData? ownerusersinfo;
     Size size = MediaQuery.of(context).size;
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual,
         overlays: [SystemUiOverlay.bottom]);
