@@ -36,6 +36,7 @@ class _watchingPageState extends State<watchingPage> {
     super.initState();
     currentUser = widget.users;
     flickManager = FlickManager(
+      //FlickManager dung de quan ly url video se hien thi cung nhu cac cai dat default cua video
       videoPlayerController: VideoPlayerController.network(widget.info.url!),
       autoInitialize: true,
       autoPlay: true,
@@ -88,18 +89,21 @@ class _watchingPageState extends State<watchingPage> {
                         flickVideoWithControls: const FlickVideoWithControls(
                           videoFit: BoxFit.contain,
                           closedCaptionTextStyle: TextStyle(fontSize: 8),
-                          controls: FlickPortraitControls(),
+                          controls:
+                              FlickPortraitControls(), //handle video theo kich thuoc doc
                         ),
                         flickVideoWithControlsFullscreen:
                             const FlickVideoWithControls(
                           videoFit: BoxFit.contain,
-                          controls: FlickLandscapeControls(),
+                          controls:
+                              FlickLandscapeControls(), //handle video theo kich thuoc ngang
                         ),
                       ),
                     ),
                   ),
                 ),
                 IconButton(
+                  //nut back
                   onPressed: () {
                     Navigator.pop(context);
                   },
@@ -111,20 +115,21 @@ class _watchingPageState extends State<watchingPage> {
                 ),
               ],
             ),
-            videoInfo(info: widget.info),
+            videoInfo(info: widget.info), //hien thi thong tin cua video
             ownerTag(
               users: currentUser,
               infoVid: widget.info,
               isLogin: widget.isLogin,
             ),
             const Divider(
+              //duong ke ngang
               color: Colors.black,
               height: 5,
               thickness: 2,
               indent: 5,
               endIndent: 5,
             ),
-            widget.isLogin
+            widget.isLogin //dieu kien de hien thi khu vuc comment
                 ? commentArea(
                     info: widget.info,
                     currentUser: widget.users!,

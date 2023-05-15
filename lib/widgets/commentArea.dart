@@ -25,6 +25,7 @@ class _commentAreaState extends State<commentArea> {
   final formKey = GlobalKey<FormState>();
   final TextEditingController commentController = TextEditingController();
 
+  ///Ham push comment len database
   Future pushComment(commentModel comment) async {
     await FirebaseFirestore.instance.collection('comment_list').add({
       'name': comment.name,
@@ -44,6 +45,7 @@ class _commentAreaState extends State<commentArea> {
         children: [
           Expanded(
             child: CommentBox(
+              //box de nhap comment
               userImage: CommentBox.commentImageParser(
                   imageURLorPath: widget.currentUser.avatarUrl),
               labelText: 'Write a comment...',
@@ -53,6 +55,7 @@ class _commentAreaState extends State<commentArea> {
                 if (formKey.currentState!.validate()) {
                   print(commentController.text);
                   setState(() {
+                    //format datetime
                     var date = DateTime.now();
                     var formattedDate = formatDate(date, [
                       dd,
@@ -65,15 +68,17 @@ class _commentAreaState extends State<commentArea> {
                       ':',
                       nn,
                     ]);
-                    commentModel comment = commentModel();
+                    commentModel comment =
+                        commentModel(); // tao object comment va khoi tao gia tri cua object
                     comment.avtUrl = widget.currentUser.avatarUrl;
                     comment.content = commentController.text;
                     comment.name = widget.currentUser.username;
                     comment.date = formattedDate.toString();
                     comment.vidId = widget.info.vidId;
-                    pushComment(comment);
+                    pushComment(comment); //day comment len database
                   });
-                  commentController.clear();
+                  commentController
+                      .clear(); //xoa buffer cua comment cu sau khi push len database
                   FocusManager.instance.primaryFocus?.unfocus();
                 } else {
                   print("Not validated");

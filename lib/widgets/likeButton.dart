@@ -22,8 +22,10 @@ class _LikeButtonState extends State<LikeButton> {
   UserData? currentUser;
   bool? isLiked = false;
 
+  /// Ham quan ly su kien khi nhan nut like
   Future onLikeButtonTapped() async {
     if (!widget.isLogin) {
+      //Handle khi chua login, hien thi SnackBar de thong bao
       final snackbar = SnackBar(
         content: Text('Please Login to react!'),
         showCloseIcon: true,
@@ -31,22 +33,25 @@ class _LikeButtonState extends State<LikeButton> {
       );
       ScaffoldMessenger.of(context).showSnackBar(snackbar);
     } else {
+      //Handle truong hop nguoi dung da like video
       var likedCountRef = FirebaseFirestore.instance
           .collection('video_list')
           .doc(widget.info.vidId);
       isLiked!
           ? {
+              //neu da like thi so luot like se -1 va isLike = false, sau do se cap nhat lai database
               await likedCountRef
                   .update({'likedCount': --widget.info.likedCount}),
-              await deleteLikedVideo(),
+              await deleteLikedVideo(), //Xoa video khoi danh sach da yeu thich
               setState(() {
                 isLiked = !isLiked!;
               })
             }
           : {
+              //neu chua like thi so luot like se +1 va isLike = true, sau do se cap nhat lai database
               await likedCountRef
                   .update({'likedCount': ++widget.info.likedCount}),
-              await addLikedVideo(),
+              await addLikedVideo(), //Them video khoi danh sach da yeu thich
               setState(() {
                 isLiked = !isLiked!;
               })
@@ -54,17 +59,20 @@ class _LikeButtonState extends State<LikeButton> {
     }
   }
 
+  ///Ham them video da like va thong tin user like video vao database
   Future addLikedVideo() async {
     var collection = FirebaseFirestore.instance.collection('liked_video');
     await collection
         .add({'userId': currentUser!.docId, 'vidId': widget.info.vidId});
   }
 
+  ///Xoa video khoi danh sach video da yeu thich
   Future deleteLikedVideo() async {
     var collection = FirebaseFirestore.instance.collection('liked_video');
     await collection.doc(await getLikedDocId()).delete();
   }
 
+  ///Ham lay docId cua video ma nguoi dung da yeu thich
   Future<String> getLikedDocId() async {
     String? res;
     var collection = FirebaseFirestore.instance.collection('liked_video');
@@ -80,6 +88,7 @@ class _LikeButtonState extends State<LikeButton> {
     return res!;
   }
 
+  ///Ham kiem tra video da duoc nguoi dung like hay chua
   Future<bool> checkLiked() async {
     bool? res;
     var collection = FirebaseFirestore.instance.collection('liked_video');
@@ -95,6 +104,8 @@ class _LikeButtonState extends State<LikeButton> {
     return res!;
   }
 
+  ///Ham khoi tao bien flag quan ly su kien like cua nguoi dung
+  ///Neu nguoi dung da like tu truoc thi isLiked = true va nguoc lai
   Future<void> setUpLikedFlag() async {
     if (widget.isLogin) {
       isLiked = await checkLiked();
