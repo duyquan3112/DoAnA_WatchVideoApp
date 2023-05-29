@@ -90,6 +90,131 @@ class _MyHomePageState extends State<MyHomePage> {
       likedVideo(isLogin: _isLoggedIn),
     ];
     return Scaffold(
+      appBar: PreferredSize(
+        preferredSize: Size.fromHeight(100),
+        child: Container(
+          color: Colors.white,
+          padding: EdgeInsets.symmetric(horizontal: 20.0),
+          child: AppBar(
+            elevation: 0,
+            automaticallyImplyLeading: false,
+            backgroundColor: Colors.white,
+            toolbarHeight: 50,
+            leading: Builder(
+              builder: (BuildContext context) {
+                return IconButton(
+                  icon: Icon(Icons.menu),
+                  color: Colors.black,
+                  onPressed: () {
+                    Scaffold.of(context).openDrawer();
+                  },
+                );
+              },
+            ),
+            title: Container(
+              height: 50,
+              alignment: Alignment.center,
+              child: const Text(
+                'Home',
+                style: TextStyle(
+                  fontSize: 19.0,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black,
+                ),
+              ),
+            ),
+            actions: [
+              SizedBox(
+                child: (_isLoggedIn)
+                    ? Center(
+                        child: Row(
+                          children: [
+                            CircleAvatar(
+                              backgroundImage:
+                                  NetworkImage(currentUser!.avatarUrl!),
+                            ),
+                            SizedBox(width: 10),
+                          ],
+                        ),
+                      )
+                    : Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Container(
+                          height: 30,
+                          child: ElevatedButton(
+                              onPressed: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(builder: (context) => signInPage()),
+                                );
+                              },
+                              style: ElevatedButton.styleFrom(
+                                padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                                backgroundColor: Colors.red,
+                              ),
+                              child: Text(
+                                'Login',
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  color: Colors.white, // Màu văn bản của nút
+                                ),
+                              ),
+                            ),
+                        ),
+                      ],
+                    )
+              ),
+            ],
+            bottom: PreferredSize(
+              preferredSize: Size.fromHeight(50),
+              child: Container(
+                height: 50,
+                color: Colors.white,
+                padding: EdgeInsets.symmetric(horizontal: 20.0),
+                child: Padding(
+                  padding: EdgeInsets.symmetric(vertical: 5.0),
+                  child: Center(
+                    child: DecoratedBox(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10.0),
+                        border: Border.all(
+                              color: Colors.grey.withOpacity(0.5), width: 1.0),
+                        color: Color.fromARGB(255, 236, 236, 236),
+                      ),
+                      child: Row(
+                        children: [
+                          SizedBox(width: 10.0),
+                          Expanded(
+                            child: TextField(
+                              decoration: InputDecoration(
+                                border: InputBorder.none,
+                                hintText: "Search",
+                              ),
+                            ),
+                          ),
+                          IconButton(
+                            icon: Icon(
+                              Icons.search,
+                              color: Colors.black,
+                            ),
+                            onPressed: () {
+                              print("your menu action here");
+                            },
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ),
+      ),
       drawer: Drawer(
         child: ListView(
           padding: EdgeInsets.zero,
@@ -103,7 +228,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 ),
               ),
               decoration: BoxDecoration(
-                color: Colors.blue,
+                color: Color.fromARGB(255, 133, 200, 255),
               ),
             ),
             ListTile(
@@ -182,72 +307,6 @@ class _MyHomePageState extends State<MyHomePage> {
           ],
         ),
       ),
-      appBar: AppBar(
-        // title: Center(child: Text(widget.title)),
-        actions: <Widget>[
-          IconButton(
-            icon: const Icon(Icons.notifications),
-            onPressed: () {},
-          ),
-          IconButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => searchPage(
-                            users: widget.users,
-                            isLogin: _isLoggedIn,
-                          )),
-                );
-              },
-              icon: const Icon(Icons.search)),
-          SizedBox(
-            child: (_isLoggedIn)
-                ? Center(
-                    child: Row(
-                      children: [
-                        CircleAvatar(
-                          backgroundImage:
-                              NetworkImage(currentUser!.avatarUrl!),
-                        ),
-                        SizedBox(width: 10),
-                        Text(
-                          currentUser!.username!,
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 16,
-                          ),
-                        ),
-                        SizedBox(width: 10),
-                      ],
-                    ),
-                  )
-                : TextButton(
-                    style: TextButton.styleFrom(
-                      backgroundColor: Colors.red,
-                      foregroundColor: Colors.white,
-                    ),
-                    onPressed: () {
-                      // Điều hướng qua Login
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => signInPage()),
-                      );
-                    },
-                    child: const Text('Login'),
-                  ),
-          ),
-          // TextButton(
-          //   onPressed: () {
-          //     _handleLogout();
-          //   },
-          //   child: Text('Logout'),
-          //   style: ButtonStyle(
-          //     backgroundColor: MaterialStatePropertyAll<Color>(Colors.black),
-          //   ),
-          // ),
-        ],
-      ),
       body: Column(
         children: [
           Row(mainAxisAlignment: MainAxisAlignment.end, children: [
@@ -301,6 +360,7 @@ class _MyHomePageState extends State<MyHomePage> {
             // ),
 
             ///menu chon loai sort video
+
 
             Padding(
               padding: const EdgeInsets.only(right: 12.0),
