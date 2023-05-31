@@ -1,17 +1,15 @@
-import 'package:do_an/pages/homePage.dart';
-
-// import 'package:do_an/pages/upLoadVideo.dart';
-// import 'package:do_an/pages/watchingPage.dart';
+import 'package:do_an/pages/home_page.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'firebase_options.dart';
+import 'models/get_user_data.dart';
 
-import 'models/getUserData.dart';
-
-Future main() async {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
-
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   runApp(const MyApp());
 }
 

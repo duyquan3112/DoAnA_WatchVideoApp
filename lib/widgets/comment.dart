@@ -1,9 +1,9 @@
-import 'package:do_an/models/commentModel.dart';
+import 'package:do_an/models/comment_model.dart';
 import 'package:flutter/material.dart';
 import 'package:comment_box/comment/comment.dart';
 
 class CommentChild extends StatefulWidget {
-  final commentModel comment;
+  final CommentModel comment;
 
   const CommentChild({super.key, required this.comment});
 
@@ -25,9 +25,9 @@ class _CommentChildState extends State<CommentChild> {
           child: Container(
             height: 50.0,
             width: 50.0,
-            decoration: new BoxDecoration(
+            decoration: const BoxDecoration(
                 color: Colors.blue,
-                borderRadius: new BorderRadius.all(Radius.circular(50))),
+                borderRadius: BorderRadius.all(Radius.circular(50))),
             child: CircleAvatar(
                 radius: 50,
                 backgroundImage: CommentBox.commentImageParser(
@@ -36,10 +36,11 @@ class _CommentChildState extends State<CommentChild> {
         ),
         title: Text(
           widget.comment.name!,
-          style: TextStyle(fontWeight: FontWeight.bold),
+          style: const TextStyle(fontWeight: FontWeight.bold),
         ),
         subtitle: Text(widget.comment.content!),
-        trailing: Text(widget.comment.date!, style: TextStyle(fontSize: 10)),
+        trailing:
+            Text(widget.comment.date!, style: const TextStyle(fontSize: 10)),
       ),
     );
   }

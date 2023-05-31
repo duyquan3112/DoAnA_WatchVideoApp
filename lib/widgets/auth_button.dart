@@ -1,14 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 
 class authButton extends StatelessWidget {
   final Function()? onTap;
   final String options;
 
-  const authButton({
-    super.key, 
-    required this.onTap,
-    required this.options});
+  const authButton({super.key, required this.onTap, required this.options});
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +17,6 @@ class authButton extends StatelessWidget {
           color: Colors.black,
           borderRadius: BorderRadius.circular(8),
         ),
-        
         child: Center(
           child: Text(
             options,
