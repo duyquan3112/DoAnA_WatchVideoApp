@@ -55,6 +55,13 @@ dependencies:
   path_provider: ^2.0.14
   date_format: ^2.0.7
   another_flushbar: ^1.12.29
+  flutter_native_splash: ^2.0.1+1
+
+flutter_native_splash:
+  image: ./assets/images/splash/a.png
+  color: "ffffff"
+  
+
   
   
 
@@ -91,9 +98,11 @@ flutter:
     - assets/images/google.png
     - assets/images/default_avatar.jpg
     - assets/images/thumbnail/
+    - assets/images/splash/
     - assets/icons/system/2x/
     - assets/icons/system/3x/
     - assets/video/
+    
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
