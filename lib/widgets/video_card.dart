@@ -59,81 +59,79 @@ class _VideoCardState extends State<VideoCard> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    return _thumbnailUrl != null
-        ? Card(
-            shadowColor: Colors.black87,
-            elevation: 8,
-            child: InkWell(
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (_) => WatchingPage(
-                      users: currentUser,
-                      info: widget.infoVid,
-                      isLogin: widget.isLogin ?? false,
-                    ),
-                  ),
-                );
-              },
-              child: Column(
-                children: [
-                  Stack(
-                    fit: StackFit.loose,
-                    alignment: Alignment.center,
-                    children: [
-                      Container(
-                        height: size.height * 1 / 5,
-                        width: size.width,
-                        color: Colors.black,
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Stack(
-                              alignment: Alignment.center,
-                              children: [
-                                Container(
-                                  width: size.width * 1 / 5,
-                                  color: Colors.black,
-                                ),
-                                Image.file(
-                                  File(_thumbnailUrl!),
-                                  scale: 1,
-                                  height: size.height * 1 / 5,
-                                ),
-                                const CircleAvatar(
-                                  radius: 30,
-                                  backgroundColor: Colors.black45,
-                                  child: Icon(
-                                    Icons.play_arrow,
-                                    size: 40,
-                                    color: Colors.white,
-                                  ),
-                                ),
-                              ],
-                            )
-                          ],
-                        ),
-                      )
-                    ],
-                  ),
-                  Container(
-                    color: Colors.white,
-                    child: ListTile(
-                      isThreeLine: true,
-                      leading: const CircleAvatar(),
-                      title: Text(widget.infoVid.title ?? ''),
-                      subtitle: Text(widget.infoVid.description ?? ''),
-                      trailing: IconButton(
-                        icon: const Icon(Icons.more_vert_outlined),
-                        onPressed: () => DeleteVideo(info: widget.infoVid),
-                      ),
-                    ),
-                  ),
-                ],
+    return Card(
+      shadowColor: Colors.black87,
+      elevation: 8,
+      child: InkWell(
+        onTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (_) => WatchingPage(
+                users: currentUser,
+                info: widget.infoVid,
+                isLogin: widget.isLogin ?? false,
               ),
             ),
-          )
-        : const SizedBox.shrink();
+          );
+        },
+        child: Column(
+          children: [
+            Stack(
+              fit: StackFit.loose,
+              alignment: Alignment.center,
+              children: [
+                Container(
+                  height: size.height * 1 / 5,
+                  width: size.width,
+                  color: Colors.black,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      if (_thumbnailUrl != null)
+                        Stack(alignment: Alignment.center, children: [
+                          Container(
+                            width: size.width * 1 / 5,
+                            color: Colors.black,
+                          ),
+                          Image.file(
+                            File(_thumbnailUrl!),
+                            scale: 1,
+                            height: size.height * 1 / 5,
+                          ),
+                          const CircleAvatar(
+                            radius: 30,
+                            backgroundColor: Colors.black45,
+                            child: Icon(
+                              Icons.play_arrow,
+                              size: 40,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ])
+                      else
+                        const CircularProgressIndicator()
+                    ],
+                  ),
+                ),
+              ],
+            ),
+            Container(
+              color: Colors.white,
+              child: ListTile(
+                isThreeLine: true,
+                leading: const CircleAvatar(),
+                title: Text(widget.infoVid.title ?? ''),
+                subtitle: Text(widget.infoVid.description ?? ''),
+                trailing: IconButton(
+                  icon: const Icon(Icons.more_vert_outlined),
+                  onPressed: () => DeleteVideo(info: widget.infoVid),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }
