@@ -111,15 +111,18 @@ class _MyHomePageState extends State<MyHomePage> {
                 );
               },
             ),
-            title: Container(
-              height: 50,
-              alignment: Alignment.center,
-              child: const Text(
-                'Home',
-                style: TextStyle(
-                  fontSize: 19.0,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.black,
+            title: Padding(
+              padding: const EdgeInsets.fromLTRB(20.0,0,0,0),
+              child: Container(
+                height: 50,
+                alignment: Alignment.center,
+                child: const Text(
+                  'Home',
+                  style: TextStyle(
+                    fontSize: 19.0,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black,
+                  ),
                 ),
               ),
             ),
@@ -133,7 +136,7 @@ class _MyHomePageState extends State<MyHomePage> {
                               backgroundImage:
                                   NetworkImage(currentUser!.avatarUrl!),
                             ),
-                            SizedBox(width: 10),
+                            // SizedBox(width: 10),
                           ],
                         ),
                       )
@@ -225,7 +228,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 children: [
                   CircleAvatar(),
                   Text(
-                    'Ten nguoi dung',
+                    'Guest',
                     style: TextStyle(
                       color: Colors.white,
                       fontSize: 24,
@@ -248,7 +251,6 @@ class _MyHomePageState extends State<MyHomePage> {
               leading: Icon(Icons.settings),
               title: Text('Settings'),
               onTap: () {
-                // TODO: Add navigation logic here
               },
             ),
             ExpansionTile(
@@ -267,7 +269,6 @@ class _MyHomePageState extends State<MyHomePage> {
                                 isLogin: _isLoggedIn,
                               ))),
                     );
-                    // TODO: Add navigation logic here
                   },
                 ),
                 ListTile(
@@ -282,7 +283,6 @@ class _MyHomePageState extends State<MyHomePage> {
                                 isLogin: _isLoggedIn,
                               ))),
                     );
-                    // TODO: Add navigation logic here
                   },
                 ),
                 ListTile(
@@ -315,95 +315,68 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
       body: Column(
         children: [
-          Row(mainAxisAlignment: MainAxisAlignment.end, children: [
-            // TextButton(
-            //   onPressed: () {
-            //     Navigator.push(
-            //       context,
-            //       MaterialPageRoute(
-            //           builder: (context) => (MyMusicApp(
-            //                 users: currentUser,
-            //                 isLogin: _isLoggedIn,
-            //               ))),
-            //     );
-            //   },
-            //   child: Text('Music'),
-            //   style: ButtonStyle(
-            //     backgroundColor: MaterialStatePropertyAll<Color>(Colors.black),
-            //   ),
-            // ),
-            // TextButton(
-            //   onPressed: () {
-            //     Navigator.push(
-            //       context,
-            //       MaterialPageRoute(
-            //           builder: (context) => (MyGameApp(
-            //                 users: currentUser,
-            //                 isLogin: _isLoggedIn,
-            //               ))),
-            //     );
-            //   },
-            //   child: Text('Game'),
-            //   style: ButtonStyle(
-            //     backgroundColor: MaterialStatePropertyAll<Color>(Colors.black),
-            //   ),
-            // ),
-            // TextButton(
-            //   onPressed: () {
-            //     Navigator.push(
-            //       context,
-            //       MaterialPageRoute(
-            //           builder: (context) => (MyMoviesApp(
-            //                 users: currentUser,
-            //                 isLogin: _isLoggedIn,
-            //               ))),
-            //     );
-            //   },
-            //   child: Text('Movies'),
-            //   style: ButtonStyle(
-            //     backgroundColor: MaterialStatePropertyAll<Color>(Colors.black),
-            //   ),
-            // ),
+          SizedBox(
+            height: 10,
+          ),
+          Container(
+            height: 1.0,
+            width: 350.0,
+            color: Colors.grey,
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.start, 
+            children: [
+              const Text(
+                'Category : Đang fix',
+                style: TextStyle(
+                  fontSize: 18.0,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.red,
+                ),
+              ),
+              
 
             ///menu chon loai sort video
-
-
-            Padding(
-              padding: const EdgeInsets.only(right: 12.0),
-              child: DropdownButton<String>(
-                value: dropdownValue,
-                icon: const Icon(Icons.arrow_downward),
-                elevation: 16,
-                style: const TextStyle(color: Color.fromARGB(255, 0, 0, 0)),
-                underline: Container(
-                  height: 2,
-                  color: Color.fromARGB(255, 0, 0, 0),
+              Padding(
+                padding: const EdgeInsets.only(right: 15.0),
+                child: Container(
+                  color: Colors.grey,
+                  child: DropdownButton<String>(
+                    value: dropdownValue,
+                    icon: const Icon(Icons.arrow_downward),
+                    elevation: 16,
+                    style: const TextStyle(color: Color.fromARGB(255, 0, 0, 0)),
+                    underline: Container(
+                      height: 2,
+                      color: Color.fromARGB(255, 0, 0, 0),
+                    ),
+                    onChanged: (String? value) {
+                      //khi chon loai sort thi gia tri bien filter va isDes se thay doi theo
+                      dropdownValue = value!;
+                      if (list.indexOf(value) == 0) {
+                        filter = 'date';
+                        isDes = true;
+                      } else if (list.indexOf(value) == 1) {
+                        filter = 'date';
+                        isDes = false;
+                      } else {
+                        filter = 'likedCount';
+                        isDes = true;
+                      }
+                      setState(() {});
+                    },
+                    items: list.map<DropdownMenuItem<String>>((String value) {
+                      //hien thi loai sort da chon
+                      return DropdownMenuItem<String>(
+                        value: value,
+                        child: Text(value),
+                      );
+                    }).toList(),
+                  ),
                 ),
-                onChanged: (String? value) {
-                  //khi chon loai sort thi gia tri bien filter va isDes se thay doi theo
-                  dropdownValue = value!;
-                  if (list.indexOf(value) == 0) {
-                    filter = 'date';
-                    isDes = true;
-                  } else if (list.indexOf(value) == 1) {
-                    filter = 'date';
-                    isDes = false;
-                  } else {
-                    filter = 'likedCount';
-                    isDes = true;
-                  }
-                  setState(() {});
-                },
-                items: list.map<DropdownMenuItem<String>>((String value) {
-                  //hien thi loai sort da chon
-                  return DropdownMenuItem<String>(
-                    value: value,
-                    child: Text(value),
-                  );
-                }).toList(),
               ),
-            ),
-          ]),
+            ]
+          ),
           _selectedIndex == 0
               ? _widgetOptions.elementAt(_selectedIndex)
               : _isLoggedIn
