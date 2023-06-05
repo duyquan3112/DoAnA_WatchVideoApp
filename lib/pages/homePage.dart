@@ -226,13 +226,48 @@ class _MyHomePageState extends State<MyHomePage> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  CircleAvatar(),
-                  Text(
-                    'Guest',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 24,
-                    ),
+                  SizedBox(
+                    child: (_isLoggedIn)
+                        ? Center(
+                            child: Column(
+                              children: [
+                                CircleAvatar(
+                                  backgroundImage:
+                                      NetworkImage(currentUser!.avatarUrl!),
+                                ),
+                                SizedBox(height: 20),
+                                Text(
+                                  '${currentUser!.username}',
+                                  style: TextStyle(
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          )
+                        : Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Container(
+                              child: Column(
+                                children: [
+                                  CircleAvatar(
+                                    backgroundColor: Colors.grey,
+                                  ),
+                                  SizedBox(height: 20),
+                                  Text(
+                                    'Guest',
+                                    style: TextStyle(
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ],
+                              )
+                            ),
+                          ],
+                        )
                   ),
                 ],
               ),
