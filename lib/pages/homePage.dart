@@ -332,7 +332,6 @@ class _MyHomePageState extends State<MyHomePage> {
                                 isLogin: _isLoggedIn,
                               ))),
                     );
-                    // TODO: Add navigation logic here
                   },
                 ),
               ],
@@ -355,27 +354,113 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
           Container(
             height: 1.0,
-            width: 350.0,
+            width: 320.0,
             color: Colors.grey,
           ),
           Row(
-            mainAxisAlignment: MainAxisAlignment.start, 
+            // mainAxisAlignment: MainAxisAlignment.spaceEvenly, 
             children: [
-              const Text(
-                'Category : Đang fix',
-                style: TextStyle(
-                  fontSize: 18.0,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.red,
+              SizedBox(
+                width: 10,
+              ),
+              Container(
+                height: 60,
+                width: 270,
+                child: SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: Row(
+                    children: [
+                      Container(
+                        margin: EdgeInsets.all(10),
+                        width: 100,
+                        height: 60,
+                        padding: EdgeInsets.all(0),
+                        decoration: BoxDecoration(
+                          border: Border.all(
+                            color: Colors.black,
+                            width: 2.0,
+                          ),
+                          borderRadius: BorderRadius.circular(10),
+                          color: Colors.grey[200],
+                        ),
+                        child: Center(
+                          child: Text(
+                            'Music',
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontSize: 20,
+                            ),
+                          ),
+                        ),
+                      ),
+                      Container(
+                        margin: EdgeInsets.all(10),
+                        width: 100,
+                        height: 60,
+                        padding: EdgeInsets.all(0),
+                        decoration: BoxDecoration(
+                          border: Border.all(
+                            color: Colors.black,
+                            width: 2.0,
+                          ),
+                          borderRadius: BorderRadius.circular(10),
+                          color: Colors.grey[200],
+                        ),
+                        child: Center(
+                          child: Text(
+                            'Game',
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontSize: 20,
+                            ),
+                          ),
+                        ),
+                      ),
+                      Container(
+                        margin: EdgeInsets.all(10),
+                        width: 100,
+                        height: 60,
+                        padding: EdgeInsets.all(0),
+                        decoration: BoxDecoration(
+                          border: Border.all(
+                            color: Colors.black,
+                            width: 2.0,
+                          ),
+                          borderRadius: BorderRadius.circular(10),
+                          color: Colors.grey[200],
+                        ),
+                        child: Center(
+                          child: Text(
+                            'Movie',
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontSize: 20,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
-              
-
+              SizedBox(
+                width: 10,
+              ),
+              SizedBox(
+                width: 1,
+                height: 50,
+                child: Container(
+                  color: Colors.grey,
+                ),
+              ),
+              SizedBox(
+                width: 3,
+              ),
             ///menu chon loai sort video
               Padding(
                 padding: const EdgeInsets.only(right: 15.0),
                 child: Container(
-                  color: Colors.grey,
+                  color: Colors.white,
                   child: DropdownButton<String>(
                     value: dropdownValue,
                     icon: const Icon(Icons.arrow_downward),
@@ -411,6 +496,14 @@ class _MyHomePageState extends State<MyHomePage> {
                 ),
               ),
             ]
+          ),
+          Container(
+            height: 1.0,
+            width: 350.0,
+            color: Colors.grey,
+          ),
+          SizedBox(
+            height: 10,
           ),
           _selectedIndex == 0
               ? _widgetOptions.elementAt(_selectedIndex)
