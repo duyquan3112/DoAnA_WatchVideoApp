@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:do_an/pages/signInPage.dart';
 import 'package:do_an/widgets/error_SnackBar.dart';
 import 'package:do_an/widgets/textfield.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -45,6 +46,15 @@ class _forgotPageState extends State<forgotPage> {
       appBar: AppBar(
         backgroundColor: Colors.grey[500],
         elevation: 0,
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back),
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => signInPage()),
+            );
+          },
+        ),
       ),
       body: Scaffold(
         backgroundColor: Colors.grey[300],
