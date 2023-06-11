@@ -1,14 +1,18 @@
 import 'dart:io';
+import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:do_an/pages/gamePage.dart';
 import 'package:do_an/pages/listLikedVideoPage.dart';
 import 'package:do_an/pages/listVideoPage.dart';
 import 'package:do_an/pages/moviePage.dart';
+import 'package:do_an/pages/profilePage.dart';
 import 'package:do_an/pages/searchPage.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:do_an/models/infoVideo.dart';
 import 'package:do_an/pages/signInPage.dart';
 import 'package:do_an/models/getUserData.dart';
+import 'package:do_an/pages/upLoadVideo.dart';
 import 'package:do_an/values/app_assets.dart';
+import 'package:do_an/widgets/drawerMenu.dart';
 import 'package:do_an/widgets/videoCard.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -67,6 +71,16 @@ class _MyHomePageState extends State<MyHomePage> {
     }
   }
 
+  /// Update sau
+  // void gotoProfilePage() {
+  //   Navigator.push(context, MaterialPageRoute(builder: ((context) => const MyProfilePage(
+  //     info: info, 
+  //     user: currentUser, 
+  //     isLogin: _isLoggedIn  
+  //     )))
+  //     );
+  // }
+
   void _handleLogout() async {
     await FirebaseAuth.instance.signOut();
     setState(() {
@@ -77,6 +91,7 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
+  GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey();
   @override
   Widget build(BuildContext context) {
     List<Widget> _widgetOptions = [
@@ -90,495 +105,372 @@ class _MyHomePageState extends State<MyHomePage> {
       likedVideo(isLogin: _isLoggedIn),
     ];
     return Scaffold(
-      appBar: PreferredSize(
-        preferredSize: Size.fromHeight(100),
-        child: Container(
-          color: Colors.white,
-          padding: EdgeInsets.symmetric(horizontal: 20.0),
-          child: AppBar(
-            elevation: 0,
-            automaticallyImplyLeading: false,
-            backgroundColor: Colors.white,
-            toolbarHeight: 50,
-            leading: Builder(
-              builder: (BuildContext context) {
-                return IconButton(
-                  icon: Icon(Icons.menu),
-                  color: Colors.black,
-                  onPressed: () {
-                    Scaffold.of(context).openDrawer();
-                  },
-                );
-              },
-            ),
-            title: Padding(
-              padding: const EdgeInsets.fromLTRB(20.0,0,0,0),
-              child: Container(
-                height: 50,
-                alignment: Alignment.center,
-                child: const Text(
-                  'Home',
-                  style: TextStyle(
-                    fontSize: 19.0,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black,
-                  ),
-                ),
-              ),
-            ),
-            actions: [
-              SizedBox(
-                child: (_isLoggedIn)
-                    ? Center(
-                        child: Row(
-                          children: [
-                            CircleAvatar(
-                              backgroundImage:
-                                  NetworkImage(currentUser!.avatarUrl!),
-                            ),
-                            // SizedBox(width: 10),
-                          ],
-                        ),
-                      )
-                    : Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Container(
-                          height: 30,
-                          child: ElevatedButton(
-                              onPressed: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(builder: (context) => signInPage()),
-                                );
-                              },
-                              style: ElevatedButton.styleFrom(
-                                padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(10),
-                                ),
-                                backgroundColor: Colors.red,
-                              ),
-                              child: Text(
-                                'Login',
-                                style: TextStyle(
-                                  fontSize: 16,
-                                  color: Colors.white, // Màu văn bản của nút
-                                ),
-                              ),
-                            ),
-                        ),
-                      ],
-                    )
-              ),
-            ],
-            bottom: PreferredSize(
-              preferredSize: Size.fromHeight(50),
-              child: Container(
-                height: 50,
-                color: Colors.white,
-                padding: EdgeInsets.symmetric(horizontal: 20.0),
-                child: Padding(
-                  padding: EdgeInsets.symmetric(vertical: 5.0),
-                  child: Center(
-                    child: DecoratedBox(
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10.0),
-                        border: Border.all(
-                              color: Colors.grey.withOpacity(0.5), width: 1.0),
-                        color: Color.fromARGB(255, 236, 236, 236),
-                      ),
-                      child: Row(
-                        children: [
-                          SizedBox(width: 10.0),
-                          Expanded(
-                            child: TextField(
-                              decoration: InputDecoration(
-                                border: InputBorder.none,
-                                hintText: "Search",
-                              ),
-                            ),
-                          ),
-                          IconButton(
-                            icon: Icon(
-                              Icons.search,
-                              color: Colors.black,
-                            ),
-                            onPressed: () {
-                              print("your menu action here");
-                            },
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-            ),
-          ),
-        ),
-      ),
-      drawer: Drawer(
-        child: ListView(
-          padding: EdgeInsets.zero,
+      resizeToAvoidBottomInset: false,
+      key: _scaffoldKey,
+      body: Container(
+        height: 1000.0,
+        child: Stack(
           children: <Widget>[
-            DrawerHeader(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  SizedBox(
-                    child: (_isLoggedIn)
-                        ? Center(
-                            child: Column(
-                              children: [
-                                CircleAvatar(
-                                  backgroundImage:
-                                      NetworkImage(currentUser!.avatarUrl!),
+            Container(
+              width: MediaQuery.of(context).size.width,
+              height: 100.0,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.only(
+                  bottomLeft: Radius.circular(30.0),
+                  bottomRight: Radius.circular(30.0),
+                ),
+                color: Colors.lightBlue,
+              ),
+              child: Center(
+                child: Padding(
+                  padding: const EdgeInsets.all(20.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      SizedBox(
+                        child: IconButton(
+                          icon: Icon(
+                            Icons.menu,
+                            color: Colors.white,
+                          ),
+                          onPressed: () {
+                            _scaffoldKey.currentState?.openDrawer();
+                          },
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(
+                          left: 30.0,
+                        ),
+                        child: const Text(
+                          "Home",
+                          style: TextStyle(
+                            color: Colors.white, 
+                            fontSize: 25.0,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                      SizedBox(
+                        child: (_isLoggedIn)
+                            ? Center(
+                                child: Row(
+                                  children: [
+                                    SizedBox(
+                                      width: 35.0,
+                                    ),
+                                    CircleAvatar(
+                                      backgroundImage:
+                                          NetworkImage(currentUser!.avatarUrl!),
+                                    ),
+                                    // SizedBox(width: 10),
+                                  ],
                                 ),
-                                SizedBox(height: 20),
-                                Text(
-                                  '${currentUser!.username}',
-                                  style: TextStyle(
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.bold,
-                                  ),
+                              )
+                            : Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Container(
+                                  height: 30,
+                                  child: ElevatedButton(
+                                      onPressed: () {
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(builder: (context) => signInPage()),
+                                        );
+                                      },
+                                      style: ElevatedButton.styleFrom(
+                                        padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.circular(10),
+                                        ),
+                                        backgroundColor: Colors.red,
+                                      ),
+                                      child: Text(
+                                        'Login',
+                                        style: TextStyle(
+                                          fontSize: 16,
+                                          color: Colors.white, // Màu văn bản của nút
+                                        ),
+                                      ),
+                                    ),
                                 ),
                               ],
-                            ),
-                          )
-                        : Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Container(
-                              child: Column(
-                                children: [
-                                  CircleAvatar(
-                                    backgroundColor: Colors.grey,
-                                  ),
-                                  SizedBox(height: 20),
-                                  Text(
-                                    'Guest',
-                                    style: TextStyle(
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                ],
-                              )
-                            ),
-                          ],
-                        )
-                  ),
-                ],
-              ),
-              decoration: BoxDecoration(
-                color: Color.fromARGB(255, 133, 200, 255),
-              ),
-            ),
-            ListTile(
-              leading: Icon(Icons.home),
-              title: Text('Home'),
-              onTap: () {
-                // TODO: Add navigation logic here
-              },
-            ),
-            ListTile(
-              leading: Icon(Icons.settings),
-              title: Text('Settings'),
-              onTap: () {
-              },
-            ),
-            ExpansionTile(
-              leading: Icon(Icons.category),
-              title: Text('Category'),
-              children: <Widget>[
-                ListTile(
-                  leading: Icon(Icons.music_note),
-                  title: Text('Music'),
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => (MyMusicApp(
-                                users: currentUser,
-                                isLogin: _isLoggedIn,
-                              ))),
-                    );
-                  },
-                ),
-                ListTile(
-                  leading: Icon(Icons.gamepad_rounded),
-                  title: Text('Game'),
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => (MyGameApp(
-                                users: currentUser,
-                                isLogin: _isLoggedIn,
-                              ))),
-                    );
-                  },
-                ),
-                ListTile(
-                  leading: Icon(Icons.movie_sharp),
-                  title: Text('Movies'),
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => (MyMoviesApp(
-                                users: currentUser,
-                                isLogin: _isLoggedIn,
-                              ))),
-                    );
-                  },
-                ),
-              ],
-            ),
-            ListTile(
-              leading: Icon(Icons.logout),
-              title: Text('Log Out'),
-              onTap: () {
-                _handleLogout();
-                // TODO: Add navigation logic here
-              },
-            ),
-          ],
-        ),
-      ),
-      body: Column(
-        children: [
-          SizedBox(
-            height: 10,
-          ),
-          Container(
-            height: 1.0,
-            width: 320.0,
-            color: Colors.grey,
-          ),
-          Row(
-            // mainAxisAlignment: MainAxisAlignment.spaceEvenly, 
-            children: [
-              SizedBox(
-                width: 10,
-              ),
-              Container(
-                height: 60,
-                width: 270,
-                child: SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  child: Row(
-                    children: [
-                      Container(
-                        margin: EdgeInsets.all(10),
-                        width: 100,
-                        height: 60,
-                        padding: EdgeInsets.all(0),
-                        decoration: BoxDecoration(
-                          border: Border.all(
-                            color: Colors.black,
-                            width: 2.0,
-                          ),
-                          borderRadius: BorderRadius.circular(10),
-                          color: Colors.grey[200],
-                        ),
-                        child: Center(
-                          child: Text(
-                            'Music',
-                            style: TextStyle(
-                              color: Colors.black,
-                              fontSize: 20,
-                            ),
-                          ),
-                        ),
-                      ),
-                      Container(
-                        margin: EdgeInsets.all(10),
-                        width: 100,
-                        height: 60,
-                        padding: EdgeInsets.all(0),
-                        decoration: BoxDecoration(
-                          border: Border.all(
-                            color: Colors.black,
-                            width: 2.0,
-                          ),
-                          borderRadius: BorderRadius.circular(10),
-                          color: Colors.grey[200],
-                        ),
-                        child: Center(
-                          child: Text(
-                            'Game',
-                            style: TextStyle(
-                              color: Colors.black,
-                              fontSize: 20,
-                            ),
-                          ),
-                        ),
-                      ),
-                      Container(
-                        margin: EdgeInsets.all(10),
-                        width: 100,
-                        height: 60,
-                        padding: EdgeInsets.all(0),
-                        decoration: BoxDecoration(
-                          border: Border.all(
-                            color: Colors.black,
-                            width: 2.0,
-                          ),
-                          borderRadius: BorderRadius.circular(10),
-                          color: Colors.grey[200],
-                        ),
-                        child: Center(
-                          child: Text(
-                            'Movie',
-                            style: TextStyle(
-                              color: Colors.black,
-                              fontSize: 20,
-                            ),
-                          ),
-                        ),
+                            )
                       ),
                     ],
                   ),
                 ),
               ),
-              SizedBox(
-                width: 10,
-              ),
-              SizedBox(
-                width: 1,
-                height: 50,
-                child: Container(
-                  color: Colors.grey,
-                ),
-              ),
-              SizedBox(
-                width: 3,
-              ),
-            ///menu chon loai sort video
-              Padding(
-                padding: const EdgeInsets.only(right: 15.0),
-                child: Container(
-                  color: Colors.white,
-                  child: DropdownButton<String>(
-                    value: dropdownValue,
-                    icon: const Icon(Icons.arrow_downward),
-                    elevation: 16,
-                    style: const TextStyle(color: Color.fromARGB(255, 0, 0, 0)),
-                    underline: Container(
-                      height: 2,
-                      color: Color.fromARGB(255, 0, 0, 0),
-                    ),
-                    onChanged: (String? value) {
-                      //khi chon loai sort thi gia tri bien filter va isDes se thay doi theo
-                      dropdownValue = value!;
-                      if (list.indexOf(value) == 0) {
-                        filter = 'date';
-                        isDes = true;
-                      } else if (list.indexOf(value) == 1) {
-                        filter = 'date';
-                        isDes = false;
-                      } else {
-                        filter = 'likedCount';
-                        isDes = true;
-                      }
-                      setState(() {});
-                    },
-                    items: list.map<DropdownMenuItem<String>>((String value) {
-                      //hien thi loai sort da chon
-                      return DropdownMenuItem<String>(
-                        value: value,
-                        child: Text(value),
-                      );
-                    }).toList(),
+            ),
+            Positioned(
+              top: 80.0,
+              left: 0.0,
+              right: 0.0,
+              child: Container(
+                padding: EdgeInsets.symmetric(horizontal: 30.0),
+                child: DecoratedBox(
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(20.0),
+                      border: Border.all(
+                          color: Colors.grey.withOpacity(0.5), width: 1.0),
+                      color: Colors.white),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: Padding(
+                          padding: const EdgeInsets.only(
+                            left: 15.0,
+                          ),
+                          child: TextField(
+                            decoration: InputDecoration(
+                              border: InputBorder.none,
+                              hintText: "Under Maintenance ( Đang Fixbug )",
+                            ),
+                          ),
+                        ),
+                      ),
+                      IconButton(
+                        icon: Icon(
+                          Icons.search,
+                          color: Colors.lightBlue,
+                        ),
+                        onPressed: () {
+                        },
+                      ),
+                    ],
                   ),
                 ),
               ),
-            ]
-          ),
-          Container(
-            height: 1.0,
-            width: 350.0,
-            color: Colors.grey,
-          ),
-          SizedBox(
-            height: 10,
-          ),
-          _selectedIndex == 0
-              ? _widgetOptions.elementAt(_selectedIndex)
-              : _isLoggedIn
-                  ? _widgetOptions.elementAt(_selectedIndex)
-                  : AlertDialog(
-                      content: Text('Please Login to use'),
-                      actions: <Widget>[
-                        TextButton(
-                          child: const Text('Cancel'),
-                          onPressed: () {
-                            setState(() {
-                              _selectedIndex = 0;
-                            });
-                            _widgetOptions.elementAt(_selectedIndex);
-                          },
+            ),
+            Container(
+              child: Column(
+                children: [
+                  SizedBox(
+                    height: 135,
+                  ),
+                  Container(
+                    height: 1.0,
+                    width: 320.0,
+                    color: Colors.grey,
+                  ),
+                  Row(
+                    // mainAxisAlignment: MainAxisAlignment.spaceEvenly, 
+                    children: [
+                  SizedBox(
+                    width: 10,
+                  ),
+                  Container(
+                    height: 60,
+                    width: 270,
+                    child: SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      child: Row(
+                        children: [
+                          Container(
+                            margin: EdgeInsets.all(10),
+                            width: 100,
+                            height: 60,
+                            padding: EdgeInsets.all(0),
+                            decoration: BoxDecoration(
+                              border: Border.all(
+                                color: Colors.black,
+                                width: 2.0,
+                              ),
+                              borderRadius: BorderRadius.circular(10),
+                              color: Colors.grey[200],
+                            ),
+                            child: Center(
+                              child: Text(
+                                'Music',
+                                style: TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 20,
+                                ),
+                              ),
+                            ),
+                          ),
+                          Container(
+                            margin: EdgeInsets.all(10),
+                            width: 100,
+                            height: 60,
+                            padding: EdgeInsets.all(0),
+                            decoration: BoxDecoration(
+                              border: Border.all(
+                                color: Colors.black,
+                                width: 2.0,
+                              ),
+                              borderRadius: BorderRadius.circular(10),
+                              color: Colors.grey[200],
+                            ),
+                            child: Center(
+                              child: Text(
+                                'Game',
+                                style: TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 20,
+                                ),
+                              ),
+                            ),
+                          ),
+                          Container(
+                            margin: EdgeInsets.all(10),
+                            width: 100,
+                            height: 60,
+                            padding: EdgeInsets.all(0),
+                            decoration: BoxDecoration(
+                              border: Border.all(
+                                color: Colors.black,
+                                width: 2.0,
+                              ),
+                              borderRadius: BorderRadius.circular(10),
+                              color: Colors.grey[200],
+                            ),
+                            child: Center(
+                              child: Text(
+                                'Movie',
+                                style: TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 20,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    width: 10,
+                  ),
+                  SizedBox(
+                    width: 1,
+                    height: 50,
+                    child: Container(
+                      color: Colors.grey,
+                    ),
+                  ),
+                  SizedBox(
+                    width: 3,
+                  ),
+                              ///menu chon loai sort video
+                  Padding(
+                    padding: const EdgeInsets.only(right: 15.0),
+                    child: Container(
+                      color: Colors.white,
+                      child: DropdownButton<String>(
+                        value: dropdownValue,
+                        icon: const Icon(Icons.arrow_downward),
+                        elevation: 16,
+                        style: const TextStyle(color: Color.fromARGB(255, 0, 0, 0)),
+                        underline: Container(
+                          height: 2,
+                          color: Color.fromARGB(255, 0, 0, 0),
                         ),
-                        TextButton(
-                          child: const Text('Login'),
-                          onPressed: () {
-                            Navigator.of(context).pushAndRemoveUntil(
-                                MaterialPageRoute(
-                                    builder: (context) => signInPage()),
-                                (route) => false);
-                          },
+                        onChanged: (String? value) {
+                          //khi chon loai sort thi gia tri bien filter va isDes se thay doi theo
+                          dropdownValue = value!;
+                          if (list.indexOf(value) == 0) {
+                            filter = 'date';
+                            isDes = true;
+                          } else if (list.indexOf(value) == 1) {
+                            filter = 'date';
+                            isDes = false;
+                          } else {
+                            filter = 'likedCount';
+                            isDes = true;
+                          }
+                          setState(() {});
+                        },
+                        items: list.map<DropdownMenuItem<String>>((String value) {
+                          //hien thi loai sort da chon
+                          return DropdownMenuItem<String>(
+                            value: value,
+                            child: Text(value),
+                          );
+                        }).toList(),
+                      ),
+                    ),
+                  ),
+                              ]
+                            ),
+                            Container(
+                              height: 1.0,
+                              width: 350.0,
+                              color: Colors.grey,
+                            ),
+                            SizedBox(
+                              height: 10,
+                            ),
+                            _selectedIndex == 0
+                  ? _widgetOptions.elementAt(_selectedIndex)
+                  : _isLoggedIn
+                      ? _widgetOptions.elementAt(_selectedIndex)
+                      : AlertDialog(
+                          content: Text('Please Login to use'),
+                          actions: <Widget>[
+                            TextButton(
+                              child: const Text('Cancel'),
+                              onPressed: () {
+                                setState(() {
+                                  _selectedIndex = 0;
+                                });
+                                _widgetOptions.elementAt(_selectedIndex);
+                              },
+                            ),
+                            TextButton(
+                              child: const Text('Login'),
+                              onPressed: () {
+                                Navigator.of(context).pushAndRemoveUntil(
+                                    MaterialPageRoute(
+                                        builder: (context) => signInPage()),
+                                    (route) => false);
+                              },
+                            ),
+                          ],
                         ),
                       ],
                     ),
-        ],
-      ),
-
-      floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.add),
-        onPressed: () {
-          if (_isLoggedIn) {
-            _showDialog();
-          } else {
-            Navigator.push(
-                context, MaterialPageRoute(builder: (_) => signInPage()));
-          }
-        },
-      ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-
-      bottomNavigationBar: Container(
-        decoration: BoxDecoration(
-          border: Border(
-            top: BorderSide(
-              color: Colors.grey,
-              width: 1.0,
             ),
-          ),
-        ),
-        child: BottomNavigationBar(
-          items: <BottomNavigationBarItem>[
-            BottomNavigationBarItem(
-              icon: const Icon(Icons.home),
-              label: 'Home',
-            ),
-            const BottomNavigationBarItem(
-                icon: Icon(Icons.library_add_outlined), label: 'Liked Video'),
+
           ],
-          currentIndex: _selectedIndex,
-          selectedItemColor: Color.fromARGB(255, 0, 94, 255),
-          selectedIconTheme: IconThemeData(
-            size: 30,
-          ),
-          selectedLabelStyle: TextStyle(fontWeight: FontWeight.bold),
-          unselectedItemColor: Colors.black,
-          showUnselectedLabels: true,
-          backgroundColor: Color.fromARGB(255, 190, 227, 255),
-          onTap: _onItemTapped,
         ),
       ),
-      // This trailing comma makes auto-formatting nicer for build methods.
+
+      drawer: drawerMenu(
+        // onProfileTap: gotoProfilePage(),
+        onSignOut: _handleLogout,
+      ),
+      bottomNavigationBar: CurvedNavigationBar(
+        backgroundColor: Colors.white,
+        color: Colors.lightBlue,
+        items: [
+          Icon(
+            Icons.home,
+            color: Colors.white,
+          ),
+          Icon(
+            Icons.library_add_outlined,
+            color: Colors.white
+          ),
+        ],
+        onTap: _onItemTapped,
+      ),
+      floatingActionButton:
+        FloatingActionButton(
+          backgroundColor: Colors.lightBlue,
+          elevation: 0,
+          child: Icon(Icons.add),
+          onPressed: () {
+            if (_isLoggedIn) {
+              _showDialog();
+            } else {
+              Navigator.push(
+                  context, MaterialPageRoute(builder: (_) => signInPage()));
+            }
+          },
+        ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
     );
   }
 
@@ -590,9 +482,6 @@ class _MyHomePageState extends State<MyHomePage> {
         users: currentUser!,
         userId: widget.userId,
       ),
-      // barrierColor: Colors.white.withOpacity(0.7),
-      // pillColor: Colors.red,
-      // backgroundColor: Colors.yellow,
     );
   }
 }
