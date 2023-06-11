@@ -15,7 +15,7 @@ import '../widgets/videoCard.dart';
 class MyProfilePage extends StatefulWidget {
   const MyProfilePage(
       {super.key,
-      required this.info,
+      required this.info,  
       required this.user,
       required this.isLogin});
 

@@ -53,18 +53,18 @@ class _videoCardState extends State<videoCard> {
 
   ///Ham khoi tao thumbnail cho video
   ///Thumbnail la frame dau tien cua video
-  void genThumbnail() async {
-    _thumbnailUrl = await VideoThumbnail.thumbnailFile(
-        video: widget.infoVid.url!,
-        thumbnailPath: (await getTemporaryDirectory()).path,
-        imageFormat: ImageFormat.WEBP);
-    setState(() {});
-  }
+  // void genThumbnail() async {
+  //   _thumbnailUrl = await VideoThumbnail.thumbnailFile(
+  //       video: widget.infoVid.url!,
+  //       thumbnailPath: (await getTemporaryDirectory()).path,
+  //       imageFormat: ImageFormat.WEBP);
+  //   setState(() {});
+  // }
 
   @override
   void initState() {
     super.initState();
-    genThumbnail();
+    // genThumbnail();
     currentUser = widget.users;
   }
 
