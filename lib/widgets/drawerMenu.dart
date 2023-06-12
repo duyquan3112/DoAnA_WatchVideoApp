@@ -1,3 +1,4 @@
+import 'package:another_flushbar/flushbar.dart';
 import 'package:do_an/models/getUserData.dart';
 import 'package:do_an/pages/gamePage.dart';
 import 'package:do_an/pages/moviePage.dart';
@@ -9,48 +10,52 @@ import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
 
 class drawerMenu extends StatefulWidget {
-  // final void Function()? onProfileTap;
   final Function()? onSignOut;
-  const drawerMenu({super.key, required this.onSignOut});
+  final Function()? onProfileTap;
+  const drawerMenu({
+    super.key, 
+    required this.onSignOut,
+    required this.onProfileTap,
+  });
 
-
-  
   @override
   State<drawerMenu> createState() => _drawerMenuState();
 }
 
 class _drawerMenuState extends State<drawerMenu> {
-  UserData? currentUser;
-  String? userId;
-  bool _isLoggedIn = false;
-  
   @override
-  void initState() {
-    super.initState();
-    currentUser = UserData.getCurrentUser();
-    if (currentUser?.username != null) {
+  Widget build(BuildContext context) {
+
+    UserData? currentUser;
+    String? userId;
+    bool _isLoggedIn = false;
+
+    
+    @override
+    void initState() {
+      super.initState();
+      currentUser = UserData.getCurrentUser();
+      if (currentUser?.username != null) {
+        setState(() {
+          _isLoggedIn = true;
+        });
+      } else {
+        setState(() {
+          _isLoggedIn = false;
+        });
+      }
+    }
+
+      void _handleLogout() async {
+      await FirebaseAuth.instance.signOut();
       setState(() {
-        _isLoggedIn = true;
-      });
-    } else {
-      setState(() {
+        currentUser = null;
+        userId = null;
         _isLoggedIn = false;
       });
     }
-  }
-
-    void _handleLogout() async {
-    await FirebaseAuth.instance.signOut();
-    setState(() {
-      currentUser = null;
-      userId = null;
-      _isLoggedIn = false;
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
     return Drawer(
+      backgroundColor: Colors.lightBlueAccent,
           child: Column(
             children: [
             DrawerHeader(
@@ -103,7 +108,11 @@ class _drawerMenuState extends State<drawerMenu> {
                 ],
               ),
               decoration: BoxDecoration(
-                color: Color.fromARGB(255, 133, 200, 255),
+                color: Colors.lightBlue,
+                borderRadius: BorderRadius.only(
+                  bottomLeft: Radius.circular(25.0),
+                  bottomRight: Radius.circular(25.0),
+                )
               ),
             ),
             MyListTile(
@@ -111,16 +120,16 @@ class _drawerMenuState extends State<drawerMenu> {
               text: 'H O M E', 
               onTap: () => Navigator.pop(context),
             ),
-            // MyListTile(
-            //   icon: Icons.person, 
-            //   text: 'P R O F I L E', 
-            //   onTap: onProfileTap,
-            // ),
-            // MyListTile(
-            //   icon: Icons.logout, 
-            //   text: 'L O G O U T', 
-            //   onTap: onSignOut,
-            // ),
+            MyListTile(
+              icon: Icons.person, 
+              text: 'P R O F I L E', 
+              onTap: widget.onProfileTap,
+            ),
+            MyListTile(
+              icon: Icons.logout, 
+              text: 'L O G O U T', 
+              onTap: widget.onSignOut,
+            ),
           ],
         ),
       );
