@@ -71,16 +71,6 @@ class _MyHomePageState extends State<MyHomePage> {
     }
   }
 
-  /// Update sau
-  // void gotoProfilePage() {
-  //   Navigator.push(context, MaterialPageRoute(builder: ((context) => const MyProfilePage(
-  //     info: info, 
-  //     user: currentUser, 
-  //     isLogin: _isLoggedIn  
-  //     )))
-  //     );
-  // }
-
   void _handleLogout() async {
     await FirebaseAuth.instance.signOut();
     setState(() {
@@ -89,6 +79,10 @@ class _MyHomePageState extends State<MyHomePage> {
       _isLoggedIn = false;
       _selectedIndex = 0;
     });
+  }
+
+  void gotoProfilePage() {
+
   }
 
   GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey();
@@ -438,7 +432,7 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
 
       drawer: drawerMenu(
-        // onProfileTap: gotoProfilePage(),
+        onProfileTap: gotoProfilePage,
         onSignOut: _handleLogout,
       ),
       bottomNavigationBar: CurvedNavigationBar(
