@@ -127,9 +127,8 @@ class _videoCardState extends State<videoCard> {
               color: Colors.white,
               child: ListTile(
                 isThreeLine: true,
-                leading: const CircleAvatar(),
                 title: Text(widget.infoVid.title!),
-                subtitle: Text(widget.infoVid.description!),
+                subtitle: Text(widget.infoVid.ownerName!),
                 trailing: IconButton(
                   icon: const Icon(Icons.more_vert_outlined),
                   onPressed: () => deleteVideo(info: widget.infoVid),
