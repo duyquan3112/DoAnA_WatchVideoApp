@@ -74,9 +74,10 @@ class _MyHomePageState extends State<MyHomePage> {
     }
   }
 
-  void _handleLogout() async {
+  void handleLogout() async {
     await FirebaseAuth.instance.signOut();
     setState(() {
+      UserData.empty();
       currentUser = null;
       userId = null;
       _isLoggedIn = false;
@@ -451,12 +452,13 @@ class _MyHomePageState extends State<MyHomePage> {
 
       drawer: Builder(
         builder: (context) => drawerMenu(
+          
           userData: UserData.getCurrentUser(),
           onHomePageTap: () {
             
           },
           onProfileTap: gotoProfilePage,
-          onSignOut: _handleLogout,
+          onSignOut: handleLogout,
         ),
       ),
       bottomNavigationBar: CurvedNavigationBar(

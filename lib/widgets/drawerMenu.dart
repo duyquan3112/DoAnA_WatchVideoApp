@@ -1,6 +1,7 @@
 import 'package:another_flushbar/flushbar.dart';
 import 'package:do_an/models/getUserData.dart';
 import 'package:do_an/pages/gamePage.dart';
+import 'package:do_an/pages/homePage.dart';
 import 'package:do_an/pages/moviePage.dart';
 import 'package:do_an/pages/musicPage.dart';
 import 'package:do_an/widgets/my_list_tile.dart';
@@ -26,38 +27,46 @@ class drawerMenu extends StatefulWidget {
   State<drawerMenu> createState() => _drawerMenuState();
 }
 
-class _drawerMenuState extends State<drawerMenu> {
-  UserData? currentUser;
-  String? userId;
-  bool _isLoggedIn = true;
 
+class _drawerMenuState extends State<drawerMenu> {
+  UserData? currentUser ;
+  String? userId;
+  bool isLoggedIn = false;
+  
   @override
   void initState() {
     super.initState();
     currentUser = UserData.getCurrentUser();
     if (currentUser?.username != null) {
       setState(() {
-        _isLoggedIn = true;
+        isLoggedIn = true;
       });
     } else {
       setState(() {
-        _isLoggedIn = false;
+        isLoggedIn = false;
       });
     }
   }
 
-    void _handleLogout() async {
-    await FirebaseAuth.instance.signOut();
-    setState(() {
-      currentUser = null;
-      userId = null;
-      _isLoggedIn = false;
-    });
-  }
-
+  //   Future<void> _handleLogout() async {
+  //     widget.onSignOut;
+  //     _scaffoldKey.currentState?.openEndDrawer();
+  
+    
+  //   // setState(() {
+  //   //   isLoggedIn = false;
+  //   //   UserData.empty();
+  //   //   currentUser = null;
+  //   //   userId = null;
+      
+  //   // });
+  // }
+  GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   @override
   Widget build(BuildContext context) {
+   
     return Drawer(
+      key: _scaffoldKey,
       backgroundColor: Colors.lightBlueAccent,
           child: Column(
             children: [
@@ -66,17 +75,17 @@ class _drawerMenuState extends State<drawerMenu> {
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   SizedBox(
-                    child: (_isLoggedIn)
+                    child: (isLoggedIn)
                         ? Center(
                             child: Column(
                               children: [
                                 CircleAvatar(
                                   backgroundImage:
-                                      NetworkImage(widget.userData!.avatarUrl!),
+                                      NetworkImage(currentUser!.avatarUrl!),
                                 ),
                                 SizedBox(height: 20),
                                 Text(
-                                  '${widget.userData?.username}',
+                                  '${currentUser!.username}',
                                   style: TextStyle(
                                     fontSize: 18,
                                     fontWeight: FontWeight.bold,
@@ -153,7 +162,7 @@ class _drawerMenuState extends State<drawerMenu> {
                         MaterialPageRoute(
                             builder: (context) => (MyMusicApp(
                                   users: currentUser,
-                                  isLogin: _isLoggedIn,
+                                  isLogin: isLoggedIn,
                                 ))),
                       );
                     },
@@ -167,7 +176,7 @@ class _drawerMenuState extends State<drawerMenu> {
                         MaterialPageRoute(
                             builder: (context) => (MyGameApp(
                                   users: currentUser,
-                                  isLogin: _isLoggedIn,
+                                  isLogin: isLoggedIn,
                                 ))),
                       );
                     },
@@ -181,7 +190,7 @@ class _drawerMenuState extends State<drawerMenu> {
                         MaterialPageRoute(
                             builder: (context) => (MyMoviesApp(
                                   users: currentUser,
-                                  isLogin: _isLoggedIn,
+                                  isLogin: isLoggedIn,
                                 ))),
                       );
                     },
@@ -192,7 +201,7 @@ class _drawerMenuState extends State<drawerMenu> {
             MyListTile(
               icon: Icons.logout, 
               text: 'L O G O U T', 
-              onTap: widget.onSignOut,
+              onTap: widget.onSignOut
             ),
           ],
         ),
