@@ -34,6 +34,22 @@ class UserData {
     return _currentUser;
   }
 
+   static Future<UserData?> getCurrentUserFromFireBase(UserData _currentUser) async {
+  User? user = FirebaseAuth.instance.currentUser;
+  if (user != null) {
+    _currentUser.avatarUrl = user.photoURL;
+  _currentUser.displayName = user.displayName;
+_currentUser.email = user.email;
+
+
+    // Đã đăng nhập, trả về thông tin người dùng hiện tại
+    return _currentUser;
+  } else {
+    // Chưa đăng nhập
+    return null;
+  }
+}
+
   factory UserData.fromFirestore(DocumentSnapshot snapshot) {
     Map<String, dynamic> data = snapshot.data()! as Map<String, dynamic>;
     return UserData(
@@ -47,14 +63,16 @@ class UserData {
         docId: snapshot.id);
   }
 
-  static UserData empty() {
-    return UserData(
+  static empty() {
+    
+    var _currentUser = UserData(
         uid: '',
-        username: '',
-        firstName: '',
-        lastName: '',
-        email: '',
-        avatarUrl: '',
-        docId: '');
+        username: null,
+        firstName: null,
+        lastName: null,
+        email: null,
+        avatarUrl: null,
+        docId: null);
+      return setCurrentUser(_currentUser);
   }
 }
