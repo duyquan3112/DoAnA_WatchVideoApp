@@ -10,12 +10,16 @@ import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
 
 class drawerMenu extends StatefulWidget {
+  final Function()? onHomePageTap;
   final Function()? onSignOut;
   final Function()? onProfileTap;
+  final UserData? userData;
   const drawerMenu({
-    super.key, 
+    super.key,
+    required this.onHomePageTap,
     required this.onSignOut,
     required this.onProfileTap,
+    this.userData,
   });
 
   @override
@@ -23,37 +27,36 @@ class drawerMenu extends StatefulWidget {
 }
 
 class _drawerMenuState extends State<drawerMenu> {
+  UserData? currentUser;
+  String? userId;
+  bool _isLoggedIn = true;
+
   @override
-  Widget build(BuildContext context) {
-
-    UserData? currentUser;
-    String? userId;
-    bool _isLoggedIn = false;
-
-    
-    @override
-    void initState() {
-      super.initState();
-      currentUser = UserData.getCurrentUser();
-      if (currentUser?.username != null) {
-        setState(() {
-          _isLoggedIn = true;
-        });
-      } else {
-        setState(() {
-          _isLoggedIn = false;
-        });
-      }
-    }
-
-      void _handleLogout() async {
-      await FirebaseAuth.instance.signOut();
+  void initState() {
+    super.initState();
+    currentUser = UserData.getCurrentUser();
+    if (currentUser?.username != null) {
       setState(() {
-        currentUser = null;
-        userId = null;
+        _isLoggedIn = true;
+      });
+    } else {
+      setState(() {
         _isLoggedIn = false;
       });
     }
+  }
+
+    void _handleLogout() async {
+    await FirebaseAuth.instance.signOut();
+    setState(() {
+      currentUser = null;
+      userId = null;
+      _isLoggedIn = false;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return Drawer(
       backgroundColor: Colors.lightBlueAccent,
           child: Column(
@@ -69,11 +72,11 @@ class _drawerMenuState extends State<drawerMenu> {
                               children: [
                                 CircleAvatar(
                                   backgroundImage:
-                                      NetworkImage(currentUser!.avatarUrl!),
+                                      NetworkImage(widget.userData!.avatarUrl!),
                                 ),
                                 SizedBox(height: 20),
                                 Text(
-                                  '${currentUser!.username}',
+                                  '${widget.userData?.username}',
                                   style: TextStyle(
                                     fontSize: 18,
                                     fontWeight: FontWeight.bold,
@@ -118,12 +121,73 @@ class _drawerMenuState extends State<drawerMenu> {
             MyListTile(
               icon: Icons.home, 
               text: 'H O M E', 
-              onTap: () => Navigator.pop(context),
+              onTap: widget.onHomePageTap,
             ),
             MyListTile(
               icon: Icons.person, 
               text: 'P R O F I L E', 
               onTap: widget.onProfileTap,
+            ),
+            Padding(
+              padding: const EdgeInsets.only(
+                left: 10.0,
+              ),
+              child: ExpansionTile(
+                leading: Icon(
+                  Icons.category,
+                  color: Colors.white,
+                ),
+                title: Text(
+                  'C A T E G O R I E S',
+                  style: TextStyle(
+                    color: Colors.white,
+                  ),
+                ),
+                children: <Widget>[
+                  MyListTile(
+                    icon: Icons.music_note, 
+                    text: 'Music', 
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => (MyMusicApp(
+                                  users: currentUser,
+                                  isLogin: _isLoggedIn,
+                                ))),
+                      );
+                    },
+                  ),
+                  MyListTile(
+                    icon: Icons.gamepad_rounded, 
+                    text: 'Game', 
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => (MyGameApp(
+                                  users: currentUser,
+                                  isLogin: _isLoggedIn,
+                                ))),
+                      );
+                    },
+                  ),
+                  MyListTile(
+                    icon: Icons.movie_sharp, 
+                    text: 'Movie', 
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => (MyMoviesApp(
+                                  users: currentUser,
+                                  isLogin: _isLoggedIn,
+                                ))),
+                      );
+                    },
+                  ),
+                ],
+              ),
             ),
             MyListTile(
               icon: Icons.logout, 
