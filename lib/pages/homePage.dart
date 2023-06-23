@@ -4,6 +4,7 @@ import 'package:do_an/pages/gamePage.dart';
 import 'package:do_an/pages/listLikedVideoPage.dart';
 import 'package:do_an/pages/listVideoPage.dart';
 import 'package:do_an/pages/moviePage.dart';
+import 'package:do_an/pages/personalProfilePage.dart';
 import 'package:do_an/pages/profilePage.dart';
 import 'package:do_an/pages/searchPage.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -13,6 +14,7 @@ import 'package:do_an/models/getUserData.dart';
 import 'package:do_an/pages/upLoadVideo.dart';
 import 'package:do_an/values/app_assets.dart';
 import 'package:do_an/widgets/drawerMenu.dart';
+import 'package:do_an/widgets/error_SnackBar.dart';
 import 'package:do_an/widgets/videoCard.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -40,11 +42,12 @@ class _MyHomePageState extends State<MyHomePage> {
   String dropdownValue = list.first;
   String filter = 'date';
   bool isDes = false;
-
+  
   late int _selectedIndex;
   File? file;
   UserData? currentUser;
   String? userId;
+  infoVideo? info;
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
@@ -81,9 +84,6 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
-  void gotoProfilePage() {
-
-  }
 
   GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey();
   @override
@@ -98,6 +98,24 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
       likedVideo(isLogin: _isLoggedIn),
     ];
+    infoVideo? info;
+    void gotoProfilePage() {
+      if (currentUser == null) {
+        // Hiển thị Flushbar nếu currentUser là null
+        errorSnackBar(
+          errMess: 'Vui lòng login để xem trang cá nhân!',
+        ).build(context);
+      } else {
+        // Điều hướng qua trang personalProfilePage nếu có currentUser
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => personalProfilePage(
+            currentUser: currentUser,
+            isLogin: _isLoggedIn,
+          )),
+        );
+      }
+    }
     return Scaffold(
       resizeToAvoidBottomInset: false,
       key: _scaffoldKey,
@@ -431,9 +449,15 @@ class _MyHomePageState extends State<MyHomePage> {
         ),
       ),
 
-      drawer: drawerMenu(
-        onProfileTap: gotoProfilePage,
-        onSignOut: _handleLogout,
+      drawer: Builder(
+        builder: (context) => drawerMenu(
+          userData: UserData.getCurrentUser(),
+          onHomePageTap: () {
+            
+          },
+          onProfileTap: gotoProfilePage,
+          onSignOut: _handleLogout,
+        ),
       ),
       bottomNavigationBar: CurvedNavigationBar(
         backgroundColor: Colors.white,
