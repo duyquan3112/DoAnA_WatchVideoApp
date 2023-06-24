@@ -13,6 +13,8 @@ import 'package:path_provider/path_provider.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:video_thumbnail/video_thumbnail.dart';
+import 'package:slide_popup_dialog_null_safety/slide_popup_dialog.dart'
+    as slideDialog;
 
 class videoCard extends StatefulWidget {
   final infoVideo infoVid;
@@ -138,15 +140,15 @@ class _videoCardState extends State<videoCard> {
                         onPressed: () => showBottomSheet(
                               context: context,
                               builder: (context) => Container(
+                                height: size.height * 1 / 5,
+                                width: size.width,
                                 child: Column(
                                   children: [
                                     deleteVideo(info: widget.infoVid),
                                     TextButton(
-                                        onPressed: () => showDialog(
-                                            context: context,
-                                            builder: (context) => editVideo(
-                                                info: widget.infoVid)),
-                                        child: Text('Edit Video'))
+                                      onPressed: () => _showDialog(),
+                                      child: Text('Edit Video'),
+                                    )
                                   ],
                                 ),
                               ),
@@ -158,6 +160,15 @@ class _videoCardState extends State<videoCard> {
             ),
           ],
         ),
+      ),
+    );
+  }
+
+  void _showDialog() {
+    slideDialog.showSlideDialog(
+      context: this.context,
+      child: editVideo(
+        info: widget.infoVid,
       ),
     );
   }
