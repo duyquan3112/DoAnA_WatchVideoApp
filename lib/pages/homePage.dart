@@ -292,182 +292,174 @@ class _MyHomePageState extends State<MyHomePage> {
                     color: Colors.grey,
                   ),
                   Row(
-                      // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        SizedBox(
-                          width: 10,
-                        ),
-                        Container(
-                          height: 60,
-                          width: 270,
-                          child: SingleChildScrollView(
-                            scrollDirection: Axis.horizontal,
-                            child: Row(
-                              children: [
-                                Container(
-                                  margin: EdgeInsets.all(10),
-                                  width: 100,
-                                  height: 60,
-                                  padding: EdgeInsets.all(0),
-                                  decoration: BoxDecoration(
-                                    border: Border.all(
-                                      color: Colors.black,
-                                      width: 2.0,
-                                    ),
-                                    borderRadius: BorderRadius.circular(10),
-                                    color: Colors.grey[200],
+                    children: [
+                      SizedBox(
+                        width: 10,
+                      ),
+                      Container(
+                        height: 60,
+                        width: 250,
+                        child: SingleChildScrollView(
+                          scrollDirection: Axis.horizontal,
+                          child: Row(
+                            children: [
+                              Container(
+                                margin: EdgeInsets.all(10),
+                                width: 80,
+                                height: 30,
+                                padding: EdgeInsets.all(0),
+                                decoration: BoxDecoration(
+                                  border: Border.all(
+                                    color: Colors.lightBlue,
+                                    width: 2.0,
                                   ),
-                                  child: Center(
-                                    child: Text(
-                                      'Music',
-                                      style: TextStyle(
-                                        color: Colors.black,
-                                        fontSize: 20,
-                                      ),
+                                  borderRadius: BorderRadius.circular(10),
+                                  color: Colors.lightBlue[200],
+                                ),
+                                child: Center(
+                                  child: Text(
+                                    'Music',
+                                    style: TextStyle(
+                                      color: Colors.black,
+                                      fontSize: 15,
                                     ),
                                   ),
                                 ),
-                                Container(
-                                  margin: EdgeInsets.all(10),
-                                  width: 100,
-                                  height: 60,
-                                  padding: EdgeInsets.all(0),
-                                  decoration: BoxDecoration(
-                                    border: Border.all(
-                                      color: Colors.black,
-                                      width: 2.0,
-                                    ),
-                                    borderRadius: BorderRadius.circular(10),
-                                    color: Colors.grey[200],
-                                  ),
-                                  child: Center(
-                                    child: Text(
-                                      'Game',
-                                      style: TextStyle(
-                                        color: Colors.black,
-                                        fontSize: 20,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                                Container(
-                                  margin: EdgeInsets.all(10),
-                                  width: 100,
-                                  height: 60,
-                                  padding: EdgeInsets.all(0),
-                                  decoration: BoxDecoration(
-                                    border: Border.all(
-                                      color: Colors.black,
-                                      width: 2.0,
-                                    ),
-                                    borderRadius: BorderRadius.circular(10),
-                                    color: Colors.grey[200],
-                                  ),
-                                  child: Center(
-                                    child: Text(
-                                      'Movie',
-                                      style: TextStyle(
-                                        color: Colors.black,
-                                        fontSize: 20,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                        SizedBox(
-                          width: 10,
-                        ),
-                        SizedBox(
-                          width: 1,
-                          height: 50,
-                          child: Container(
-                            color: Colors.grey,
-                          ),
-                        ),
-                        SizedBox(
-                          width: 3,
-                        ),
-
-                        ///menu chon loai sort video
-                        Padding(
-                          padding: const EdgeInsets.only(right: 15.0),
-                          child: Container(
-                            color: Colors.white,
-                            child: DropdownButton<String>(
-                              value: dropdownValue,
-                              icon: const Icon(Icons.arrow_downward),
-                              elevation: 16,
-                              style: const TextStyle(
-                                  color: Color.fromARGB(255, 0, 0, 0)),
-                              underline: Container(
-                                height: 2,
-                                color: Color.fromARGB(255, 0, 0, 0),
                               ),
-                              onChanged: (String? value) {
-                                //khi chon loai sort thi gia tri bien filter va isDes se thay doi theo
-                                dropdownValue = value!;
-                                if (list.indexOf(value) == 0) {
-                                  filter = 'date';
-                                  isDes = true;
-                                } else if (list.indexOf(value) == 1) {
-                                  filter = 'date';
-                                  isDes = false;
-                                } else {
-                                  filter = 'likedCount';
-                                  isDes = true;
-                                }
-                                setState(() {});
-                              },
-                              items: list.map<DropdownMenuItem<String>>(
-                                  (String value) {
-                                //hien thi loai sort da chon
-                                return DropdownMenuItem<String>(
-                                  value: value,
-                                  child: Text(value),
-                                );
-                              }).toList(),
-                            ),
+                              Container(
+                                margin: EdgeInsets.all(10),
+                                width: 80,
+                                height: 30,
+                                padding: EdgeInsets.all(0),
+                                decoration: BoxDecoration(
+                                  border: Border.all(
+                                    color: Colors.lightBlue,
+                                    width: 2.0,
+                                  ),
+                                  borderRadius: BorderRadius.circular(10),
+                                  color: Colors.lightBlue[200],
+                                ),
+                                child: Center(
+                                  child: Text(
+                                    'Game',
+                                    style: TextStyle(
+                                      color: Colors.black,
+                                      fontSize: 15,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              Container(
+                                margin: EdgeInsets.all(10),
+                                width: 80,
+                                height: 30,
+                                padding: EdgeInsets.all(0),
+                                decoration: BoxDecoration(
+                                  border: Border.all(
+                                    color: Colors.lightBlue,
+                                    width: 2.0,
+                                  ),
+                                  borderRadius: BorderRadius.circular(10),
+                                  color: Colors.lightBlue[200],
+                                ),
+                                child: Center(
+                                  child: Text(
+                                    'Movie',
+                                    style: TextStyle(
+                                      color: Colors.black,
+                                      fontSize: 15,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
                           ),
                         ),
-                      ]),
-                  Container(
-                    height: 1.0,
-                    width: 350.0,
-                    color: Colors.grey,
-                  ),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  _selectedIndex == 0
-                      ? _widgetOptions.elementAt(_selectedIndex)
-                      : _isLoggedIn
-                          ? _widgetOptions.elementAt(_selectedIndex)
-                          : AlertDialog(
-                              content: Text('Please Login to use'),
-                              actions: <Widget>[
-                                TextButton(
-                                  child: const Text('Cancel'),
-                                  onPressed: () {
-                                    setState(() {
-                                      _selectedIndex = 0;
-                                    });
-                                    _widgetOptions.elementAt(_selectedIndex);
-                                  },
-                                ),
-                                TextButton(
-                                  child: const Text('Login'),
-                                  onPressed: () {
-                                    Navigator.of(context).pushAndRemoveUntil(
-                                        MaterialPageRoute(
-                                            builder: (context) => signInPage()),
-                                        (route) => false);
-                                  },
-                                ),
-                              ],
+                      ),
+                      SizedBox(
+                        width: 10,
+                      ),
+                      SizedBox(
+                        width: 1,
+                        height: 50,
+                        child: Container(
+                          color: Colors.grey,
+                        ),
+                      ),
+                      SizedBox(
+                        width: 10,
+                      ),
+
+                      ///menu chon loai sort video
+                      Padding(
+                        padding: const EdgeInsets.only(right: 15.0),
+                        child: Container(
+                          color: Colors.white,
+                          child: DropdownButton<String>(
+                            value: dropdownValue,
+                            icon: const Icon(Icons.arrow_downward),
+                            elevation: 16,
+                            style: const TextStyle(
+                                color: Color.fromARGB(255, 0, 0, 0)),
+                            underline: Container(
+                              height: 2,
+                              color: Color.fromARGB(255, 0, 0, 0),
                             ),
+                            onChanged: (String? value) {
+                              //khi chon loai sort thi gia tri bien filter va isDes se thay doi theo
+                              dropdownValue = value!;
+                              if (list.indexOf(value) == 0) {
+                                filter = 'date';
+                                isDes = true;
+                              } else if (list.indexOf(value) == 1) {
+                                filter = 'date';
+                                isDes = false;
+                              } else {
+                                filter = 'likedCount';
+                                isDes = true;
+                              }
+                              setState(() {});
+                            },
+                            items: list.map<DropdownMenuItem<String>>(
+                                (String value) {
+                              //hien thi loai sort da chon
+                              return DropdownMenuItem<String>(
+                                value: value,
+                                child: Text(value),
+                              );
+                            }).toList(),
+                          ),
+                        ),
+                      ),
+                    ]
+                  ),
+                _selectedIndex == 0
+                    ? _widgetOptions.elementAt(_selectedIndex)
+                    : _isLoggedIn
+                        ? _widgetOptions.elementAt(_selectedIndex)
+                        : AlertDialog(
+                            content: Text('Please Login to use'),
+                            actions: <Widget>[
+                              TextButton(
+                                child: const Text('Cancel'),
+                                onPressed: () {
+                                  setState(() {
+                                    _selectedIndex = 0;
+                                  });
+                                  _widgetOptions.elementAt(_selectedIndex);
+                                },
+                              ),
+                              TextButton(
+                                child: const Text('Login'),
+                                onPressed: () {
+                                  Navigator.of(context).pushAndRemoveUntil(
+                                      MaterialPageRoute(
+                                          builder: (context) => signInPage()),
+                                      (route) => false);
+                                },
+                              ),
+                            ],
+                          ),
                 ],
               ),
             ),

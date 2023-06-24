@@ -1,16 +1,21 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:do_an/models/infoVideo.dart';
-import 'package:do_an/pages/listVideoPage.dart';
-import 'package:do_an/widgets/editVideo.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/material.dart';
-import 'package:slide_popup_dialog_null_safety/slide_popup_dialog.dart'
-    as slideDialog;
-
-import '../models/getUserData.dart';
-import '../widgets/deleteVideo.dart';
 import '../widgets/editVideo.dart';
 import '../widgets/videoCard.dart';
+import '../models/getUserData.dart';
+import '../widgets/deleteVideo.dart';
+import 'package:flutter/material.dart';
+import 'package:do_an/pages/homePage.dart';
+import 'package:do_an/models/infoVideo.dart';
+import 'package:do_an/widgets/editVideo.dart';
+import 'package:do_an/widgets/drawerMenu.dart';
+import 'package:do_an/pages/listVideoPage.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:do_an/widgets/error_SnackBar.dart';
+import 'package:do_an/pages/personalProfilePage.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:slide_popup_dialog_null_safety/slide_popup_dialog.dart'
+
+    as slideDialog;
+
 
 class MyProfilePage extends StatefulWidget {
   const MyProfilePage(
@@ -27,6 +32,63 @@ class MyProfilePage extends StatefulWidget {
 }
 
 class _MyProfilePageState extends State<MyProfilePage> {
+  UserData? currentUser;
+  late int _selectedIndex;
+  String? userId;
+  bool _isLoggedIn = true;
+
+  void _handleLogout() async {
+    await FirebaseAuth.instance.signOut();
+    setState(() {
+      currentUser = null;
+      userId = null;
+      _isLoggedIn = false;
+      _selectedIndex = 0;
+    });
+  }
+
+  void gotoHomePage() {
+    if (currentUser == true) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => MyHomePage(
+            users: currentUser!,
+            userId: userId!,
+          )),
+      );
+    } else {
+      // Điều hướng qua trang personalProfilePage nếu không có currentUser
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => MyHomePage(
+                  users: UserData(uid: ''),
+                  userId: '',
+                )),
+      );
+    }
+  }
+
+  void gotoProfilePage() {
+      if (currentUser == true) {
+        // Hiển thị Flushbar nếu currentUser là null
+        errorSnackBar(
+          errMess: 'Bạn đang ở trang cá nhân!',
+        ).build(context);
+      } else {
+        // Điều hướng qua trang personalProfilePage nếu có currentUser
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+              builder: (context) => personalProfilePage(
+                    currentUser: currentUser,
+                    isLogin: _isLoggedIn,
+                  )),
+        );
+      }
+    }
+  GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey();
   @override
   build(BuildContext context) {
     final user1 = widget.user;
@@ -37,6 +99,35 @@ class _MyProfilePageState extends State<MyProfilePage> {
 
     //QuerySnapshot vidbelongtodocid = await firestore.collection('videos').where
     return Scaffold(
+      key: _scaffoldKey,
+      appBar: AppBar(
+        title: const Text(
+          "Profile",
+          style: TextStyle(
+            color: Colors.white, 
+            fontSize: 25.0,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        leading: Container(
+          padding: const EdgeInsets.only(left:30.0),
+          child: IconButton(
+            icon: Icon(
+              Icons.menu,
+              color: Colors.white,
+            ),
+            onPressed: () {
+              _scaffoldKey.currentState?.openDrawer();
+            },
+          ),
+        ),
+      ),
+      drawer: drawerMenu(
+        userData: currentUser,
+        onHomePageTap: gotoHomePage,
+        onProfileTap: gotoProfilePage,
+        onSignOut: _handleLogout,
+      ),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         children: <Widget>[
@@ -103,55 +194,6 @@ class _MyProfilePageState extends State<MyProfilePage> {
               ],
             ),
           ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              Container(
-                decoration: BoxDecoration(
-                  color: Colors.black,
-                  border: Border.all(width: 4),
-                  borderRadius: BorderRadius.circular(15),
-                ),
-                child: TextButton(
-                  onPressed: () {
-                    _showDialog();
-                  },
-                  style: TextButton.styleFrom(
-                    padding: EdgeInsets.zero,
-                    tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                    // padding: EdgeInsets.fromLTRB(0, 20, 0, 20),
-
-                    foregroundColor: Colors.white,
-                  ),
-                  child: const Text("Edit video"),
-                ),
-              ),
-              Container(
-                decoration: BoxDecoration(
-                  color: Colors.black,
-                  border: Border.all(width: 4),
-                  borderRadius: BorderRadius.circular(15),
-                ),
-                child: deleteVideo(
-                  info: widget.info,
-                ),
-              ),
-            ],
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              TextButton(
-                  style: TextButton.styleFrom(
-                    primary: Colors.purpleAccent,
-                    backgroundColor: Colors.black,
-                  ),
-                  // ignore: avoid_print hct
-                  onPressed: () => print('chang to manage profile page'),
-                  child: const Text('Manage Profile'))
-            ],
-          ),
-
           //render video co dieu kien hct
           StreamBuilder(
               stream: videos.snapshots(),
