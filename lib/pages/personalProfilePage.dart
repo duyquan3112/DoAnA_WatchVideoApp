@@ -223,8 +223,7 @@ class _personalProfilePageState extends State<personalProfilePage> {
                   children: [
                     TextButton(
                       style: TextButton.styleFrom(
-                        primary: Colors.purpleAccent,
-                        backgroundColor: Colors.black,
+                        backgroundColor: Colors.lightBlue,
                       ),
                       onPressed: () {
                         Navigator.push(
@@ -232,7 +231,12 @@ class _personalProfilePageState extends State<personalProfilePage> {
                           MaterialPageRoute(builder: (context) => manageProfilePage()),
                         );
                       },
-                      child: const Text('Manage Profile'),
+                      child: const Text(
+                        'Manage Profile',
+                        style: TextStyle(
+                          color: Colors.white,
+                        ),
+                      ),
                     ),
                   ],
                 ),
