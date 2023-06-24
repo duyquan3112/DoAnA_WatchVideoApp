@@ -12,6 +12,7 @@ import 'package:do_an/widgets/deleteVideo.dart';
 import 'package:do_an/widgets/selectFiles.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:do_an/widgets/error_SnackBar.dart';
+import 'package:do_an/pages/manageProfilePage.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
@@ -142,7 +143,7 @@ class _personalProfilePageState extends State<personalProfilePage> {
                 child: Padding(
                   padding: const EdgeInsets.all(20.0),
                   child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    mainAxisAlignment: MainAxisAlignment.start,
                     children: [
                       SizedBox(
                         child: IconButton(
@@ -160,57 +161,14 @@ class _personalProfilePageState extends State<personalProfilePage> {
                           left: 0,
                         ),
                         child: const Text(
-                          "Home",
+                          "Profile Page",
                           style: TextStyle(
                             color: Colors.white, 
                             fontSize: 25.0,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
-                      ),
-                      Icon(
-                        Icons.logout,
-                      )         
-                    ],
-                  ),
-                ),
-              ),
-            ),
-            Positioned(
-              top: 80.0,
-              left: 0.0,
-              right: 0.0,
-              child: Container(
-                padding: EdgeInsets.symmetric(horizontal: 30.0),
-                child: DecoratedBox(
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(20.0),
-                      border: Border.all(
-                          color: Colors.grey.withOpacity(0.5), width: 1.0),
-                      color: Colors.white),
-                  child: Row(
-                    children: [
-                      Expanded(
-                        child: Padding(
-                          padding: const EdgeInsets.only(
-                            left: 15.0,
-                          ),
-                          child: TextField(
-                            decoration: InputDecoration(
-                              border: InputBorder.none,
-                              hintText: "Under Maintenance ( Đang Fixbug )",
-                            ),
-                          ),
-                        ),
-                      ),
-                      IconButton(
-                        icon: Icon(
-                          Icons.search,
-                          color: Colors.lightBlue,
-                        ),
-                        onPressed: () {
-                        },
-                      ),
+                      ),       
                     ],
                   ),
                 ),
@@ -263,19 +221,11 @@ class _personalProfilePageState extends State<personalProfilePage> {
                         border: Border.all(width: 4),
                         borderRadius: BorderRadius.circular(15),
                       ),
-                      child: TextButton(
-                        onPressed: () {
-                          // _showDialog();
-                        },
-                        style: TextButton.styleFrom(
-                          padding: EdgeInsets.zero,
-                          tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                          // padding: EdgeInsets.fromLTRB(0, 20, 0, 20),
-
-                          foregroundColor: Colors.white,
-                        ),
-                        child: const Text("Edit video"),
-                      ),
+                      child: Container(
+                        height: 50.0,
+                        width: 200.0,
+                        color: Colors.grey,
+                      )
                     ),
                     // Container(
                     //   decoration: BoxDecoration(
@@ -298,7 +248,7 @@ class _personalProfilePageState extends State<personalProfilePage> {
                           backgroundColor: Colors.black,
                         ),
                         // ignore: avoid_print hct
-                        onPressed: () => print('chang to manage profile page'),
+                        onPressed: () => MaterialPageRoute(builder: (context) => manageProfilePage()),
                         child: const Text('Manage Profile'))
                   ],
                 ),
@@ -358,36 +308,6 @@ class _personalProfilePageState extends State<personalProfilePage> {
         onProfileTap: gotoProfilePage,
         onSignOut: _handleLogout,
       ),
-      bottomNavigationBar: CurvedNavigationBar(
-        backgroundColor: Colors.white,
-        color: Colors.lightBlue,
-        items: [
-          Icon(
-            Icons.home,
-            color: Colors.white,
-          ),
-          Icon(
-            Icons.library_add_outlined,
-            color: Colors.white
-          ),
-        ],
-        onTap: _onItemTapped,
-      ),
-      floatingActionButton:
-        FloatingActionButton(
-          backgroundColor: Colors.lightBlue,
-          elevation: 0,
-          child: Icon(Icons.add),
-          onPressed: () {
-            if (_isLoggedIn) {
-              _showDialog();
-            } else {
-              Navigator.push(
-                  context, MaterialPageRoute(builder: (_) => signInPage()));
-            }
-          },
-        ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
     );
   }
   // void _showDialog() {

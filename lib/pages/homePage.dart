@@ -1,31 +1,31 @@
 import 'dart:io';
-import 'package:curved_navigation_bar/curved_navigation_bar.dart';
+import 'package:path/path.dart';
+import '../widgets/selectFiles.dart';
+import 'package:flutter/material.dart';
 import 'package:do_an/pages/gamePage.dart';
-import 'package:do_an/pages/listLikedVideoPage.dart';
-import 'package:do_an/pages/listVideoPage.dart';
 import 'package:do_an/pages/moviePage.dart';
-import 'package:do_an/pages/personalProfilePage.dart';
-import 'package:do_an/pages/profilePage.dart';
+import 'package:do_an/pages/musicPage.dart';
 import 'package:do_an/pages/searchPage.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:do_an/models/infoVideo.dart';
 import 'package:do_an/pages/signInPage.dart';
-import 'package:do_an/models/getUserData.dart';
+import 'package:do_an/pages/profilePage.dart';
 import 'package:do_an/pages/upLoadVideo.dart';
 import 'package:do_an/values/app_assets.dart';
-import 'package:do_an/widgets/drawerMenu.dart';
-import 'package:do_an/widgets/error_SnackBar.dart';
 import 'package:do_an/widgets/videoCard.dart';
+import 'package:do_an/models/getUserData.dart';
+import 'package:do_an/widgets/drawerMenu.dart';
+import 'package:do_an/pages/listVideoPage.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:flutter/material.dart';
-import 'package:path/path.dart';
-
+import 'package:do_an/widgets/error_SnackBar.dart';
+import 'package:do_an/pages/listLikedVideoPage.dart';
+import 'package:do_an/pages/personalProfilePage.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:slide_popup_dialog_null_safety/slide_popup_dialog.dart'
+
     as slideDialog;
 
-import '../widgets/selectFiles.dart';
-import 'package:do_an/pages/musicPage.dart';
 
 const List<String> list = <String>['Newest', 'Oldest', 'Likest'];
 
@@ -231,25 +231,44 @@ class _MyHomePageState extends State<MyHomePage> {
                       color: Colors.white),
                   child: Row(
                     children: [
-                      Expanded(
-                        child: Padding(
-                          padding: const EdgeInsets.only(
-                            left: 15.0,
-                          ),
-                          child: TextField(
-                            decoration: InputDecoration(
-                              border: InputBorder.none,
-                              hintText: "Under Maintenance ( Đang Fixbug )",
+                      GestureDetector(
+                        child: Container(
+                          height: 50.0,
+                          child: Center(
+                            child: Expanded(
+                              child: Padding(
+                                padding: const EdgeInsets.only(
+                                  left: 15.0,
+                                ),
+                                child: Row(
+                                  children: [
+                                    Text(
+                                      'Search',
+                                      style: TextStyle(
+                                        fontSize: 18.0,
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      width: 220.0,
+                                    ),
+                                    Icon(
+                                      Icons.search,
+                                      color: Colors.lightBlue,
+                                    )
+                                  ],
+                                ),
+                              ),
                             ),
                           ),
                         ),
-                      ),
-                      IconButton(
-                        icon: Icon(
-                          Icons.search,
-                          color: Colors.lightBlue,
-                        ),
-                        onPressed: () {
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => searchPage(
+                              isLogin: _isLoggedIn,
+                              users: widget.users,
+                            )),
+                          );
                         },
                       ),
                     ],
@@ -453,7 +472,6 @@ class _MyHomePageState extends State<MyHomePage> {
 
       drawer: Builder(
         builder: (context) => drawerMenu(
-          
           userData: UserData.getCurrentUser(),
           onHomePageTap: () {
             
@@ -463,6 +481,7 @@ class _MyHomePageState extends State<MyHomePage> {
         ),
       ),
       bottomNavigationBar: CurvedNavigationBar(
+        height: 50.0,
         backgroundColor: Colors.white,
         color: Colors.lightBlue,
         items: [
