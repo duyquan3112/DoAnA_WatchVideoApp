@@ -29,66 +29,85 @@ class listVideo extends StatefulWidget {
 
 class _listVideoState extends State<listVideo> {
   UserData? currentUser;
+  int _visibleVideoCount = 5;
+  int _additionalVideoCount = 5;
 
   @override
   void initState() {
     super.initState();
     currentUser = widget.users;
-    setState(() {});
   }
 
   @override
   Widget build(BuildContext context) {
-    //String uRlVideo = AppAssets.videoDefault;
-
     var videos = FirebaseFirestore.instance
         .collection('video_list')
         .orderBy(widget.filter!, descending: widget.isDes!);
+
     return StreamBuilder(
-        stream: videos.snapshots(),
-        builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
-          if (snapshot.hasData) {
-            return Flexible(
-              child: ListView.builder(
-                  physics: const BouncingScrollPhysics(),
-                  padding: const EdgeInsets.all(8),
-                  shrinkWrap: true,
-                  itemCount: snapshot.data!.docs.length,
-                  itemBuilder: (context, index) {
-                    infoVideo info = infoVideo();
-                    info.description =
-                        snapshot.data!.docs[index]['description'];
-                    info.title = snapshot.data!.docs[index]['title'];
-                    info.url = snapshot.data!.docs[index]['videoUrl'];
-                    info.vidId = snapshot.data!.docs[index].id;
-                    info.userId = snapshot.data!.docs[index]['ownerId'];
-                    info.types = snapshot.data!.docs[index]['type'];
-                    info.ownerName = snapshot.data!.docs[index]['ownerName'];
-                    info.likedCount = snapshot.data!.docs[index]['likedCount'];
-                    return videoCard(
-                      key: UniqueKey(),
-                      users: currentUser,
-                      // uRLVideo: snapshot.data!.docs[index]['videoUrl'],
-                      // title: snapshot.data!.docs[index]['title'],
-                      // des: snapshot.data!.docs[index]['description'],
-                      // vidId: snapshot.data!.docs[index].id,
-                      infoVid: info,
-                      isLogin: widget.isLogin,
-                    );
-                  }
-                  // Card(
-                  //     child: ListTile(
-                  //   isThreeLine: true,
-                  //   leading: CircleAvatar(),
-                  //   title: Text(snapshot.data!.docs[index]['title']),
-                  //   subtitle: Text(snapshot.data!.docs[index]['description']),
-                  //   trailing: Icon(Icons.more_vert),
-                  // )),
-                  ),
-            );
-          } else {
-            return Center(child: const Text('No data'));
-          }
-        });
+      stream: videos.snapshots(),
+      builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+        if (snapshot.hasData) {
+          final videoCount = snapshot.data!.docs.length;
+          final visibleVideoCount = _visibleVideoCount <= videoCount
+              ? _visibleVideoCount
+              : videoCount;
+
+          return Flexible(
+            child: ListView.builder(
+              physics: const BouncingScrollPhysics(),
+              padding: const EdgeInsets.all(8),
+              shrinkWrap: true,
+              itemCount:
+                  visibleVideoCount + (_visibleVideoCount < videoCount ? 1 : 0),
+              itemBuilder: (context, index) {
+                if (_visibleVideoCount < videoCount &&
+                    index == visibleVideoCount) {
+                  return GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        _visibleVideoCount += _additionalVideoCount;
+                      });
+                    },
+                    child: Container(
+                      height: 50,
+                      color: Colors.grey[300],
+                      child: Center(
+                        child: Text(
+                          'Load More',
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 16,
+                          ),
+                        ),
+                      ),
+                    ),
+                  );
+                }
+
+                infoVideo info = infoVideo();
+                info.description = snapshot.data!.docs[index]['description'];
+                info.title = snapshot.data!.docs[index]['title'];
+                info.url = snapshot.data!.docs[index]['videoUrl'];
+                info.vidId = snapshot.data!.docs[index].id;
+                info.userId = snapshot.data!.docs[index]['ownerId'];
+                info.types = snapshot.data!.docs[index]['type'];
+                info.ownerName = snapshot.data!.docs[index]['ownerName'];
+                info.likedCount = snapshot.data!.docs[index]['likedCount'];
+
+                return videoCard(
+                  key: UniqueKey(),
+                  users: currentUser,
+                  infoVid: info,
+                  isLogin: widget.isLogin,
+                );
+              },
+            ),
+          );
+        } else {
+          return Center(child: const Text('No data'));
+        }
+      },
+    );
   }
 }
