@@ -56,18 +56,18 @@ class _videoCardState extends State<videoCard> {
 
   //Ham khoi tao thumbnail cho video
   //Thumbnail la frame dau tien cua video
-  void genThumbnail() async {
-    _thumbnailUrl = await VideoThumbnail.thumbnailFile(
-        video: widget.infoVid.url!,
-        thumbnailPath: (await getTemporaryDirectory()).path,
-        imageFormat: ImageFormat.WEBP);
-    setState(() {});
-  }
+  // void genThumbnail() async {
+  //   _thumbnailUrl = await VideoThumbnail.thumbnailFile(
+  //       video: widget.infoVid.url!,
+  //       thumbnailPath: (await getTemporaryDirectory()).path,
+  //       imageFormat: ImageFormat.WEBP);
+  //   setState(() {});
+  // }
 
   @override
   void initState() {
     super.initState();
-    genThumbnail();
+    // genThumbnail();
     currentUser = UserData.getCurrentUser();
   }
 
@@ -93,9 +93,15 @@ class _videoCardState extends State<videoCard> {
           children: [
             Stack(fit: StackFit.loose, alignment: Alignment.center, children: [
               Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(10.0),
+                    topRight: Radius.circular(10.0),
+                  ),
+                  color: Colors.black,
+                ),
                 height: size.height * 1 / 5,
                 width: size.width,
-                color: Colors.black,
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -103,7 +109,7 @@ class _videoCardState extends State<videoCard> {
                       Stack(alignment: Alignment.center, children: [
                         Container(
                           width: size.width * 1 / 5,
-                          color: Colors.black,
+                          color: Colors.white,
                         ),
                         Image.file(
                           File(_thumbnailUrl!),
@@ -127,11 +133,41 @@ class _videoCardState extends State<videoCard> {
               )
             ]),
             Container(
-              color: Colors.white,
+              decoration: BoxDecoration(
+                color: Colors.lightBlue,
+                borderRadius: BorderRadius.only(
+                  bottomLeft: Radius.circular(10.0),
+                  bottomRight: Radius.circular(10.0),
+                ),
+              ),
               child: ListTile(
                 isThreeLine: true,
-                title: Text(widget.infoVid.title!),
-                subtitle: Text(widget.infoVid.ownerName!),
+                title: Container(
+                  padding: EdgeInsets.only(
+                    top: 8.0,
+                    left: 5.0,
+                  ),
+                  child: Text(
+                    widget.infoVid.title!,
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 16.0
+                    ),
+                  ),
+                ),
+                subtitle: Container(
+                  padding: EdgeInsets.only(
+                    top: 6.0,
+                    left: 10.0
+                  ),
+                  child: Text(
+                    widget.infoVid.ownerName!,
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold
+                    ),
+                  ),
+                ),
                 trailing: (currentUser != null &&
                         currentUser!.docId == widget.infoVid.userId)
                     ? IconButton(
@@ -154,7 +190,11 @@ class _videoCardState extends State<videoCard> {
                             ))
                     : IconButton(
                         onPressed: () {},
-                        icon: const Icon(Icons.more_vert_outlined)),
+                        icon: const Icon(
+                          Icons.more_vert_outlined,
+                          color: Colors.white,
+                        )
+                      ),
               ),
             ),
           ],
