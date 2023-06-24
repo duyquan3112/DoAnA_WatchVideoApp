@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:do_an/pages/homePage.dart';
+import 'package:do_an/widgets/info_Box.dart';
 import 'package:do_an/models/getUserData.dart';
 import 'package:do_an/widgets/drawerMenu.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -98,63 +99,93 @@ class _manageProfilePageState extends State<manageProfilePage> {
     
     return Scaffold(
       key: _scaffoldKey,
-      body: Container(
-        height: 1000.0,
-        child: Stack(
-          children: <Widget>[
-            Container(
-              width: MediaQuery.of(context).size.width,
-              height: 100.0,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.only(
-                  bottomLeft: Radius.circular(30.0),
-                  bottomRight: Radius.circular(30.0),
-                ),
-                color: Colors.lightBlue,
-              ),
-              child: Center(
-                child: Padding(
-                  padding: const EdgeInsets.all(20.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      SizedBox(
-                        child: IconButton(
-                          icon: Icon(
-                            Icons.menu,
-                            color: Colors.white,
-                          ),
-                          onPressed: () {
-                            _scaffoldKey.currentState?.openDrawer();
-                          },
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(
-                          left: 0,
-                        ),
-                        child: const Text(
-                          "Manange Profile",
-                          style: TextStyle(
-                            color: Colors.white, 
-                            fontSize: 25.0,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ),        
-                    ],
-                  ),
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
       drawer: drawerMenu(
         userData: currentUser,
         onHomePageTap: gotoHomePage,
         onProfileTap: gotoProfilePage,
         onSignOut: _handleLogout,
+      ),
+      appBar: AppBar(
+        title: const Text(
+          "Manange Profile",
+          style: TextStyle(
+            color: Colors.white, 
+            fontSize: 25.0,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        leading: Container(
+          padding: const EdgeInsets.only(left:30.0),
+          child: IconButton(
+            icon: Icon(
+              Icons.menu,
+              color: Colors.white,
+            ),
+            onPressed: () {
+              _scaffoldKey.currentState?.openDrawer();
+            },
+          ),
+        ),
+      ),
+      body: Container(
+        height: 1000.0,
+        child: Stack(
+          children: <Widget>[
+            ListView(
+              children: [
+                const SizedBox(
+                  height: 50.0,
+                ),
+                CircleAvatar(
+                  radius: 30,
+                  backgroundImage: NetworkImage(
+                    currentUser!.avatarUrl!,
+                    scale: 10,
+                  ),
+                ),
+                const SizedBox(
+                  height: 20.0,
+                ),
+                Text(
+                  currentUser!.email!,
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 20.0,
+                    fontWeight: FontWeight.w300
+                  ),
+                ),
+                const SizedBox(
+                  height: 50.0,
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(
+                    left: 25.0,
+                  ),
+                  child: Text(
+                    'My Details',
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 15.0
+                    ),
+                  ),
+                ),
+                infoTextBox(
+                  text: currentUser!.username!, 
+                  sectionName: 'Username'
+                ),
+                infoTextBox(
+                  text: currentUser!.firstName!, 
+                  sectionName: 'First name'
+                ),
+                infoTextBox(
+                  text: currentUser!.lastName!, 
+                  sectionName: 'Last name'
+                ),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }
