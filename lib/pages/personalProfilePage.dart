@@ -173,7 +173,9 @@ class _personalProfilePageState extends State<personalProfilePage> {
                             fontWeight: FontWeight.bold,
                           ),
                         ),
+
                       ),
+
                     ],
                   ),
                 ),
@@ -222,6 +224,7 @@ class _personalProfilePageState extends State<personalProfilePage> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     TextButton(
+
                       style: TextButton.styleFrom(
                         backgroundColor: Colors.lightBlue,
                       ),
@@ -238,6 +241,7 @@ class _personalProfilePageState extends State<personalProfilePage> {
                         ),
                       ),
                     ),
+
                   ],
                 ),
 

@@ -130,9 +130,8 @@ class _videoCardState extends State<videoCard> {
               color: Colors.white,
               child: ListTile(
                 isThreeLine: true,
-                leading: const CircleAvatar(),
                 title: Text(widget.infoVid.title!),
-                subtitle: Text(widget.infoVid.description!),
+                subtitle: Text(widget.infoVid.ownerName!),
                 trailing: (currentUser != null &&
                         currentUser!.docId == widget.infoVid.userId)
                     ? IconButton(
