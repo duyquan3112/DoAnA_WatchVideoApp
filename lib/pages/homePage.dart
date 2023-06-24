@@ -47,7 +47,7 @@ class _MyHomePageState extends State<MyHomePage> {
   File? file;
   UserData? currentUser;
   String? userId;
-  infoVideo? info;
+  // infoVideo? infoVid;
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
@@ -99,7 +99,7 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
       likedVideo(isLogin: _isLoggedIn),
     ];
-    infoVideo? info;
+    //infoVideo? infoVid;
     void gotoProfilePage() {
       if (currentUser == null) {
         // Hiển thị Flushbar nếu currentUser là null
@@ -111,6 +111,7 @@ class _MyHomePageState extends State<MyHomePage> {
         Navigator.push(
           context,
           MaterialPageRoute(builder: (context) => personalProfilePage(
+            
             currentUser: currentUser,
             isLogin: _isLoggedIn,
           )),

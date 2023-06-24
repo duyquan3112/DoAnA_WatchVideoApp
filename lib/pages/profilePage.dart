@@ -192,7 +192,8 @@ class _MyProfilePageState extends State<MyProfilePage> {
                   );
                 }
                 return const Text('no data');
-              })
+              }
+            )
         ],
       ),
     );

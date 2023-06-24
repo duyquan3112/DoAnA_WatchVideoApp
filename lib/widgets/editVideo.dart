@@ -1,17 +1,17 @@
-import 'dart:ffi';
 import 'dart:io';
-
-import 'package:do_an/models/getUserData.dart';
-import 'package:do_an/models/infoVideo.dart';
-import 'package:file_picker/file_picker.dart';
-import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_storage/firebase_storage.dart';
-import 'package:flutter/material.dart';
+import 'dart:ffi';
 import 'package:path/path.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-
 import '../api/firebase_api.dart';
 import '../pages/upLoadVideo.dart';
+import 'package:flutter/material.dart';
+import 'package:do_an/models/infoVideo.dart';
+import 'package:file_picker/file_picker.dart';
+import 'package:do_an/models/getUserData.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+
+
 
 const List<String> list = <String>['Movies', 'Games', 'Musics'];
 
@@ -45,54 +45,52 @@ class _editVideoState extends State<editVideo> {
   Widget build(BuildContext context) {
     value:
     _type == null ? null : types[_type!];
-    return Expanded(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          title(),
-          description(),
-          DropdownButton<String>(
-            value: dropdownValue,
-            icon: const Icon(Icons.arrow_downward),
-            elevation: 16,
-            style: const TextStyle(color: Colors.blue),
-            underline: Container(
-              height: 2,
-              color: Colors.blue,
-            ),
-            onChanged: (String? value) {
-              // This is called when the user selects an item.
-              setState(() {
-                dropdownValue = value!;
-                _type = types.indexOf(value);
-              });
-            },
-            items: list.map<DropdownMenuItem<String>>((String value) {
-              return DropdownMenuItem<String>(
-                value: value,
-                child: Text(value),
-              );
-            }).toList(),
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        title(),
+        description(),
+        DropdownButton<String>(
+          value: dropdownValue,
+          icon: const Icon(Icons.arrow_downward),
+          elevation: 16,
+          style: const TextStyle(color: Colors.blue),
+          underline: Container(
+            height: 2,
+            color: Colors.blue,
           ),
-          TextButton(
-            onPressed: () async {
-              // await upLoadFile();
-              // pushFile();
-              if(titleController.text ==null){
-               await Update(await getVideoData(1), descriptionController.text, await getTypeVideo());
-              }else if(descriptionController.text == null){
-               await Update(await getVideoData(0), titleController.text, await getTypeVideo());
-              }else if(titleController.text ==null && descriptionController.text == null){
-                await Update(await getVideoData(1), await getVideoData(0), await getTypeVideo());
-              }else{
-                await Update(titleController.text, descriptionController.text, await getTypeVideo());
-              }
-            },
-            child: Text('Update'),
-          ),
-         
-        ],
-      ),
+          onChanged: (String? value) {
+            // This is called when the user selects an item.
+            setState(() {
+              dropdownValue = value!;
+              _type = types.indexOf(value);
+            });
+          },
+          items: list.map<DropdownMenuItem<String>>((String value) {
+            return DropdownMenuItem<String>(
+              value: value,
+              child: Text(value),
+            );
+          }).toList(),
+        ),
+        TextButton(
+          onPressed: () async {
+            // await upLoadFile();
+            // pushFile();
+            if(titleController.text ==null){
+             await Update(await getVideoData(1), descriptionController.text, await getTypeVideo());
+            }else if(descriptionController.text == null){
+             await Update(await getVideoData(0), titleController.text, await getTypeVideo());
+            }else if(titleController.text ==null && descriptionController.text == null){
+              await Update(await getVideoData(1), await getVideoData(0), await getTypeVideo());
+            }else{
+              await Update(titleController.text, descriptionController.text, await getTypeVideo());
+            }
+          },
+          child: Text('Update'),
+        ),
+       
+      ],
     );
   }
 
