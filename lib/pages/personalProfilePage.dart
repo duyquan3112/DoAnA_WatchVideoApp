@@ -173,7 +173,9 @@ class _personalProfilePageState extends State<personalProfilePage> {
                             fontWeight: FontWeight.bold,
                           ),
                         ),
+
                       ),
+
                     ],
                   ),
                 ),
@@ -222,6 +224,7 @@ class _personalProfilePageState extends State<personalProfilePage> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     TextButton(
+
                       style: TextButton.styleFrom(
                         primary: Colors.purpleAccent,
                         backgroundColor: Colors.black,
@@ -234,6 +237,7 @@ class _personalProfilePageState extends State<personalProfilePage> {
                       },
                       child: const Text('Manage Profile'),
                     ),
+
                   ],
                 ),
 
