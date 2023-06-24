@@ -14,7 +14,6 @@ import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:video_thumbnail/video_thumbnail.dart';
 
-
 class videoCard extends StatefulWidget {
   final infoVideo infoVid;
   final UserData? users;
@@ -53,20 +52,20 @@ class _videoCardState extends State<videoCard> {
     }
   }
 
-  ///Ham khoi tao thumbnail cho video
-  ///Thumbnail la frame dau tien cua video
-  // void genThumbnail() async {
-  //   _thumbnailUrl = await VideoThumbnail.thumbnailFile(
-  //       video: widget.infoVid.url!,
-  //       thumbnailPath: (await getTemporaryDirectory()).path,
-  //       imageFormat: ImageFormat.WEBP);
-  //   setState(() {});
-  // }
+  //Ham khoi tao thumbnail cho video
+  //Thumbnail la frame dau tien cua video
+  void genThumbnail() async {
+    _thumbnailUrl = await VideoThumbnail.thumbnailFile(
+        video: widget.infoVid.url!,
+        thumbnailPath: (await getTemporaryDirectory()).path,
+        imageFormat: ImageFormat.WEBP);
+    setState(() {});
+  }
 
   @override
   void initState() {
     super.initState();
-    // genThumbnail();
+    genThumbnail();
     currentUser = UserData.getCurrentUser();
   }
 
@@ -132,20 +131,29 @@ class _videoCardState extends State<videoCard> {
                 leading: const CircleAvatar(),
                 title: Text(widget.infoVid.title!),
                 subtitle: Text(widget.infoVid.description!),
-                trailing:  (currentUser != null &&  currentUser!.docId == widget.infoVid.userId) ? IconButton(
-                  icon: const Icon(Icons.more_vert_outlined),
-                  onPressed: () => showBottomSheet(
-                    context: context,
-                    builder: (context) => Container(
-                      child: Column(
-                        children: [
-                          deleteVideo(info: widget.infoVid), 
-                          editVideo(info: widget.infoVid),
-                        ],
-                      ),
-                    ),
-                  ) 
-                ) : IconButton(onPressed: (){}, icon: const Icon(Icons.more_vert_outlined)),
+                trailing: (currentUser != null &&
+                        currentUser!.docId == widget.infoVid.userId)
+                    ? IconButton(
+                        icon: const Icon(Icons.more_vert_outlined),
+                        onPressed: () => showBottomSheet(
+                              context: context,
+                              builder: (context) => Container(
+                                child: Column(
+                                  children: [
+                                    deleteVideo(info: widget.infoVid),
+                                    TextButton(
+                                        onPressed: () => showDialog(
+                                            context: context,
+                                            builder: (context) => editVideo(
+                                                info: widget.infoVid)),
+                                        child: Text('Edit Video'))
+                                  ],
+                                ),
+                              ),
+                            ))
+                    : IconButton(
+                        onPressed: () {},
+                        icon: const Icon(Icons.more_vert_outlined)),
               ),
             ),
           ],
@@ -153,6 +161,4 @@ class _videoCardState extends State<videoCard> {
       ),
     );
   }
-} 
-
-
+}
