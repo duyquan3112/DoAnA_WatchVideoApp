@@ -173,6 +173,9 @@ class _personalProfilePageState extends State<personalProfilePage> {
                             fontWeight: FontWeight.bold,
                           ),
                         ),
+
+                      )
+
                     ],
                   ),
                 ),
@@ -261,7 +264,7 @@ class _personalProfilePageState extends State<personalProfilePage> {
                           backgroundColor: Colors.black,
                         ),
                         // ignore: avoid_print hct
-                        onPressed: () => MaterialPageRoute(builder: (context) => manageProfilePage()),
+          onPressed: () => MaterialPageRoute(builder: (context) => manageProfilePage()),
                         child: const Text('Manage Profile'))
                   ],
                 ),
