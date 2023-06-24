@@ -11,15 +11,11 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 
-
-
 const List<String> list = <String>['Movies', 'Games', 'Musics'];
 
 class editVideo extends StatefulWidget {
   final infoVideo info;
-  const editVideo(
-      {super.key, required this.info});
-
+  const editVideo({super.key, required this.info});
 
   @override
   State<editVideo> createState() => _editVideoState();
@@ -28,8 +24,6 @@ class editVideo extends StatefulWidget {
 class _editVideoState extends State<editVideo> {
   final titleController = TextEditingController();
   final descriptionController = TextEditingController();
-
-
 
   String dropdownValue = list.first;
 
@@ -45,52 +39,58 @@ class _editVideoState extends State<editVideo> {
   Widget build(BuildContext context) {
     value:
     _type == null ? null : types[_type!];
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        title(),
-        description(),
-        DropdownButton<String>(
-          value: dropdownValue,
-          icon: const Icon(Icons.arrow_downward),
-          elevation: 16,
-          style: const TextStyle(color: Colors.blue),
-          underline: Container(
-            height: 2,
-            color: Colors.blue,
+    return Expanded(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          title(),
+          description(),
+          DropdownButton<String>(
+            value: dropdownValue,
+            icon: const Icon(Icons.arrow_downward),
+            elevation: 16,
+            style: const TextStyle(color: Colors.blue),
+            underline: Container(
+              height: 2,
+              color: Colors.blue,
+            ),
+            onChanged: (String? value) {
+              // This is called when the user selects an item.
+              setState(() {
+                dropdownValue = value!;
+                _type = types.indexOf(value);
+              });
+            },
+            items: list.map<DropdownMenuItem<String>>((String value) {
+              return DropdownMenuItem<String>(
+                value: value,
+                child: Text(value),
+              );
+            }).toList(),
           ),
-          onChanged: (String? value) {
-            // This is called when the user selects an item.
-            setState(() {
-              dropdownValue = value!;
-              _type = types.indexOf(value);
-            });
-          },
-          items: list.map<DropdownMenuItem<String>>((String value) {
-            return DropdownMenuItem<String>(
-              value: value,
-              child: Text(value),
-            );
-          }).toList(),
-        ),
-        TextButton(
-          onPressed: () async {
-            // await upLoadFile();
-            // pushFile();
-            if(titleController.text ==null){
-             await Update(await getVideoData(1), descriptionController.text, await getTypeVideo());
-            }else if(descriptionController.text == null){
-             await Update(await getVideoData(0), titleController.text, await getTypeVideo());
-            }else if(titleController.text ==null && descriptionController.text == null){
-              await Update(await getVideoData(1), await getVideoData(0), await getTypeVideo());
-            }else{
-              await Update(titleController.text, descriptionController.text, await getTypeVideo());
-            }
-          },
-          child: Text('Update'),
-        ),
-       
-      ],
+          TextButton(
+            onPressed: () async {
+              // await upLoadFile();
+              // pushFile();
+              if (titleController.text == null) {
+                await Update(await getVideoData(1), descriptionController.text,
+                    await getTypeVideo());
+              } else if (descriptionController.text == null) {
+                await Update(await getVideoData(0), titleController.text,
+                    await getTypeVideo());
+              } else if (titleController.text == null &&
+                  descriptionController.text == null) {
+                await Update(await getVideoData(1), await getVideoData(0),
+                    await getTypeVideo());
+              } else {
+                await Update(titleController.text, descriptionController.text,
+                    await getTypeVideo());
+              }
+            },
+            child: Text('Update'),
+          ),
+        ],
+      ),
     );
   }
 
@@ -123,7 +123,7 @@ class _editVideoState extends State<editVideo> {
           textInputAction: TextInputAction.done,
         ),
       );
- 
+
   Future<String> getVideoData(int flag) async {
     var collection = FirebaseFirestore.instance.collection("video_list");
     String description;
@@ -131,13 +131,12 @@ class _editVideoState extends State<editVideo> {
     var docRef = await collection.doc(widget.info.vidId).get();
     // var docRef = db.collection("video_list").doc(widget.info.vidId);
     Map<String, dynamic>? data = docRef.data();
-    if(flag == 0){
-       description = data?['description'];
-       return description;
-      }
+    if (flag == 0) {
+      description = data?['description'];
+      return description;
+    }
     title = data?['title'];
     return title;
-      
   }
 
   Future Update(String title, String description, String type) async {
@@ -150,7 +149,6 @@ class _editVideoState extends State<editVideo> {
     });
   }
 
-
   Future<String> getTypeVideo() async {
     String tmp = '';
     if (_type == 0) {
@@ -161,5 +159,3 @@ class _editVideoState extends State<editVideo> {
     return tmp = 'musics';
   }
 }
-
-
