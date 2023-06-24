@@ -15,7 +15,7 @@ import '../widgets/videoCard.dart';
 class MyProfilePage extends StatefulWidget {
   const MyProfilePage(
       {super.key,
-      required this.info,  
+      required this.info,
       required this.user,
       required this.isLogin});
 
@@ -40,49 +40,52 @@ class _MyProfilePageState extends State<MyProfilePage> {
       body: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         children: <Widget>[
-          Container(
-            color: Colors.blue,
+          // Container(
+          //   color: Colors.blue,
+          //   child: Row(
+          //     mainAxisAlignment: MainAxisAlignment.start,
+          //     children: [
+          //       Padding(
+          //         padding: const EdgeInsets.fromLTRB(0, 0, 200, 0),
+          //         child: IconButton(
+          //           icon: Icon(Icons.arrow_back),
+          //           onPressed: () {},
+          //           iconSize: 40,
+          //         ),
+          //       ),
+          //       IconButton(
+          //         icon: Icon(Icons.alarm),
+          //         onPressed: () {},
+          //         alignment: Alignment.center,
+          //         iconSize: 40,
+          //       ),
+          //       IconButton(
+          //         icon: Icon(Icons.search),
+          //         onPressed: () {},
+          //         alignment: Alignment.center,
+          //         iconSize: 40,
+          //       )
+          //     ],
+          //   ),
+          // ),
+          Padding(
+            padding: const EdgeInsets.fromLTRB(0, 50, 0, 0),
             child: Row(
-              mainAxisAlignment: MainAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(0, 0, 200, 0),
-                  child: IconButton(
-                    icon: Icon(Icons.arrow_back),
-                    onPressed: () {},
-                    iconSize: 40,
-                  ),
-                ),
-                IconButton(
-                  icon: Icon(Icons.alarm),
-                  onPressed: () {},
-                  alignment: Alignment.center,
-                  iconSize: 40,
-                ),
-                IconButton(
-                  icon: Icon(Icons.search),
-                  onPressed: () {},
-                  alignment: Alignment.center,
-                  iconSize: 40,
+                Column(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: CircleAvatar(
+                        //backgroundImage: NetworkImage(user1!.avatarUrl),
+                        backgroundColor: Colors.red,
+                      ),
+                    )
+                  ],
                 )
               ],
             ),
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Column(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: CircleAvatar(
-                      //backgroundImage: NetworkImage(user1!.avatarUrl),
-                      backgroundColor: Colors.red,
-                    ),
-                  )
-                ],
-              )
-            ],
           ),
           Padding(
             padding: const EdgeInsets.fromLTRB(0, 0, 0, 10),
