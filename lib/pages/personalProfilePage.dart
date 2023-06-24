@@ -174,7 +174,7 @@ class _personalProfilePageState extends State<personalProfilePage> {
                           ),
                         ),
 
-                      )
+                      ),
 
                     ],
                   ),
@@ -185,7 +185,7 @@ class _personalProfilePageState extends State<personalProfilePage> {
               mainAxisAlignment: MainAxisAlignment.start,
               children: <Widget>[
                 SizedBox(
-                  height: 150,
+                  height: 120,
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -221,51 +221,23 @@ class _personalProfilePageState extends State<personalProfilePage> {
                   ),
                 ),
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    Container(
-                      decoration: BoxDecoration(
-                        color: Colors.black,
-                        border: Border.all(width: 4),
-                        borderRadius: BorderRadius.circular(15),
-                      ),
-                      child: TextButton(
-                        onPressed: () {
-                          //_showDialog();
-                        },
-                        style: TextButton.styleFrom(
-                          padding: EdgeInsets.zero,
-                          tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                          // padding: EdgeInsets.fromLTRB(0, 20, 0, 20),
-
-                          foregroundColor: Colors.white,
-                        ),
-                        child: const Text("Edit video"),
-                      ),
-                    ),
-                    // Container(
-                    //   decoration: BoxDecoration(
-                    //     color: Colors.black,
-                    //     border: Border.all(width: 4),
-                    //     borderRadius: BorderRadius.circular(15),
-                    //   ),
-                    //   // child: deleteVideo(
-                    //   //   info: widget.info,
-                    //   // ),
-                    // ),
-                  ],
-                ),
-                Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     TextButton(
-                        style: TextButton.styleFrom(
-                          primary: Colors.purpleAccent,
-                          backgroundColor: Colors.black,
-                        ),
-                        // ignore: avoid_print hct
-          onPressed: () => MaterialPageRoute(builder: (context) => manageProfilePage()),
-                        child: const Text('Manage Profile'))
+
+                      style: TextButton.styleFrom(
+                        primary: Colors.purpleAccent,
+                        backgroundColor: Colors.black,
+                      ),
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => manageProfilePage()),
+                        );
+                      },
+                      child: const Text('Manage Profile'),
+                    ),
+
                   ],
                 ),
 
