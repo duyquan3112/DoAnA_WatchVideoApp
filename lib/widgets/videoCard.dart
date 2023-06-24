@@ -1,17 +1,19 @@
 import 'dart:io';
-
-import 'package:date_format/date_format.dart';
-import 'package:do_an/models/getUserData.dart';
-import 'package:do_an/models/infoVideo.dart';
-import 'package:do_an/pages/watchingPage.dart';
-import 'package:do_an/values/app_assets.dart';
-import 'package:do_an/widgets/deleteVideo.dart';
 import 'package:flutter/material.dart';
+import 'package:do_an/models/infoVideo.dart';
+import 'package:date_format/date_format.dart';
+import 'package:do_an/values/app_assets.dart';
+import 'package:do_an/widgets/editVideo.dart';
+import 'package:do_an/models/getUserData.dart';
+import 'package:do_an/pages/watchingPage.dart';
+import 'package:another_flushbar/flushbar.dart';
+import 'package:do_an/widgets/deleteVideo.dart';
+import 'package:video_player/video_player.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
-import 'package:path_provider/path_provider.dart';
-import 'package:video_player/video_player.dart';
 import 'package:video_thumbnail/video_thumbnail.dart';
+
 
 class videoCard extends StatefulWidget {
   final infoVideo infoVid;
@@ -65,7 +67,7 @@ class _videoCardState extends State<videoCard> {
   void initState() {
     super.initState();
     // genThumbnail();
-    currentUser = widget.users;
+    currentUser = UserData.getCurrentUser();
   }
 
   @override
@@ -130,10 +132,20 @@ class _videoCardState extends State<videoCard> {
                 leading: const CircleAvatar(),
                 title: Text(widget.infoVid.title!),
                 subtitle: Text(widget.infoVid.description!),
-                trailing: IconButton(
+                trailing:  (currentUser != null &&  currentUser!.docId == widget.infoVid.userId) ? IconButton(
                   icon: const Icon(Icons.more_vert_outlined),
-                  onPressed: () => deleteVideo(info: widget.infoVid),
-                ),
+                  onPressed: () => showBottomSheet(
+                    context: context,
+                    builder: (context) => Container(
+                      child: Column(
+                        children: [
+                          deleteVideo(info: widget.infoVid), 
+                          editVideo(info: widget.infoVid),
+                        ],
+                      ),
+                    ),
+                  ) 
+                ) : IconButton(onPressed: (){}, icon: const Icon(Icons.more_vert_outlined)),
               ),
             ),
           ],
@@ -141,4 +153,6 @@ class _videoCardState extends State<videoCard> {
       ),
     );
   }
-}
+} 
+
+

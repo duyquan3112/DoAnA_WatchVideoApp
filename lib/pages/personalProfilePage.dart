@@ -1,33 +1,35 @@
 import 'dart:io';
-
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:curved_navigation_bar/curved_navigation_bar.dart';
-import 'package:do_an/models/getUserData.dart';
-import 'package:do_an/models/infoVideo.dart';
-import 'package:do_an/pages/homePage.dart';
-import 'package:do_an/pages/signInPage.dart';
-import 'package:do_an/widgets/deleteVideo.dart';
-import 'package:do_an/widgets/editVideo.dart';
-import 'package:do_an/widgets/error_SnackBar.dart';
-import 'package:do_an/widgets/selectFiles.dart';
-import 'package:do_an/widgets/videoCard.dart';
-import 'package:do_an/widgets/drawerMenu.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:path/path.dart';
+import 'package:flutter/material.dart';
+import 'package:do_an/pages/homePage.dart';
+import 'package:do_an/models/infoVideo.dart';
+import 'package:do_an/pages/signInPage.dart';
+import 'package:do_an/widgets/editVideo.dart';
+import 'package:do_an/widgets/videoCard.dart';
+import 'package:do_an/models/getUserData.dart';
+import 'package:do_an/widgets/drawerMenu.dart';
+import 'package:do_an/widgets/deleteVideo.dart';
+import 'package:do_an/widgets/selectFiles.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:do_an/widgets/error_SnackBar.dart';
+import 'package:flutter/src/widgets/framework.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/src/widgets/placeholder.dart';
+import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:slide_popup_dialog_null_safety/slide_popup_dialog.dart'
+
     as slideDialog;
 
 class personalProfilePage extends StatefulWidget {
   final UserData? currentUser;
   final bool isLogin;
   // final infoVideo info;
+  // final infoVideo info;
   const personalProfilePage({
     super.key,
     required this.isLogin,
     required this.currentUser,
+    // required this.info,
     // required this.info,
   });
 
@@ -70,7 +72,7 @@ class _personalProfilePageState extends State<personalProfilePage> {
     final user1 = widget.currentUser;
     final isLogin = widget.isLogin;
     final docid = user1?.docId;
-    // final name = widget.info.ownerName;
+    final name = widget.currentUser!.username;
     var videos = FirebaseFirestore.instance.collection('video_list');
     
     void gotoProfilePage() {
@@ -116,7 +118,7 @@ class _personalProfilePageState extends State<personalProfilePage> {
       context: this.context,
       child: selectAndUploadFiles(
         users: currentUser!,
-        userId: userId!,
+        userId: currentUser!.docId!,
       ),
     );
   }
@@ -275,16 +277,16 @@ class _personalProfilePageState extends State<personalProfilePage> {
                         child: const Text("Edit video"),
                       ),
                     ),
-                    Container(
-                      decoration: BoxDecoration(
-                        color: Colors.black,
-                        border: Border.all(width: 4),
-                        borderRadius: BorderRadius.circular(15),
-                      ),
-                      // child: deleteVideo(
-                      //   info: widget.info,
-                      // ),
-                    ),
+                    // Container(
+                    //   decoration: BoxDecoration(
+                    //     color: Colors.black,
+                    //     border: Border.all(width: 4),
+                    //     borderRadius: BorderRadius.circular(15),
+                    //   ),
+                    //   // child: deleteVideo(
+                    //   //   info: widget.info,
+                    //   // ),
+                    // ),
                   ],
                 ),
                 Row(
@@ -325,21 +327,21 @@ class _personalProfilePageState extends State<personalProfilePage> {
                                     snapshot.data!.docs[index]['ownerName'];
                                 info.likedCount =
                                     snapshot.data!.docs[index]['likedCount'];
-                                //name owner == name cua video thi moi hien thi video cua user do hct
-                                // if (info.ownerName == name) {
-                                //   return videoCard(
-                                //     key: UniqueKey(),
-                                //     users: user1,
-                                //     // uRLVideo: snapshot.data!.docs[index]['videoUrl'],
-                                //     // title: snapshot.data!.docs[index]['title'],
-                                //     // des: snapshot.data!.docs[index]['description'],
-                                //     // vidId: snapshot.data!.docs[index].id,
-                                //     infoVid: info,
-                                //     isLogin: widget.isLogin,
-                                //   );
-                                // } else {
-                                //   return Container();
-                                // }
+                                // name owner == name cua video thi moi hien thi video cua user do hct
+                                if (info.ownerName == name) {
+                                  return videoCard(
+                                    key: UniqueKey(),
+                                    users: user1,
+                                    // uRLVideo: snapshot.data!.docs[index]['videoUrl'],
+                                    // title: snapshot.data!.docs[index]['title'],
+                                    // des: snapshot.data!.docs[index]['description'],
+                                    // vidId: snapshot.data!.docs[index].id,
+                                    infoVid: info,
+                                    isLogin: widget.isLogin,
+                                  );
+                                } else {
+                                  return Container();
+                                }
                               }),
                         );
                       }
