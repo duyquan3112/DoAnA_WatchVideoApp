@@ -44,6 +44,7 @@ class MyGameAppState extends State<MyGameApp> {
                             info.ownerName =
                                 snapshot.data!.docs[index]['ownerName'];
                             info.userId = snapshot.data!.docs[index]['ownerId'];
+                            info.thumbnailUrl = snapshot.data!.docs[index]['thumbnailUrl'];
                             if (info.types == 'games') {
                               return videoCard(
                                 users: widget.users,

@@ -272,6 +272,7 @@ class _personalProfilePageState extends State<personalProfilePage> {
                                     snapshot.data!.docs[index]['ownerName'];
                                 info.likedCount =
                                     snapshot.data!.docs[index]['likedCount'];
+                                    info.thumbnailUrl = snapshot.data!.docs[index]['thumbnailUrl'];
                                 // name owner == name cua video thi moi hien thi video cua user do hct
                                 if (info.userId == widget.currentUser!.docId) {
                                   return videoCard(

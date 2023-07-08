@@ -39,7 +39,7 @@ class videoCard extends StatefulWidget {
 }
 
 class _videoCardState extends State<videoCard> {
-  String? _thumbnailUrl;
+  //String? _thumbnailUrl;
   UserData? currentUser;
 
   ///Viet lai ham setState
@@ -67,7 +67,7 @@ class _videoCardState extends State<videoCard> {
   @override
   void initState() {
     super.initState();
-    // genThumbnail();
+    //genThumbnail();
     currentUser = UserData.getCurrentUser();
   }
 
@@ -105,14 +105,14 @@ class _videoCardState extends State<videoCard> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    if (_thumbnailUrl != null)
+                    if (widget.infoVid.thumbnailUrl != null)
                       Stack(alignment: Alignment.center, children: [
                         Container(
                           width: size.width * 1 / 5,
                           color: Colors.white,
                         ),
-                        Image.file(
-                          File(_thumbnailUrl!),
+                        Image.network(
+                          (widget.infoVid.thumbnailUrl!),
                           scale: 1,
                           height: size.height * 1 / 5,
                         ),

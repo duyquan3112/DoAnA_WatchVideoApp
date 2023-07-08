@@ -32,6 +32,7 @@ class _likedVideoState extends State<likedVideo> {
       info.types = document['type'];
       info.ownerName = document['ownerName'];
       info.likedCount = document['likedCount'];
+      info.thumbnailUrl = document['thumbnailUrl'];
     });
     return info;
   }
