@@ -54,6 +54,7 @@ class searchPageState extends State<searchPage> {
                 info.types = doc['type'];
                 info.ownerName = doc['ownerName'];
                 info.likedCount = doc['likedCount'];
+                info.thumbnailUrl = doc['thumbnailUrl'];
 
                 // Check if the search input matches the video title
                 if (title.isEmpty ||
