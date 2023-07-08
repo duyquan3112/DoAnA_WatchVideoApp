@@ -445,6 +445,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                 onPressed: () {
                                   setState(() {
                                     _selectedIndex = 0;
+                                    _onItemTapped(0);
                                   });
                                   _widgetOptions.elementAt(_selectedIndex);
                                 },
@@ -475,6 +476,7 @@ class _MyHomePageState extends State<MyHomePage> {
         ),
       ),
       bottomNavigationBar: CurvedNavigationBar(
+        index: _selectedIndex,
         height: 50.0,
         backgroundColor: Colors.white,
         color: Colors.lightBlue,
@@ -488,6 +490,7 @@ class _MyHomePageState extends State<MyHomePage> {
         onTap: _onItemTapped,
       ),
       floatingActionButton: FloatingActionButton(
+        
         backgroundColor: Colors.lightBlue,
         elevation: 0,
         child: Icon(Icons.add),
