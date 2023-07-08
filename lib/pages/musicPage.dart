@@ -45,6 +45,7 @@ class MyMusicAppState extends State<MyMusicApp> {
                             info.ownerName =
                                 snapshot.data!.docs[index]['ownerName'];
                             info.userId = snapshot.data!.docs[index]['ownerId'];
+                            info.thumbnailUrl = snapshot.data!.docs[index]['thumbnailUrl'];
 
                             print(info.types);
                             if (info.types == 'musics') {

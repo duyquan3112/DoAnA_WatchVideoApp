@@ -2,6 +2,7 @@ class infoVideo {
   String? title;
   String? description;
   String? url;
+  String? thumbnailUrl;
   String? userId;
   String? vidId;
   String? types;
@@ -13,6 +14,7 @@ class infoVideo {
     this.title,
     this.description,
     this.url,
+    this.thumbnailUrl,
     this.userId,
     this.vidId,
     this.types,

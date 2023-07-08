@@ -47,6 +47,7 @@ class MyMoviesAppState extends State<MyMoviesApp> {
                             info.ownerName =
                                 snapshot.data!.docs[index]['ownerName'];
                             info.userId = snapshot.data!.docs[index]['ownerId'];
+                            info.thumbnailUrl = snapshot.data!.docs[index]['thumbnailUrl'];
                             // print(snapshot.data!.docs[index].data());
                             print(info.types);
                             if (info.types == 'movies') {

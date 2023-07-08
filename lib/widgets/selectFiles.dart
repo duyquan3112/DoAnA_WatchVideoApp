@@ -1,17 +1,19 @@
-import 'dart:ffi';
 import 'dart:io';
-
-import 'package:date_format/date_format.dart';
-import 'package:do_an/models/getUserData.dart';
-import 'package:file_picker/file_picker.dart';
-import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_storage/firebase_storage.dart';
-import 'package:flutter/material.dart';
+import 'dart:ffi';
+import 'dart:typed_data';
 import 'package:path/path.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-
 import '../api/firebase_api.dart';
 import '../pages/upLoadVideo.dart';
+import 'package:flutter/material.dart';
+import 'package:date_format/date_format.dart';
+import 'package:file_picker/file_picker.dart';
+import 'package:do_an/models/getUserData.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:video_thumbnail/video_thumbnail.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+
+
 
 const List<String> list = <String>['Movies', 'Games', 'Musics'];
 
@@ -136,6 +138,8 @@ class _selectAndUploadFilesState extends State<selectAndUploadFiles> {
   }
 
   Future pushFile(String title, String description) async {
+    final thumbnailBytes = await generateThumbnail(urlDownload!);
+    final thumbnailUrl = await uploadThumbnail(urlDownload!, thumbnailBytes!);
     var date = DateTime.now();
                     var formattedDate = formatDate(date, [
                       dd,
@@ -152,6 +156,7 @@ class _selectAndUploadFilesState extends State<selectAndUploadFiles> {
       'title': title,
       'description': description,
       'videoUrl': urlDownload,
+      'thumbnailUrl': thumbnailUrl,
       'type': await getTypeVideo(),
       'ownerId': widget.userId,
       'ownerName': widget.users.username,
@@ -195,6 +200,37 @@ class _selectAndUploadFilesState extends State<selectAndUploadFiles> {
 
     print('Download-Link: $urlDownload');
   }
+
+  //generate thumbnail byte
+  Future<Uint8List?> generateThumbnail(String videoPath) async {
+  final thumbnailBytes = await VideoThumbnail.thumbnailData(
+    video: videoPath,
+    imageFormat: ImageFormat.JPEG,
+    maxHeight: 512,
+    maxWidth: 512,
+    quality: 50,
+  );
+  return thumbnailBytes;
+}
+//upload thumbail to firebase and get url
+  Future<String> uploadThumbnail(String videoPath, Uint8List thumbnailBytes) async {
+  final storage = FirebaseStorage.instance;
+  
+  // Generate a unique filename for the thumbnail
+  final thumbnailFileName = DateTime.now().millisecondsSinceEpoch.toString() + '.jpg';
+  
+  // Create a reference to the thumbnail location in Firebase Storage
+  final thumbnailRef = storage.ref().child('thumbnails/$thumbnailFileName');
+  
+  // Upload the thumbnail bytes to Firebase Storage
+  await thumbnailRef.putData(thumbnailBytes);
+  
+  // Get the download URL of the uploaded thumbnail
+  final thumbnailUrl = await thumbnailRef.getDownloadURL();
+  
+  return thumbnailUrl;
+}
+
 
   Widget buildUploadStatus(UploadTask task) => StreamBuilder<TaskSnapshot>(
         stream: task.snapshotEvents,

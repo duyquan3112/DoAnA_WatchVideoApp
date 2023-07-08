@@ -89,6 +89,7 @@ class _listVideoState extends State<listVideo> {
                 info.description = snapshot.data!.docs[index]['description'];
                 info.title = snapshot.data!.docs[index]['title'];
                 info.url = snapshot.data!.docs[index]['videoUrl'];
+                info.thumbnailUrl = snapshot.data!.docs[index]['thumbnailUrl'];
                 info.vidId = snapshot.data!.docs[index].id;
                 info.userId = snapshot.data!.docs[index]['ownerId'];
                 info.types = snapshot.data!.docs[index]['type'];
