@@ -59,8 +59,8 @@ dependencies:
   curved_navigation_bar: ^1.0.3
 
 flutter_native_splash:
-  image: ./assets/images/splash/a.png
-  color: "ffffff"
+  background_image: "./assets/images/splash/a.png"
+  
   
 
   
