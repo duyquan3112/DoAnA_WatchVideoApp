@@ -1,12 +1,12 @@
-import 'package:another_flushbar/flushbar.dart';
-import 'package:do_an/models/getUserData.dart';
+import 'package:flutter/material.dart';
 import 'package:do_an/pages/gamePage.dart';
 import 'package:do_an/pages/homePage.dart';
 import 'package:do_an/pages/moviePage.dart';
 import 'package:do_an/pages/musicPage.dart';
+import 'package:do_an/models/getUserData.dart';
+import 'package:another_flushbar/flushbar.dart';
 import 'package:do_an/widgets/my_list_tile.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
 
@@ -132,11 +132,11 @@ class _drawerMenuState extends State<drawerMenu> {
               text: 'H O M E', 
               onTap: widget.onHomePageTap,
             ),
-            MyListTile(
+            isLoggedIn != false ? MyListTile(
               icon: Icons.person, 
               text: 'P R O F I L E', 
               onTap: widget.onProfileTap,
-            ),
+            ) : SizedBox(),
             Padding(
               padding: const EdgeInsets.only(
                 left: 10.0,
@@ -198,11 +198,11 @@ class _drawerMenuState extends State<drawerMenu> {
                 ],
               ),
             ),
-            MyListTile(
+            isLoggedIn != false ? MyListTile(
               icon: Icons.logout, 
               text: 'L O G O U T', 
-              onTap: widget.onSignOut
-            ),
+              onTap: widget.onSignOut,
+            ) : SizedBox(),
           ],
         ),
       );

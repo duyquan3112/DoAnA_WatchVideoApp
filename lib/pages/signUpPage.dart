@@ -1,15 +1,17 @@
 import 'dart:io';
-
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:do_an/pages/signInPage.dart';
-import 'package:do_an/widgets/auth_button.dart';
-import 'package:do_an/widgets/textfield.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:do_an/pages/signInPage.dart';
+import 'package:do_an/widgets/textfield.dart';
+import 'package:do_an/widgets/auth_button.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:do_an/widgets/valid_SnackBar.dart';
+import 'package:do_an/widgets/error_SnackBar.dart';
 import 'package:flutter/src/widgets/framework.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+
 
 class signUpPage extends StatefulWidget {
   const signUpPage({super.key});
@@ -63,14 +65,26 @@ class _signUpPageState extends State<signUpPage> {
         'password' : passwordController.text,
         'avatarUrl': defaultAvatarUrl,
         });
+
+        ///SnackBar SignUp Success
+        validSnackBar(
+          validMess: 'Congrat! Your account have been created!!'
+        ).build(context);
+
+        ///Navigate to Sign In Page
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => (signInPage())),
+        );
       }
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found'){
         // wrongEmailPopup();
-        print(e);
-      } else if (e.code == 'wrong-password') {
+        errorSnackBar(errMess: 'There is no existing user record corresponding to the provided identifier.',);
+      } else if (passwordConfirm() == false) {
         // wrongPasswordPopup();
-        print(e);
+        errorSnackBar(errMess: 'Password and Confirm Password is different!',);
       }
     }
   }

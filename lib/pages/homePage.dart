@@ -27,7 +27,7 @@ import 'package:slide_popup_dialog_null_safety/slide_popup_dialog.dart'
     as slideDialog;
 
 
-const List<String> list = <String>['Newest', 'Oldest', 'Likest'];
+const List<String> list = <String>['Newest', 'Oldest', 'Trending'];
 
 class MyHomePage extends StatefulWidget {
   final UserData users;
@@ -103,7 +103,7 @@ class _MyHomePageState extends State<MyHomePage> {
       if (currentUser == null) {
         // Hiển thị Flushbar nếu currentUser là null
         errorSnackBar(
-          errMess: 'Vui lòng login để xem trang cá nhân!',
+          errMess: 'Please login to view your profile!',
         ).build(context);
       } else {
         // Điều hướng qua trang personalProfilePage nếu có currentUser
@@ -185,7 +185,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
                                     Container(
-                                      height: 30,
+                                      height: 40,
                                       child: ElevatedButton(
                                         onPressed: () {
                                           Navigator.push(
@@ -202,14 +202,13 @@ class _MyHomePageState extends State<MyHomePage> {
                                             borderRadius:
                                                 BorderRadius.circular(10),
                                           ),
-                                          backgroundColor: Colors.red,
+                                          backgroundColor: Color.fromARGB(255, 255, 255, 255),
                                         ),
                                         child: Text(
                                           'Login',
                                           style: TextStyle(
                                             fontSize: 16,
-                                            color: Colors
-                                                .white, // Màu văn bản của nút
+                                            color: Color.fromARGB(255, 0, 0, 0), // Màu văn bản của nút
                                           ),
                                         ),
                                       ),
@@ -294,7 +293,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   Row(
                     children: [
                       SizedBox(
-                        width: 10,
+                        width: 20,
                       ),
                       Container(
                         height: 60,
@@ -317,11 +316,28 @@ class _MyHomePageState extends State<MyHomePage> {
                                   color: Colors.lightBlue[200],
                                 ),
                                 child: Center(
-                                  child: Text(
-                                    'Music',
-                                    style: TextStyle(
-                                      color: Colors.black,
-                                      fontSize: 15,
+                                  child: TextButton(
+                                    style: ButtonStyle(
+                                      alignment: Alignment.center,
+                                      padding:  MaterialStateProperty.all<EdgeInsets>(
+                                        EdgeInsets.all(0.0)
+                                      ),
+                                    ),
+                                    onPressed: () {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(builder: ((context) => MyMusicApp(
+                                          users: currentUser, 
+                                          isLogin: _isLoggedIn
+                                        )),
+                                      ));
+                                    },
+                                    child: Text(
+                                      'Music',
+                                      style: TextStyle(
+                                        color: Colors.black,
+                                        fontSize: 15,
+                                      ),
                                     ),
                                   ),
                                 ),
@@ -340,11 +356,26 @@ class _MyHomePageState extends State<MyHomePage> {
                                   color: Colors.lightBlue[200],
                                 ),
                                 child: Center(
-                                  child: Text(
-                                    'Game',
-                                    style: TextStyle(
-                                      color: Colors.black,
-                                      fontSize: 15,
+                                  child: TextButton(
+                                    style: ButtonStyle(
+                                      alignment: Alignment.center,
+                                      padding:  MaterialStateProperty.all<EdgeInsets>(
+                                        EdgeInsets.all(0.0)),
+                                    ),
+                                    onPressed: () {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(builder: ((context) => MyGameApp(
+                                          users: currentUser, 
+                                          isLogin: _isLoggedIn)),
+                                      ));
+                                    },
+                                    child: Text(
+                                      'Game',
+                                      style: TextStyle(
+                                        color: Colors.black,
+                                        fontSize: 15,
+                                      ),
                                     ),
                                   ),
                                 ),
@@ -363,11 +394,58 @@ class _MyHomePageState extends State<MyHomePage> {
                                   color: Colors.lightBlue[200],
                                 ),
                                 child: Center(
-                                  child: Text(
-                                    'Movie',
-                                    style: TextStyle(
-                                      color: Colors.black,
-                                      fontSize: 15,
+                                  child: TextButton(
+                                    style: ButtonStyle(
+                                      alignment: Alignment.center,
+                                      padding:  MaterialStateProperty.all<EdgeInsets>(
+                                        EdgeInsets.all(0.0)),
+                                    ),
+                                    onPressed: () {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(builder: ((context) => MyMoviesApp(
+                                          users: currentUser, 
+                                          isLogin: _isLoggedIn)),
+                                      ));
+                                    },
+                                    child: Text(
+                                      'Movie',
+                                      style: TextStyle(
+                                        color: Colors.black,
+                                        fontSize: 15,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              Container(
+                                margin: EdgeInsets.all(10),
+                                width: 80,
+                                height: 30,
+                                padding: EdgeInsets.all(0),
+                                decoration: BoxDecoration(
+                                  border: Border.all(
+                                    color: Colors.lightBlue,
+                                    width: 2.0,
+                                  ),
+                                  borderRadius: BorderRadius.circular(10),
+                                  color: Colors.lightBlue[200],
+                                ),
+                                child: Center(
+                                  child: TextButton(
+                                    style: ButtonStyle(
+                                      alignment: Alignment.center,
+                                      padding:  MaterialStateProperty.all<EdgeInsets>(
+                                        EdgeInsets.all(0.0)),
+                                    ),
+                                    onPressed: () {                                   
+                                    },
+                                    child: Text(
+                                      'Drama',
+                                      style: TextStyle(
+                                        color: Colors.black,
+                                        fontSize: 15,
+                                      ),
                                     ),
                                   ),
                                 ),
@@ -377,7 +455,7 @@ class _MyHomePageState extends State<MyHomePage> {
                         ),
                       ),
                       SizedBox(
-                        width: 10,
+                        width: 5,
                       ),
                       SizedBox(
                         width: 1,
@@ -499,7 +577,7 @@ class _MyHomePageState extends State<MyHomePage> {
             _showDialog();
           } else {
             errorSnackBar(
-              errMess: 'Bạn phải đăng nhập để có thể Upload Video!!',
+              errMess: 'You must be logged in to be able to Upload Videos feature!!',
             ).build(context);
           }
         },
