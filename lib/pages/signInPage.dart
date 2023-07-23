@@ -58,12 +58,12 @@ class _signInPageState extends State<signInPage> {
       String errorMessage = '';
       if (e.code == 'user-not-found') {
         // Không có dữ liệu người dùng
-        errorMessage = 'Không tìm thấy người dùng có địa chỉ email này';
+        errorMessage = 'No user found with this email address';
       } else if (e.code == 'wrong-password') {
         // Sai pass
-        errorMessage = 'Mật khẩu không chính xác, vui lòng thử lại';
+        errorMessage = 'Password is incorrect, please try again';
       } else {
-        errorMessage = 'Đã xảy ra lỗi khi đăng nhập';
+        errorMessage = 'An error occurred while logging in, please try again!';
       };
       // Gọi hàm errorSnackBar để hiển thị lỗi
       errorSnackBar(errMess: errorMessage).build(context);

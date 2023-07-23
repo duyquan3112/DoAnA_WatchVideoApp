@@ -56,22 +56,9 @@ class _manageProfilePageState extends State<manageProfilePage> {
   @override
   Widget build(BuildContext context) {
     void gotoProfilePage() {
-      if (currentUser == true) {
-        // Hiển thị Flushbar nếu currentUser là null
-        errorSnackBar(
-          errMess: 'Bạn đang ở trang cá nhân!',
-        ).build(context);
-      } else {
-        // Điều hướng qua trang personalProfilePage nếu có currentUser
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-              builder: (context) => personalProfilePage(
-                    currentUser: currentUser,
-                    isLogin: _isLoggedIn,
-                  )),
-        );
-      }
+      errorSnackBar(
+          errMess: 'You currently in Profile Page!',
+      ).build(context);
     }
 
     void gotoHomePage() {

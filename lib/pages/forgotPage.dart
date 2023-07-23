@@ -1,11 +1,11 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
 import 'package:do_an/pages/signInPage.dart';
-import 'package:do_an/widgets/error_SnackBar.dart';
 import 'package:do_an/widgets/textfield.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:flutter/material.dart';
+import 'package:do_an/widgets/error_SnackBar.dart';
 import 'package:flutter/src/widgets/framework.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
 
 class forgotPage extends StatefulWidget {
@@ -30,11 +30,11 @@ class _forgotPageState extends State<forgotPage> {
     } on FirebaseAuthException catch(e) {
       String errorMessage = '';
       if(e.code == 'user-not-found') {
-        errorMessage = 'Không tìm thấy người dùng có địa chỉ email này';
+        errorMessage = 'No user found with this email address';
       } else if ( emailController.text.isEmpty) {
-        errorMessage = 'Vui lòng nhập mail để tiến hành thay đổi mật khẩu';
+        errorMessage = 'Please enter your email to change your password';
       }else {
-        errorMessage = 'Đã gửi link reset mật khẩu';
+        errorMessage = 'Password reset link sent';
       }
       errorSnackBar(errMess: errorMessage).build(context);
     };
